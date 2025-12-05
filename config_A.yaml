@@ -3,7 +3,7 @@ data_dir: "data"
 output_dir: "results"
 metric_results_dir: "metric_results/llm"
 recovery_rate_band: [0.85, 0.9]
-call_rate_param: 0.1
+lpm_call_rate_band: [0.0, 0.1]
 
 inference:
   # Machine A paths (当前默认路径)
@@ -26,6 +26,12 @@ inference:
   batch_size: 8
   template_type: "default"
   system_prompt: "You are a helpful AI assistant."
+
+  # xVerify model configuration for math evaluation
+  xverify_model_name: "xVerify-9B-C"
+  xverify_model_url: "http://127.0.0.1:8000/v1"
+  xverify_inference_mode: "api"
+  xverify_api_key: "dummy"
 
 router:
   router_type:  "llm"        #"self_questioning" #

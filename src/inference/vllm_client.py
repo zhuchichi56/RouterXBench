@@ -6,7 +6,11 @@ import re
 from transformers import AutoTokenizer
 
 from regex import T
+from config import PipelineConfig
 from inference.gpt_inference import parallel_inference_gpt
+
+_PIPELINE_CONFIG = PipelineConfig.from_yaml()
+_INFER_CFG = _PIPELINE_CONFIG.inference
 
 def parser_score(input_list: List[str]) -> List[int]:
     pattern = re.compile(r'score:\s*(\d)', re.IGNORECASE)
@@ -123,8 +127,8 @@ def parallel_inference(prompt_list: List[str],
                 temperature=temperature,
                 # top_p=top_p,
                 max_tokens=max_tokens,
-                system_prompt="You are a helpful AI assistant.",
-                max_workers=32,
+                system_prompt=_INFER_CFG.system_prompt,
+                max_workers=_INFER_CFG.max_workers,
                 batch_size=8
             )
 
@@ -138,11 +142,11 @@ def parallel_inference(prompt_list: List[str],
     else:
         # Original VLLM inference
         if type == "strong":
-            gpu_ids = [2,3,4,5]
+            gpu_ids = _INFER_CFG.strong_gpu_ids
         else:  # weak
-            gpu_ids = [2,3,4,5]
-        print(gpu_ids)
-        servers = ["http://localhost:800{}".format(i) for i in gpu_ids]
+            gpu_ids = _INFER_CFG.weak_gpu_ids
+
+        servers = [f"http://localhost:{_INFER_CFG.base_port + gpu_id}" for gpu_id in gpu_ids]
         tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
@@ -163,8 +167,8 @@ def parallel_inference_instagger(
     top_p: float = 0.9,
     model_name_or_path: str = None
 ) -> List[str]:
-    gpu_ids = [2,3,4,5]
-    servers = ["http://localhost:800{}".format(i) for i in gpu_ids]
+    gpu_ids = _INFER_CFG.strong_gpu_ids
+    servers = [f"http://localhost:{_INFER_CFG.base_port + gpu_id}" for gpu_id in gpu_ids]
     tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -207,7 +211,6 @@ if __name__ == "__main__":
         print(f"Response: {result}")
 
 # python start.py --model_path /home/zhe/models/lukeminglkm/instagger_llama2 --base_port 8000 --gpu_list 1,2,3,4,5,6,7
-
 
 
 

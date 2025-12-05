@@ -26,6 +26,7 @@ class RouterEvaluationPipeline:
         self.data_manager = DataManager(config.data_dir, config.output_dir)
         self.router_manager = RouterManager()
         self.metric_evaluator = BatchMetricEvaluator(config.metric_results_dir)
+        
     def get_score(self, task: str, judge_model: str = "gpt-5",
                   question_file: str = None, ref_answer_file: str = None) -> str:
         """
@@ -53,6 +54,8 @@ class RouterEvaluationPipeline:
         max_tokens = self.config.inference.max_tokens
         temperature = self.config.inference.temperature
         output_path = self.config.output_dir
+        # judge_model_cfg = getattr(self.config.inference, "judge_model", "gpt-5")
+        # judge_max_workers = getattr(self.config.inference, "max_workers", 64)
         if '/' in small_model_path:
             small_model_name = small_model_path.split('/')[-1]
         else:
@@ -74,7 +77,11 @@ class RouterEvaluationPipeline:
         if os.path.exists(small_output_file) and os.path.exists(large_output_file):
             print(f"Found existing, loading from file...")
             results  = self.data_manager.evaluator.evaluate_model_from_file(
-                    small_output_file, large_output_file,task
+                    small_output_file,
+                    large_output_file,
+                    task,
+                    # judge_model=judge_model_cfg,
+                    # judge_max_workers=judge_max_workers,
                 )
         else:
             results= self.data_manager.evaluate_models_on_datasets(
@@ -83,6 +90,8 @@ class RouterEvaluationPipeline:
                 datasets=datasets,
                 max_tokens=max_tokens,
                 temperature=temperature,
+                # judge_model=judge_model_cfg,
+                # judge_max_workers=judge_max_workers,
             )
 
         small_results = results[task]["small_results"]
@@ -238,7 +247,7 @@ class RouterEvaluationPipeline:
         # Use all config parameters
         small_model_path = self.config.inference.weak_model_path
         openai_api_key = self.config.inference.openai_api_key
-        openai_api_base = self.config.inference.openai_api_key
+        openai_api_base = self.config.inference.openai_api_base
         large_model_path = self.config.inference.strong_model_path
         small_model_name = os.path.basename(small_model_path)
         if large_model_path == "false":
@@ -249,7 +258,7 @@ class RouterEvaluationPipeline:
         max_tokens = self.config.inference.max_tokens
         temperature = self.config.inference.temperature
         recovery_rate_band = self.config.recovery_rate_band
-        call_rate_param = self.config.call_rate_param
+        lpm_call_rate_band = self.config.lpm_call_rate_band
         router_config = self.config.router.to_dict(self.config.inference)
 
         print("Starting pipeline evaluation")
@@ -286,7 +295,7 @@ class RouterEvaluationPipeline:
                     if line:
                         large_results.append(json.loads(line))
 
-       # 检查文件中是否有 pass_at_10 字段
+       # TODO: 检查文件中是否有 pass_at_10 字段 改成传参
         has_pass_at_10 = False
         if os.path.exists(pass_at_10_file):
             with open(pass_at_10_file, 'r', encoding='utf-8') as f:
@@ -297,7 +306,7 @@ class RouterEvaluationPipeline:
                         has_pass_at_10 = "pass_at_10" in first_item
                     except json.JSONDecodeError:
                         has_pass_at_10 = False
-
+        has_pass_at_10 = False
         if has_pass_at_10:
             print(f"Found pass@10 file, filtering samples...")
             pass_at_10_scores = []
@@ -512,7 +521,9 @@ class RouterEvaluationPipeline:
         print("Step 3: Calculating metrics")
         metric_results = self.metric_evaluator.evaluate_multiple_datasets(
             model_results, router_scores_dict,
-            router=router_identifier
+            router=router_identifier,
+            recovery_rate_band=recovery_rate_band,
+            lpm_call_rate_band=lpm_call_rate_band
         )
 
         print("Pipeline evaluation complete!")

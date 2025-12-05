@@ -22,18 +22,26 @@ class InferenceConfig:
     base_port: int = 8000
     strong_gpu_ids: List[int] = field(default_factory=lambda: [0, 1])
     weak_gpu_ids: List[int] = field(default_factory=lambda: [2, 3])
+    cuda_visible_devices: str = "2,3,4,5"
 
     # GPT API configuration
-    openai_api_key: Optional[str] = field(default_factory=lambda: os.environ.get("sk-UfaLUh9hblwmlr0p843eF3A3Ab324a878724484fA8B45c89"))
-    openai_api_base: Optional[str] = field(default_factory=lambda: os.environ.get("https://api.ai-gaochao.cn/v1'"))
+    openai_api_key: Optional[str] = field(default_factory=lambda: os.environ.get("OPENAI_API_KEY"))
+    openai_api_base: Optional[str] = field(default_factory=lambda: os.environ.get("OPENAI_API_BASE", "https://api.ai-gaochao.cn/v1"))
+    judge_model: str = "gpt-4o"
 
     # Parallel inference settings
-    max_workers: int = 32
+    max_workers: int = 64
     batch_size: int = 8
 
     # Template settings
     template_type: str = "default"
     system_prompt: str = "You are a helpful AI assistant."
+
+    # xVerify model configuration for math evaluation
+    xverify_model_name: str = "xVerify-9B-C"
+    xverify_model_url: str = "http://127.0.0.1:8000/v1"
+    xverify_inference_mode: str = "api"
+    xverify_api_key: str = "dummy"
 
     def get_server_urls(self, model_type: str = "weak") -> List[str]:
         """Generate server URLs based on model type"""
@@ -102,6 +110,14 @@ class TrainingConfig:
     epochs: int = 50
     batch_size: int = 32
     learning_rate: float = 1e-4
+
+    # Probe architecture parameters
+    mlp_hidden_dims: Optional[List[int]] = None  # Hidden dimensions for MLP probe, e.g., [512, 256]
+    conv_channels: int = 32  # Number of channels for ConvProbe
+    conv_kernel_size: int = 3  # Kernel size for ConvProbe
+    transformer_num_heads: int = 4  # Number of attention heads for TransformerProbe
+    transformer_num_layers: int = 2  # Number of transformer layers for TransformerProbe
+
     # Reward model training
     reward_model_name: str = "microsoft/deberta-v3-base"
     reward_output_dir: str = "reward_model"
@@ -123,7 +139,7 @@ class PipelineConfig:
 
     # Evaluation parameters
     recovery_rate_band: Tuple[float, float] = (0.91, 0.92)
-    call_rate_param: float = 0.1
+    lpm_call_rate_band: Tuple[float, float] = (0.0, 0.1)
 
     # Default datasets
     # default_datasets: List[str] = field(default_factory=lambda: ["aime24"])
@@ -180,5 +196,4 @@ class PipelineConfig:
             training=training_config,
             **pipeline_data
         )
-
 

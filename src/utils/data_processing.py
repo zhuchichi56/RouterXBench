@@ -10,7 +10,7 @@ import matplotlib.image as mpimg
 def load_individual_datasets(base_dir):
     """读取单独数据集的metrics.json文件"""
     
-    datasets = ["alpaca_5k_test", "numina_cot_5k_test", "mmlu_test", "magpie_5k_test", "math"]
+    datasets = ["alpaca_5k_test", "big_math_5k_test", "mmlu_test", "magpie_5k_test", "math"]
     
     results = {}
     
@@ -142,175 +142,11 @@ def load_mmlu_pro_categories(base_dir):
     
     return averages
 
-# def load_individual_datasets(base_dir):
-#     """读取单独数据集的metrics.json文件"""
-    
-#     datasets = ["alpaca_5k_test", "numina_cot_5k_test", "mmlu_test", "magpie_5k_test", "math"]
-    
-#     results = {}
-    
-#     for dataset in datasets:
-#         dataset_dir = None
-#         for item in os.listdir(base_dir):
-#             if item.startswith(f"{dataset}_"):
-#                 dataset_dir = item
-#                 break
-        
-#         if dataset_dir is None and "semantic_entropy" in base_dir:
-#             for item in os.listdir(base_dir):
-#                 if item == f"{dataset}_semantic_entropy":
-#                     dataset_dir = item
-#                     break
-        
-#         if dataset_dir is None:
-#             print(f"Warning: Directory for {dataset} not found in {base_dir}")
-#             results[dataset] = None
-#             continue
-        
-#         metrics_file = os.path.join(base_dir, dataset_dir, "metrics.json")
-#         if os.path.exists(metrics_file):
-#             try:
-#                 with open(metrics_file, 'r', encoding='utf-8') as f:
-#                     data = json.load(f)
-                
-#                 # 读取 small_mean 和 large_mean
-#                 small_mean = data["adaptive_metrics"]["small_mean"]
-#                 large_mean = data["adaptive_metrics"]["large_mean"]
-                
-#                 # 读取原始 LPM 和 MPM
-#                 lpm_raw = data["adaptive_metrics"]["LPM"]
-#                 mpm_raw = data["adaptive_metrics"]["MPM"]
-                
-#                 # 计算相对提升
-#                 if large_mean > small_mean:
-#                     lpm_relative = (lpm_raw - small_mean) / (large_mean - small_mean)
-#                     mpm_relative = (mpm_raw - small_mean) / (large_mean - small_mean)
-#                 else:
-#                     lpm_relative = 0.0
-#                     mpm_relative = 0.0
-                
-#                 metrics = {
-#                     "auroc": data["reliable_metrics"]["auroc"],
-#                     "LPM": lpm_relative,  # 使用相对提升
-#                     "HPM": data["adaptive_metrics"]["HPM"], 
-#                     "MPM": mpm_relative   # 使用相对提升
-#                 }
-                
-#                 # Magpie 和 Alpaca 不需要再除以10了，因为已经是相对提升
-                
-#                 results[dataset] = metrics
-                
-#             except Exception as e:
-#                 print(f"Error reading {metrics_file}: {e}")
-#                 results[dataset] = None
-#         else:
-#             print(f"Metrics file not found: {metrics_file}")
-#             results[dataset] = None
-    
-#     return results
-
-# def load_mmlu_pro_categories(base_dir):
-#     """读取MMLU Pro分类数据"""
-    
-#     categories = {
-#         "STEM": ["biology", "chemistry", "computer_science", "engineering", "math", "physics"],
-#         "Humanities": ["history", "philosophy"],  
-#         "Social Science": ["economics", "law", "psychology"],
-#         "Other": ["business", "health", "other"]
-#     }
-    
-#     category_results = defaultdict(list)
-    
-#     for item in os.listdir(base_dir):
-#         if item.startswith("mmlu_pro_"):
-#             temp = item.replace("mmlu_pro_", "")
-            
-#             if temp.endswith("self_questioning"):
-#                 subject = temp.rsplit("_", 2)[0]
-#             elif temp.endswith("semantic_entropy"):
-#                 subject = temp.rsplit("_", 2)[0]
-#             elif temp.endswith("confidence_margin"):
-#                 subject = temp.rsplit("_", 2)[0]
-#             elif temp.endswith("top10_variance"):
-#                 subject = temp.rsplit("_", 2)[0]
-#             elif temp.endswith("max_logits"):
-#                 subject = temp.rsplit("_", 2)[0]
-#             elif temp.endswith("dynamic_dirichlet"):
-#                 subject = temp.rsplit("_", 2)[0] 
-#             else:
-#                 known_suffixes = {"confidence", "max", "top10", "variance", "entropy", "coe"}
-#                 parts = temp.split("_")
-#                 if parts and parts[-1] in known_suffixes:
-#                     subject = "_".join(parts[:-1])
-#                 else:
-#                     subject = temp.rsplit("_", 1)[0] if "_" in temp else temp
-            
-#             category = None
-#             for cat, subjects in categories.items():
-#                 if subject in subjects:
-#                     category = cat
-#                     break
-            
-#             if category is None:
-#                 print(f"Warning: Subject '{subject}' not found in any category")
-#                 continue
-            
-#             metrics_file = os.path.join(base_dir, item, "metrics.json")
-#             if os.path.exists(metrics_file):
-#                 try:
-#                     with open(metrics_file, 'r', encoding='utf-8') as f:
-#                         data = json.load(f)
-                    
-#                     # 读取 small_mean 和 large_mean
-#                     small_mean = data["adaptive_metrics"]["small_mean"]
-#                     large_mean = data["adaptive_metrics"]["large_mean"]
-                    
-#                     # 读取原始 LPM 和 MPM
-#                     lpm_raw = data["adaptive_metrics"]["LPM"]
-#                     mpm_raw = data["adaptive_metrics"]["MPM"]
-                    
-#                     # 计算相对提升
-#                     if large_mean > small_mean:
-#                         lpm_relative = (lpm_raw - small_mean) / (large_mean - small_mean)
-#                         mpm_relative = (mpm_raw - small_mean) / (large_mean - small_mean)
-#                     else:
-#                         lpm_relative = 0.0
-#                         mpm_relative = 0.0
-                    
-#                     metrics = {
-#                         "subject": subject,
-#                         "auroc": data["reliable_metrics"]["auroc"],
-#                         "LPM": lpm_relative,
-#                         "HPM": data["adaptive_metrics"]["HPM"],
-#                         "MPM": mpm_relative
-#                     }
-                    
-#                     category_results[category].append(metrics)
-                    
-#                 except Exception as e:
-#                     print(f"Error reading {metrics_file}: {e}")
-    
-#     averages = {}
-#     category_order = ["STEM", "Humanities", "Social Science", "Other"]
-    
-#     for category in category_order:
-#         if category in category_results and category_results[category]:
-#             metrics_list = category_results[category]
-#             averages[category] = {
-#                 "auroc": sum(m["auroc"] for m in metrics_list) / len(metrics_list),
-#                 "LPM": sum(m["LPM"] for m in metrics_list) / len(metrics_list),
-#                 "HPM": sum(m["HPM"] for m in metrics_list) / len(metrics_list),
-#                 "MPM": sum(m["MPM"] for m in metrics_list) / len(metrics_list)
-#             }
-#         else:
-#             averages[category] = None
-    
-#     return averages
 
 def print_metric_comparison_table(all_path_results, metric, method_names):
     """为特定指标打印对比表格（带格式、加粗最大值、高亮最后一行）"""
 
-    dataset_order = ["alpaca_5k_test", "numina_cot_5k_test", "mmlu_test", "magpie_5k_test", "math"]
+    dataset_order = ["alpaca_5k_test", "big_math_5k_test", "mmlu_test", "magpie_5k_test", "math"]
     dataset_display_names = ["Alpaca", "Numina", "MMLU", "Magpie", "MATH"]
 
     first_three_keys = dataset_order[:3]
@@ -458,15 +294,15 @@ def print_metric_comparison_table(all_path_results, metric, method_names):
 def main():
     
     base_directories = [
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/semantic_entropy",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/self_questioning",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/confidence_margin",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/entropy",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/max_logits",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/coe_dual_mlp",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/hs_last_mlp",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/mean",
-        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/weighted/dynamic_dirichlet"
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/semantic_entropy",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/self_questioning",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/confidence_margin",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/entropy",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/max_logits",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/coe_dual_mlp",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/hs_last_mlp",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/mean",
+        "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base/dynamic_dirichlet"
     ]
     
     all_path_results = []
@@ -477,7 +313,7 @@ def main():
         if not os.path.exists(base_dir):
             print(f"Warning: Directory not found: {base_dir}")
             all_path_results.append((
-                {dataset: None for dataset in ["alpaca_5k_test", "numina_cot_5k_test", "mmlu_test", "magpie_5k_test", "math"]},
+                {dataset: None for dataset in ["alpaca_5k_test", "big_math_5k_test", "mmlu_test", "magpie_5k_test", "math"]},
                 {category: None for category in ["STEM", "Humanities", "Social Science", "Other"]}
             ))
             continue

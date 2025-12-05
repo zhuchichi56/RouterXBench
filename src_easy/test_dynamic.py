@@ -191,7 +191,7 @@ def test_dynamic_probe_on_task(task: str, hidden_states_file: str, probe_type: s
         results = run_dynamic_probe_pipeline(
             task=task,
             hidden_states_file=hidden_states_file,
-            save_dir="/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/probe_save/max_k",
+            save_dir="/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/probe_save/test",
             probe_type=probe_type
         )
 
@@ -315,17 +315,17 @@ def main_with_sampling():
 
     # 定义测试任务和对应的hidden states文件
     test_configs = [
+        # {
+        #     "task": "alpaca_5k_train",
+        #     "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_alpaca_5k_train.pt"
+        # },
+        # {
+        #     "task": "mmlu_train",
+        #     "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_mmlu_train.pt"
+        # },
         {
-            "task": "alpaca_5k_train",
-            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_alpaca_5k_train.pt"
-        },
-        {
-            "task": "mmlu_train",
-            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_mmlu_train.pt"
-        },
-        {
-            "task": "numina_cot_5k_train",
-            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_numina_cot_5k_train.pt"
+            "task": "big_math_5k_train",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_big_math_5k_train.pt"
         }
     ]
 
@@ -333,7 +333,7 @@ def main_with_sampling():
     probe_types = ["softmax", "dirichlet"]
     
     # 定义不同的采样大小
-    sample_sizes = [4000]  # None表示使用全部数据
+    sample_sizes = [None]  # None表示使用全部数据
     
     all_results = {}
 
@@ -386,13 +386,7 @@ def main_with_sampling():
 
     # 保存所有测试结果
     if all_results:
-        results_file = "results/dynamic_probe_sampling_results.json"
-        os.makedirs(os.path.dirname(results_file), exist_ok=True)
-
-        with open(results_file, 'w') as f:
-            json.dump(all_results, f, indent=2)
-
-        print(f"\n📄 All test results saved to: {results_file}")
+       
 
         # 打印总结
         print(f"\n📋 Summary of Dynamic Probe Performance by Sample Size:")
@@ -441,8 +435,8 @@ def main_single_datasets_with_sampling():
             "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_mmlu_train.pt"
         },
         {
-            "task": "numina_cot_5k_train",
-            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_numina_cot_5k_train.pt"
+            "task": "big_math_5k_train",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_big_math_5k_train.pt"
         }
     ]
     

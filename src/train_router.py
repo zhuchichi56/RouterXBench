@@ -59,11 +59,12 @@ class ProbeTrainer:
         "mean": MeanProbe, "max": MaxProbe, "mean+max": MeanMaxProbe, "transformer": TransformerProbe
     }
 
-    def __init__(self, probe_type: str, device: Optional[str] = None):
+    def __init__(self, probe_type: str, device: Optional[str] = None, probe_config: Optional[Dict] = None):
         self.probe_type = probe_type
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model = None
         self.normalizer = None
+        self.probe_config = probe_config or {}
 
     def build_normalizer(self, train_dataset) -> Optional[ZScoreNormalizer]:
         if self.probe_type in ["pca_conv", "mean", "max", "mean+max", "transformer"]:
@@ -93,7 +94,31 @@ class ProbeTrainer:
         
 
     def create_model(self, input_dim: int, output_dim: int = 1) -> nn.Module:
-        return self.PROBE_CLASSES[self.probe_type](input_dim, output_dim)
+        probe_class = self.PROBE_CLASSES[self.probe_type]
+
+        # Build kwargs based on probe type
+        kwargs = {}
+
+        if self.probe_type in ["hs_last_mlp", "hs_mlp", "coe_dual_mlp", "coe_c_scalar", "coe_r_scalar"]:
+            # MLP probes
+            if "mlp_hidden_dims" in self.probe_config and self.probe_config["mlp_hidden_dims"]:
+                kwargs["hidden_dims"] = self.probe_config["mlp_hidden_dims"]
+
+        elif self.probe_type == "pca_conv":
+            # Conv probe
+            if "conv_channels" in self.probe_config:
+                kwargs["conv_channels"] = self.probe_config["conv_channels"]
+            if "conv_kernel_size" in self.probe_config:
+                kwargs["kernel_size"] = self.probe_config["conv_kernel_size"]
+
+        elif self.probe_type == "transformer":
+            # Transformer probe
+            if "transformer_num_heads" in self.probe_config:
+                kwargs["num_heads"] = self.probe_config["transformer_num_heads"]
+            if "transformer_num_layers" in self.probe_config:
+                kwargs["num_layers"] = self.probe_config["transformer_num_layers"]
+
+        return probe_class(input_dim, output_dim, **kwargs)
 
     def train(self, train_data: List[Dict], val_data: List[Dict], epochs: int = 50,
               batch_size: int = 32, lr: float = 1e-4, save_path: Optional[str] = None) -> Dict:
@@ -125,7 +150,12 @@ class ProbeTrainer:
         scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
 
         best_val_loss = float('inf')
+        best_val_acc = 0.0
+        best_val_auroc = 0.0
         train_losses, val_losses = [], []
+        val_accuracies = []
+        val_aurocs = []
+        learning_rates = []
         patience_counter = 0
 
         for epoch in range(epochs):
@@ -152,6 +182,8 @@ class ProbeTrainer:
             val_loss = 0.0
             correct = 0
             total = 0
+            all_probs = []
+            all_labels = []
 
             with torch.no_grad():
                 for batch_features, batch_labels in tqdm(val_loader, desc=f"Epoch {epoch+1}/{epochs} - Validation"):
@@ -165,28 +197,45 @@ class ProbeTrainer:
                     loss = criterion(outputs, batch_labels)
                     val_loss += loss.item()
 
-                    predictions = torch.sigmoid(outputs) > 0.5
+                    probs = torch.sigmoid(outputs)
+                    predictions = probs > 0.5
                     correct += (predictions == batch_labels.bool()).sum().item()
                     total += batch_labels.size(0)
+
+                    # Collect for AUROC calculation
+                    all_probs.extend(probs.cpu().numpy().tolist())
+                    all_labels.extend(batch_labels.cpu().numpy().tolist())
 
             train_loss /= len(train_loader)
             val_loss /= len(val_loader)
             val_accuracy = correct / total
 
+            # Calculate AUROC
+            try:
+                from sklearn.metrics import roc_auc_score
+                val_auroc = roc_auc_score(all_labels, all_probs)
+            except:
+                val_auroc = 0.0
+
             train_losses.append(train_loss)
             val_losses.append(val_loss)
+            val_accuracies.append(val_accuracy)
+            val_aurocs.append(val_auroc)
+            learning_rates.append(optimizer.param_groups[0]['lr'])
             scheduler.step(val_loss)
 
             print(f"Epoch {epoch+1}: Train Loss={train_loss:.4f}, Val Loss={val_loss:.4f}, "
-                  f"Val Acc={val_accuracy:.4f}, LR={optimizer.param_groups[0]['lr']:.6f}")
+                  f"Val Acc={val_accuracy:.4f}, Val AUROC={val_auroc:.4f}, LR={optimizer.param_groups[0]['lr']:.6f}")
 
             # Save best model
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
+                best_val_acc = val_accuracy
+                best_val_auroc = val_auroc
                 if save_path:
                     model_to_save = self.model.module if hasattr(self.model, 'module') else self.model
                     self._save_checkpoint(save_path, input_dim, model_to_save)
-                    print(f"💾 New best model saved! Val Loss: {best_val_loss:.4f}")
+                    print(f"💾 New best model saved! Val Loss: {best_val_loss:.4f}, Val Acc: {best_val_acc:.4f}, Val AUROC: {best_val_auroc:.4f}")
                 patience_counter = 0
             else:
                 patience_counter += 1
@@ -194,7 +243,17 @@ class ProbeTrainer:
                     print(f"🛑 Early stopping at epoch {epoch+1}")
                     break
 
-        return {'train_losses': train_losses, 'val_losses': val_losses, 'best_val_loss': best_val_loss}
+        return {
+            'train_losses': train_losses,
+            'val_losses': val_losses,
+            'val_accuracies': val_accuracies,
+            'val_aurocs': val_aurocs,
+            'learning_rates': learning_rates,
+            'best_val_loss': best_val_loss,
+            'best_val_acc': best_val_acc,
+            'best_val_auroc': best_val_auroc,
+            'initial_lr': lr
+        }
 
     def _save_checkpoint(self, save_path: str, input_dim: int, model_to_save=None):
         try:
@@ -431,8 +490,8 @@ def _process_model_multi_gpu(model_path: str, data_list: List[dict], dataset_pat
 
 # Helper functions (unchanged interfaces)
 def train_probe_model(train_data: List[Dict], val_data: List[Dict], probe_type: str,
-                     save_path: str, **kwargs) -> Dict:
-    trainer = ProbeTrainer(probe_type)
+                     save_path: str, probe_config: Optional[Dict] = None, **kwargs) -> Dict:
+    trainer = ProbeTrainer(probe_type, probe_config=probe_config)
     return trainer.train(train_data, val_data, save_path=save_path, **kwargs)
 
 
@@ -644,6 +703,15 @@ def complete_probe_training_pipeline_with_mixed_datasets(
     batch_size = config.training.batch_size
     lr = config.training.learning_rate
 
+    # Extract probe configuration from training config
+    probe_config = {
+        "mlp_hidden_dims": config.training.mlp_hidden_dims,
+        "conv_channels": config.training.conv_channels,
+        "conv_kernel_size": config.training.conv_kernel_size,
+        "transformer_num_heads": config.training.transformer_num_heads,
+        "transformer_num_layers": config.training.transformer_num_layers,
+    }
+
     # Decide save directory and filename
     save_dir = os.path.join(config.training.probe_save_path, save_subdir) if save_subdir else config.training.probe_save_path
     os.makedirs(save_dir, exist_ok=True)
@@ -658,7 +726,7 @@ def complete_probe_training_pipeline_with_mixed_datasets(
     save_path = os.path.join(save_dir, filename)
 
     results = train_probe_model(train_data, val_data, probe_type, save_path,
-                               epochs=epochs, batch_size=batch_size, lr=lr)
+                               probe_config=probe_config, epochs=epochs, batch_size=batch_size, lr=lr)
 
     print(f"✅ Mixed dataset probe training complete!")
     print(f"   Best val loss: {results['best_val_loss']:.4f}")
@@ -735,6 +803,15 @@ def complete_layerwise_probe_training_pipeline(config: PipelineConfig, task_list
     batch_size = config.training.batch_size or 32
     lr = config.training.learning_rate or 1e-4
 
+    # Extract probe configuration from training config
+    probe_config = {
+        "mlp_hidden_dims": config.training.mlp_hidden_dims,
+        "conv_channels": config.training.conv_channels,
+        "conv_kernel_size": config.training.conv_kernel_size,
+        "transformer_num_heads": config.training.transformer_num_heads,
+        "transformer_num_layers": config.training.transformer_num_layers,
+    }
+
     all_layer_results = {}
     task_suffix = "_".join(sorted(task_list))
     sample_suffix = f"_{max_samples}samples" if max_samples else ""
@@ -780,7 +857,7 @@ def complete_layerwise_probe_training_pipeline(config: PipelineConfig, task_list
         # Train using hs_mlp probe type
         layer_results = train_probe_model(
             layer_train_data, layer_val_data, "hs_mlp", layer_save_path,
-            epochs=epochs, batch_size=batch_size, lr=lr
+            probe_config=probe_config, epochs=epochs, batch_size=batch_size, lr=lr
         )
 
         all_layer_results[f"layer_{layer_idx}"] = {

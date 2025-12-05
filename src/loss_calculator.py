@@ -25,11 +25,12 @@ from src.xVerify.eval import Evaluator
 
 class MultiModalLossCalculator:
     """Simplified multi-modal loss calculator"""
-    
-    def __init__(self, model, tokenizer, device):
+
+    def __init__(self, model, tokenizer, device, inference_config=None):
         self.model = model
         self.tokenizer = tokenizer
         self.device = device
+        self.inference_config = inference_config
         self.random_loss_threshold = math.log(getattr(self.tokenizer, 'vocab_size', 50000))
         self.max_tokens = {"safety": 128, "mmlu": 128, "math": 1024}
         
@@ -248,25 +249,24 @@ class MultiModalLossCalculator:
             pred_choice = self._extract_choice(generated)
             gold_choice = self._extract_choice(gold)
             return pred_choice == gold_choice and pred_choice is not None
-        # elif loss_type == "math":
-        #     pred_answer = self._extract_math_answer(generated)
-        #     gold_answer = self._extract_math_answer(gold) or self._extract_math_answer(instruction)
-        #     return self._verify_math_answers(pred_answer, gold_answer)
-        elif loss_type in ["math","general"]:
-            # 这里用 Qwen 的评测逻辑
-            # gt_ans = qwen_parser.extract_answer(gold, "math")        # label
-            # pred_ans = qwen_parser.extract_answer(generated, "math")   # prediction
-            # acc = qwen_grader.math_equal(pred_ans, gt_ans, timeout=True)
-            # model_path = "/volume/pt-train/users/wzhang/ghchen/zh/models/xverify-0_5B"
-            # model_name = 'xVerify-0.5B-I' 
-            # inference_mode='local'
-            XVERIFY_MODEL = Model(
-                model_name="xVerify-0.5B-I",
-                model_path_or_url="http://127.0.0.1:8000/v1",
-                inference_mode="api",
-                api_key="dummy",
-            )
-            evaluator = Evaluator(model=XVERIFY_MODEL)
+        elif loss_type in ["math"]:
+            # Initialize xVerify model with config parameters
+            if self.inference_config is not None:
+                xverify_model = Model(
+                    model_name=self.inference_config.xverify_model_name,
+                    model_path_or_url=self.inference_config.xverify_model_url,
+                    inference_mode=self.inference_config.xverify_inference_mode,
+                    api_key=self.inference_config.xverify_api_key,
+                )
+            else:
+                # Fallback to default values if no config provided
+                xverify_model = Model(
+                    model_name="xVerify-0.5B",
+                    model_path_or_url="http://127.0.0.1:8000/v1",
+                    inference_mode="api",
+                    api_key="dummy",
+                )
+            evaluator = Evaluator(model=xverify_model)
             acc_str = evaluator.single_evaluate(
                 question=instruction,
                 llm_output=generated,
@@ -274,24 +274,6 @@ class MultiModalLossCalculator:
             )
             acc = 1 if str(acc_str).strip().lower() == "correct" else 0
             return acc
-        
-        # elif loss_type in ["mmlu", "mmlupro", "math"]:
-        #     model_name = 'xVerify-0.5B-I' 
-        #     # inference_mode='local'
-        #     XVERIFY_MODEL = Model(
-        #         model_name="xVerify-0.5B-I",
-        #         model_path_or_url="http://127.0.0.1:8000/v1",
-        #         inference_mode="api",
-        #         api_key="dummy",
-        #     )
-        #     evaluator = Evaluator(model=XVERIFY_MODEL)
-        #     result = evaluator.single_evaluate(
-        #         question=instruction,
-        #         llm_output=generated,
-        #         correct_answer=gold,
-        #     )
-        #     is_correct = str(result).strip().lower() == "correct"
-        #     return is_correct
 
         return False
 
@@ -399,8 +381,6 @@ class MultiModalLossCalculator:
         # If no pattern matched, return the entire text as answer
         return text.strip()
 
-
-
     def _verify_math_answers(self, pred: Optional[str], gold: Optional[str]) -> bool:
         """Professional math answer verification using multiple methods"""
         if not pred or not gold: 
@@ -468,58 +448,6 @@ class MultiModalLossCalculator:
                     pass
         return None
 
-
-def evaluate_skywork_reward(conversations: List[List[Dict]], device: str = "cuda:0") -> List[float]:
-    """
-    Evaluate conversations using Skywork Reward Model V2
-
-    Args:
-        conversations: List of conversations, each conversation is a list of messages
-                      with format [{"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]
-        device: Device to run the model on
-
-    Returns:
-        List of reward scores for each conversation
-    """
-    # model_name = "/volume/pt-train/models/Skywork-Reward-V2-Llama-3.1-8B-40M"
-    model_name = "/volume/pt-train/users/wzhang/ghchen/zh/models/ArmoRM-Llama3-8B-v0.1"
-
-    # Load model and tokenizer
-    # rm = AutoModelForSequenceClassification.from_pretrained(
-    #     model_name,
-    #     torch_dtype=torch.bfloat16,
-    #     device_map=device,
-    #     # attn_implementation="flash_attention_2",
-    #     num_labels=1,
-    # )
-    rm = AutoModelForSequenceClassification.from_pretrained(
-        model_name,
-        trust_remote_code=True,  # 放前面
-        torch_dtype=torch.bfloat16
-        # 不用 device_map
-    )
-    rm = rm.to(device).eval()  # 加载后再移到设备
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-    scores = []
-
-    with torch.no_grad():
-        for conv in conversations:
-            # Format and tokenize the conversation
-            conv_formatted = tokenizer.apply_chat_template(conv, tokenize=False)
-
-            # Remove potential duplicate bos token
-            if tokenizer.bos_token is not None and conv_formatted.startswith(tokenizer.bos_token):
-                conv_formatted = conv_formatted[len(tokenizer.bos_token):]
-
-            conv_tokenized = tokenizer(conv_formatted, return_tensors="pt").to(device)
-
-            # Get the reward score
-            # score = rm(**conv_tokenized).logits[0][0].item()
-            score = rm(**conv_tokenized).score.float().item()
-            scores.append(score)
-
-    return scores
 
 
 def llm_as_a_judge(questions: List[dict], answers: List[dict], judge_model: str = "gpt-4o", ref_answers: List[dict] = None) -> List[float]:
@@ -695,7 +623,7 @@ def llm_judge_general(
     judge_model: str = "gpt-4o", 
     ref_answers: List[dict] = None,
     max_workers: int = 32,
-    batch_size: int = 8
+   
 ) -> List[float]:
     """
     LLM-as-a-Judge evaluation function for general datasets with reference answers
@@ -758,28 +686,6 @@ def llm_judge_general(
 
         return user_prompt
 
-    def call_judge_model(system_prompt, user_prompt, model=judge_model):
-        """Call the judge model using vllm_client"""
-        from inference.vllm_client import parallel_inference
-
-        # Format as conversation for GPT models
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-        ]
-
-        # Use the parallel_inference function which routes to GPT inference
-        prompts = [json.dumps(messages)]
-        results = parallel_inference(
-            prompt_list=prompts,
-            max_tokens=2048,
-            temperature=0.0,
-            template_type="direct",
-            model_name_or_path=model
-        )
-        
-        return results[0] if results else ""
-
     def extract_score(judgment_text):
         """Extract score from judgment text"""
         if judgment_text is None:
@@ -801,6 +707,8 @@ def llm_judge_general(
     
     # Prepare all prompts for batch processing
     batch_prompts = []
+    debug_samples = []
+    DEBUG_SAMPLE_LIMIT = 3  # limit verbose logging to avoid flooding stdout
     
     for i, (question, answer) in enumerate(zip(questions, answers)):
         ref_answer = ref_answers[i] if ref_answers and i < len(ref_answers) else None
@@ -822,9 +730,17 @@ def llm_judge_general(
             {"role": "user", "content": user_prompt}
         ]
         batch_prompts.append(json.dumps(messages))
+
+        if len(debug_samples) < DEBUG_SAMPLE_LIMIT:
+            debug_samples.append({
+                "index": i,
+                "question": question_text,
+                "answer": answer_text,
+                "ref": ref_answer_text
+            })
     
-    # Batch call to judge model for all evaluations at once
-    print(f"Processing {len(batch_prompts)} evaluations in batch with max_workers={max_workers}, batch_size={batch_size}")
+    # # Batch call to judge model for all evaluations at once
+    # print(f"Processing {len(batch_prompts)} evaluations in batch with max_workers={max_workers}, batch_size={batch_size}")
     
     # For GPT models, we need to pass the batch parameters through a temp file approach
     if "gpt" in judge_model.lower():
@@ -846,17 +762,27 @@ def llm_judge_general(
                 user_content = next((msg["content"] for msg in messages if msg["role"] == "user"), "")
                 simple_queries.append(user_content)
             
+            if debug_samples:
+                print(f"[Judge Debug] Showing {len(debug_samples)} sample inputs (model={judge_model}):")
+                for sample in debug_samples:
+                    question_preview = sample["question"][:200].replace("\n", " ")
+                    answer_preview = sample["answer"][:200].replace("\n", " ")
+                    print(f"[Judge Debug][Input {sample['index']}] Q: {question_preview}")
+                    print(f"[Judge Debug][Input {sample['index']}] A: {answer_preview}")
+
             print("Starting GPT batch inference...")
             judgments = parallel_inference_gpt(
                 queries=simple_queries,
                 output_file=temp_file.name,
                 model=judge_model,
                 max_workers=max_workers,
-                batch_size=batch_size,
                 temperature=0.0,
                 max_tokens=2048,
                 system_prompt="You are a helpful assistant."
             )
+            preview_count = min(DEBUG_SAMPLE_LIMIT, len(judgments))
+            for idx in range(preview_count):
+                print(f"[Judge Debug][Raw Output {idx}] {judgments[idx]}")
         finally:
             # Clean up temp file
             if os.path.exists(temp_file.name):
@@ -871,13 +797,21 @@ def llm_judge_general(
             template_type="direct",
             model_name_or_path=judge_model
         )
+
+        if debug_samples:
+            preview_count = min(DEBUG_SAMPLE_LIMIT, len(judgments))
+            for idx in range(preview_count):
+                print(f"[Judge Debug][Raw Output {idx}] {judgments[idx]}")
+        
     
     # Extract scores from all judgments
     scores = []
     print("Extracting scores from judgments...")
-    for judgment in tqdm(judgments, desc="Processing judgments"):
+    for idx, judgment in enumerate(tqdm(judgments, desc="Processing judgments")):
         score = extract_score(judgment)
         scores.append(score)
+        if idx < DEBUG_SAMPLE_LIMIT:
+            print(f"[Judge Debug][Parsed Score {idx}] {score}")
     
     print(f"Completed evaluation of {len(scores)} samples")
     print(f"Score distribution: mean={sum(scores)/len(scores):.2f}, min={min(scores):.2f}, max={max(scores):.2f}")

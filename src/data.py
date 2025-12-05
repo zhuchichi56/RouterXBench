@@ -2,11 +2,9 @@ import json
 import torch
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
-from abc import ABC, abstractmethod
 from loss_calculator import MultiModalLossCalculator
 from inference.vllm_client import parallel_inference
-from inference.gpt_inference import parallel_inference_gpt
-from loss_calculator import evaluate_skywork_reward, llm_judge_general,llm_as_a_judge
+from loss_calculator import llm_judge_general
 
 
 class DatasetConfig:
@@ -14,6 +12,7 @@ class DatasetConfig:
         self.name = name
         self.type = type  # "mmlu", "math", "general"
         self.file_path = file_path
+        
 
 
 class DatasetRegistry:
@@ -61,6 +60,7 @@ class DatasetRegistry:
          "metamath_5k_train": DatasetConfig("metamath_5k_train", "math", "metamath_5k_train.jsonl"),
          "big_math_5k_train": DatasetConfig("big_math_5k_train", "math", "big_math_5k_train.jsonl"),
          "big_math_5k_test": DatasetConfig("big_math_5k_test", "math", "big_math_5k_test.jsonl"),
+         "test": DatasetConfig("test", "general", "test.jsonl"),
     }
 
     @classmethod
@@ -79,9 +79,9 @@ class DatasetRegistry:
 
 
 class DataLoader:
-    def __init__(self, data_dir: str = "data"):
+    def __init__(self, data_dir: str = "data", inference_config=None):
         self.data_dir = Path(data_dir)
-        self.loss_calc = MultiModalLossCalculator(model=None, tokenizer=None, device=None)
+        self.loss_calc = MultiModalLossCalculator(model=None, tokenizer=None, device=None, inference_config=inference_config)
 
     def load_jsonl(self, filepath: str) -> List[Dict]:
         data = []
@@ -109,9 +109,11 @@ class DataLoader:
 
 
 class ModelEvaluator:
-    def __init__(self, data_loader: DataLoader):
+    def __init__(self, data_loader: DataLoader, inference_config=None):
         self.data_loader = data_loader
-        self.loss_calc = MultiModalLossCalculator(model=None, tokenizer=None, device=None)
+        self.loss_calc = MultiModalLossCalculator(model=None, tokenizer=None, device=None, inference_config=inference_config)
+        # self.judge_model 
+        # self.max_workers 
 
     def evaluate_model(self, model_path: str, dataset_name: str,
                       max_tokens: int = 512, temperature: float = 0.0, 
@@ -237,7 +239,7 @@ class ModelEvaluator:
             })
         
         return results
-
+    # TODO: 把目前同时传入大模型和小模型的逻辑改为就传入一个模型然后做eval，大小模型两步骤在pipeline的get_scores里写为调用两次这个function
     def evaluate_model_from_file(self, small_file_path: str, large_file_path: str, dataset_name: str) -> Dict:
         """
         从文件中读取responses并进行evaluation
@@ -260,13 +262,26 @@ class ModelEvaluator:
         
         # 加载数据集
         data, dataset_type = self.data_loader.load_dataset(dataset_name)
+        def _ensure_general_scores(entries: List[Dict], response_getter) -> List[float]:
+            """Reuse existing scores when available and only rejudge missing ones."""
+            scores = [entry.get('score', -1) for entry in entries]
+            need_judge = [idx for idx, score in enumerate(scores) if score == -1]
+            if not need_judge:
+                return scores
+            questions = [{"instruction": data[i]['instruction']} for i in need_judge]
+            answers = [{"response": response_getter(entries[i])} for i in need_judge]
+            ref_answers = [{"response": data[i].get('response', '')} for i in need_judge]
+            judged_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, 64)
+            for idx, judged in zip(need_judge, judged_scores):
+                scores[idx] = judged
+            return scores
+
         small_scores = []
         if dataset_type == "general":
-            # Batch all general dataset evaluations for parallel processing
-            questions = [{"instruction": item['instruction']} for item in data]
-            answers = [{"response": entry.get('generated_response', '')} for entry in small_data]
-            ref_answers = [{"response": item.get('response', '')} for item in data]
-            small_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=32, batch_size=8)
+            small_scores = _ensure_general_scores(
+                small_data,
+                lambda entry: entry.get('generated_response', '')
+            )
         else:
             # Process non-general datasets individually
             for item, entry in zip(data, small_data):
@@ -277,15 +292,13 @@ class ModelEvaluator:
                 )
                 score = 1.0 if is_correct else 0.0
                 small_scores.append(score)
-        
-        # 评估大模型
+                
         large_scores = []
         if dataset_type == "general":
-            # Batch all general dataset evaluations for parallel processing
-            questions = [{"instruction": item['instruction']} for item in data]
-            answers = [{"response": entry.get('generated_response', entry.get('large_response', ''))} for entry in large_data]
-            ref_answers = [{"response": item.get('response', '')} for item in data]
-            large_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=32, batch_size=8)
+            large_scores = _ensure_general_scores(
+                large_data,
+                lambda entry: entry.get('generated_response', entry.get('large_response', ''))
+            )
         else:
             # Process non-general datasets individually
             for item, entry in zip(data, large_data):
@@ -397,7 +410,7 @@ class ModelEvaluator:
             questions = [{"instruction": item['instruction']} for item in data]
             answers = [{"response": entry.get('generated_response', '')} for entry in small_generated]
             ref_answers = [{"response": item.get('response', '')} for item in data]
-            small_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=32, batch_size=8)
+            small_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=32)
         else:
             # Process non-general datasets individually
             for item, entry in zip(data, small_generated):
@@ -449,7 +462,7 @@ class ModelEvaluator:
                 questions = [{"instruction": item['instruction']} for item in data]
                 answers = [{"response": entry.get('generated_response', entry.get('large_response', ''))} for entry in large_generated]
                 ref_answers = [{"response": item.get('response', '')} for item in data]
-                large_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=32, batch_size=8)
+                large_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=32)
             else:
                 # Process non-general datasets individually
                 for item, entry in zip(data, large_generated):
@@ -497,11 +510,16 @@ class ModelEvaluator:
             }
         }
 
+
 class DataManager:
-    def __init__(self, data_dir: str = "data", output_dir: str = "results"):
-        self.data_loader = DataLoader(data_dir)
-        self.evaluator = ModelEvaluator(self.data_loader)
+    def __init__(self, data_dir: str = "data", output_dir: str = "results", inference_config=None):
+        self.data_loader = DataLoader(data_dir, inference_config=inference_config)
+        self.evaluator = ModelEvaluator(self.data_loader, inference_config=inference_config)
         self.output_dir = Path(output_dir)
+        # self.judge_model = 
+        # self.max_workers = 
+        
+        
 
     def evaluate_models_on_datasets(self, 
                                     small_model_path: str, 
@@ -536,34 +554,6 @@ class DataManager:
                 "large_results": large_results,
                 "small_accuracy": sum(r["score"] for r in small_results) / len(small_results),
                 "large_accuracy": sum(r["score"] for r in large_results) / len(large_results)
-            }
-
-        return results
-
-
-    def evaluate_single_model_on_dataset(self, 
-                                    small_model_path: str, 
-                                  datasets: List[str], **kwargs) -> Dict[str, Dict]:
-        results = {}
-
-        small_model_name = Path(small_model_path).name
-
-
-        for dataset in datasets:
-            small_results, large_results = self.evaluator.evaluate_dataset(
-                small_model_path =small_model_path, dataset_name= dataset, **kwargs
-            )
-
-            # Save results
-            small_dir = self.output_dir / small_model_name
-            small_dir.mkdir(parents=True, exist_ok=True)
-
-            self.evaluator.save_results(small_results, small_dir / f"{dataset}.jsonl")
-         
-            results[dataset] = {
-                "small_results": small_results,
-                "small_accuracy": sum(r["score"] for r in small_results) / len(small_results),
-              
             }
 
         return results

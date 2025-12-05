@@ -256,9 +256,22 @@ class ZScoreNormalizer:
 
 
 class MLPProbe(nn.Module):
-    def __init__(self, input_dim: int, output_dim: int):
+    def __init__(self, input_dim: int, output_dim: int, hidden_dims: Optional[List[int]] = None):
         super().__init__()
-        self.net = nn.Linear(input_dim, output_dim)
+        if hidden_dims is None or len(hidden_dims) == 0:
+            # Single linear layer (original behavior)
+            self.net = nn.Linear(input_dim, output_dim)
+        else:
+            # Multi-layer MLP
+            layers = []
+            prev_dim = input_dim
+            for hidden_dim in hidden_dims:
+                layers.append(nn.Linear(prev_dim, hidden_dim))
+                layers.append(nn.ReLU())
+                layers.append(nn.Dropout(0.1))
+                prev_dim = hidden_dim
+            layers.append(nn.Linear(prev_dim, output_dim))
+            self.net = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.net(x)
@@ -281,41 +294,83 @@ class ConvProbe(nn.Module):
 
 
 class MeanProbe(nn.Module):
-    def __init__(self, input_dim: int, output_dim: int):
+    def __init__(self, input_dim: int, output_dim: int, hidden_dims: Optional[List[int]] = None, **kwargs):
         super().__init__()
-        self.fc = nn.Linear(input_dim, output_dim)
+        if hidden_dims is None or len(hidden_dims) == 0:
+            # Single linear layer (original behavior)
+            self.fc = nn.Linear(input_dim, output_dim)
+        else:
+            # Multi-layer MLP
+            layers = []
+            prev_dim = input_dim
+            for hidden_dim in hidden_dims:
+                layers.append(nn.Linear(prev_dim, hidden_dim))
+                layers.append(nn.ReLU())
+                layers.append(nn.Dropout(0.1))
+                prev_dim = hidden_dim
+            layers.append(nn.Linear(prev_dim, output_dim))
+            self.fc = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.fc(x.mean(dim=1))
 
 
 class MaxProbe(nn.Module):
-    def __init__(self, input_dim: int, output_dim: int):
+    def __init__(self, input_dim: int, output_dim: int, hidden_dims: Optional[List[int]] = None, **kwargs):
         super().__init__()
-        self.fc = nn.Linear(input_dim, output_dim)
+        if hidden_dims is None or len(hidden_dims) == 0:
+            # Single linear layer (original behavior)
+            self.fc = nn.Linear(input_dim, output_dim)
+        else:
+            # Multi-layer MLP
+            layers = []
+            prev_dim = input_dim
+            for hidden_dim in hidden_dims:
+                layers.append(nn.Linear(prev_dim, hidden_dim))
+                layers.append(nn.ReLU())
+                layers.append(nn.Dropout(0.1))
+                prev_dim = hidden_dim
+            layers.append(nn.Linear(prev_dim, output_dim))
+            self.fc = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.fc(x.max(dim=1).values)
 
 
 class MeanMaxProbe(nn.Module):
-    def __init__(self, input_dim: int, output_dim: int):
+    def __init__(self, input_dim: int, output_dim: int, hidden_dims: Optional[List[int]] = None, **kwargs):
         super().__init__()
-        self.fc = nn.Linear(input_dim * 2, output_dim)
+        # Input dimension is doubled because we concatenate mean and max
+        combined_input_dim = input_dim * 2
+
+        if hidden_dims is None or len(hidden_dims) == 0:
+            # Single linear layer (original behavior)
+            self.fc = nn.Linear(combined_input_dim, output_dim)
+        else:
+            # Multi-layer MLP
+            layers = []
+            prev_dim = combined_input_dim
+            for hidden_dim in hidden_dims:
+                layers.append(nn.Linear(prev_dim, hidden_dim))
+                layers.append(nn.ReLU())
+                layers.append(nn.Dropout(0.1))
+                prev_dim = hidden_dim
+            layers.append(nn.Linear(prev_dim, output_dim))
+            self.fc = nn.Sequential(*layers)
 
     def forward(self, x):
         # mean_feat = x.mean(dim=-1)
         # max_feat = x.max(dim=-1)[0]
 
-        mean_across_layers = x.mean(dim=1)  
-        max_across_layers = x.max(dim=1).values   
+        mean_across_layers = x.mean(dim=1)
+        max_across_layers = x.max(dim=1).values
         combined = torch.cat([mean_across_layers, max_across_layers], dim=-1)
-  
+
         return self.fc(combined)
 
 
 class TransformerProbe(nn.Module):
-    def __init__(self, input_dim: int, output_dim: int, num_heads: int = 4, num_layers: int = 2):
+    def __init__(self, input_dim: int, output_dim: int, num_heads: int = 4, num_layers: int = 2, **kwargs):
         super().__init__()
         self.input_projection = nn.Linear(input_dim, input_dim)
         encoder_layer = nn.TransformerEncoderLayer(

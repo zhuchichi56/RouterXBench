@@ -52,7 +52,7 @@ class AdaptiveMetrics:
                  router_scores: np.ndarray,
                 #  target_accuracy_band: Tuple[float, float] = (0.7, 0.9),
                  recovery_rate_band: Tuple[float,float] =(0.7,0.9),
-                 call_rate_param: float = 0.1) -> Dict:
+                 lpm_call_rate_band: Tuple[float, float] = (0.0, 0.1)) -> Dict:
         min_len = min(len(small_scores), len(large_scores), len(router_scores))
         small_scores = small_scores[:min_len]
         large_scores = large_scores[:min_len]
@@ -62,66 +62,47 @@ class AdaptiveMetrics:
         
         
         
-        #先升序排序，再取对应百分比call rate调用大模型，若遇到相同分数所占百分比大于call rate，随机选择对应比例
+        # 分数越低越优先触发大模型调用，因此直接按升序累积
         sorted_indices = np.argsort(router_scores)
         sorted_small = small_scores[sorted_indices]
         sorted_large = large_scores[sorted_indices]
-        sorted_router = router_scores[sorted_indices]
         n_samples = len(router_scores)
-        call_rates = np.linspace(0, 1, 101)  
+        prefix_large = np.cumsum(sorted_large)
+        prefix_small = np.cumsum(sorted_small)
+        total_small = prefix_small[-1] if n_samples > 0 else 0.0
+
+        call_rates = np.linspace(0, 1, 101)
         accuracies = []
-        # 记录每个分数的起止位置
-        unique_scores, score_counts = np.unique(sorted_router, return_counts=True)
-        score_ranges = []
-        start = 0
-        for count in score_counts:
-            end = start + count
-            score_ranges.append((start, end))
-            start = end
         for rate in call_rates:
-            n_large = int(rate * n_samples)  # 需调用大模型的样本数
-            
+            n_large = int(rate * n_samples)
+
             if n_large == 0:
-               
-                mean_acc = np.mean(sorted_small)
-            elif n_large == n_samples:
-                
-                mean_acc = np.mean(sorted_large)
+                mean_acc = total_small / n_samples if n_samples else 0.0
+            elif n_large >= n_samples:
+                mean_acc = np.mean(sorted_large) if n_samples else 0.0
             else:
-                selected_indices = []
-                remaining = n_large
-                
-                for score, (start, end) in zip(unique_scores, score_ranges):
-                    if remaining <= 0:
-                        break
-                    available = end - start
-                    if available <= remaining:
-                        selected_indices.extend(range(start, end))
-                        remaining -= available
-                    else:
-                        selected_indices.extend(
-                            np.random.choice(range(start, end), remaining, replace=False)
-                        )
-                        remaining = 0
-                large_acc = np.mean(sorted_large[selected_indices])
-                small_acc = np.mean(np.delete(sorted_small, selected_indices))
-                mean_acc = (large_acc * n_large + small_acc * (n_samples - n_large)) / n_samples
-            
+                large_sum = prefix_large[n_large - 1]
+                small_sum = total_small - prefix_small[n_large - 1]
+                mean_acc = (large_sum + small_sum) / n_samples
+
             accuracies.append(mean_acc)
         accuracies = np.array(accuracies)
         
 
-        # Calculate LPM
-        # low_call_mask = call_rates <= call_rate_param
-        # LPM = np.mean(accuracies[low_call_mask]) if np.any(low_call_mask) else accuracies[0]
-        max_idx = np.searchsorted(call_rates, call_rate_param, side='left')
-        LPM =np.mean(accuracies[:max_idx])
+        # Calculate LPM within指定 call-rate 区间
+        lpm_low = max(0.0, min(1.0, lpm_call_rate_band[0]))
+        lpm_high = max(lpm_low, min(1.0, lpm_call_rate_band[1]))
+        start_idx = np.searchsorted(call_rates, lpm_low, side='left')
+        end_idx = np.searchsorted(call_rates, lpm_high, side='right')
+        if end_idx <= start_idx:
+            end_idx = min(start_idx + 1, len(call_rates))
+        start_idx = min(start_idx, len(call_rates) - 1)
+        LPM = np.mean(accuracies[start_idx:end_idx])
+        lpm_threshold = accuracies[min(end_idx - 1, len(accuracies) - 1)]
 
         # Calculate HPM
         low_acc_band = small_mean+(large_mean-small_mean)*recovery_rate_band[0]
         high_acc_band = small_mean + (large_mean-small_mean)*recovery_rate_band[1]
-        print(f"low{low_acc_band}")
-        print(f"high{high_acc_band}")
         target_mask = (accuracies >= low_acc_band) & (accuracies <= high_acc_band)
         
         if np.any(target_mask):
@@ -130,7 +111,6 @@ class AdaptiveMetrics:
         else:
             HPM = 0.0
         # Calculate MPM
-        lpm_threshold = accuracies[max_idx]  # LPM的阈值点
         mpm_mask = (accuracies > lpm_threshold) & (accuracies < low_acc_band)
 
         if np.any(mpm_mask):
@@ -149,7 +129,7 @@ class AdaptiveMetrics:
             'HPM': HPM,
             'MPM': MPM,
             'recovery_rate_band': recovery_rate_band,
-            'call_rate_param': call_rate_param,
+            'lpm_call_rate_band': (lpm_low, lpm_high),
             'max_accuracy': np.max(accuracies),
             'min_accuracy': np.min(accuracies)
         }

@@ -3,7 +3,7 @@ data_dir: "data"
 output_dir: "results"
 metric_results_dir: "metric_results/base"
 recovery_rate_band: [0.85, 0.95]
-call_rate_param: 0.3
+lpm_call_rate_band: [0.25, 0.3]
 
 inference:
   # Machine B paths - modify these for your actual paths
@@ -18,15 +18,23 @@ inference:
 
   base_port: 8000  # Different port for Machine B
   strong_gpu_ids: [1, 0]
-  weak_gpu_ids: [4,5,6,7]
+  weak_gpu_ids: [0,1,2,3]
 
-  openai_api_key: "sk-e9OcUwV80NLvl00o73E5F3FcFa2d4a6cB7D46cB3D6263a1ad"
+  openai_api_key: "sk-e9OcUwV80NLvl00o73E5F3FcFa2d4a6cB7D46cB3D6263a1a"
   openai_api_base: "https://api.ai-gaochao.cn/v1"
+  judge_model: "gpt-5"
 
-  max_workers: 32
+  max_workers: 1024
   batch_size: 8
   template_type: "default"
   system_prompt: "You are a helpful AI assistant."
+  cuda_visible_devices: "4,5,6,7"
+
+  # xVerify model configuration for math evaluation
+  xverify_model_name: "xVerify-0.5B"
+  xverify_model_url: "http://127.0.0.1:8000/v1"
+  xverify_inference_mode: "api"
+  xverify_api_key: "dummy"
 
 router:
   router_type: "probe"
@@ -39,6 +47,10 @@ training:
   epochs: 50
   batch_size: 32
   learning_rate: 0.0001
+
+  # Probe architecture parameters
+  # mlp_hidden_dims: [2048, 1024]  # Hidden layers for MLP probe, set to null or [] for single layer
+
   reward_model_name: "microsoft/deberta-v3-base"
   reward_output_dir: "reward_model"
   logits_output_dir: "../hs"

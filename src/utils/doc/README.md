@@ -28,7 +28,16 @@ cd inference
 python start.py \
   --model_path "/volume/pt-train/models/Llama-3.1-8B-Instruct" \
   --base_port 8000 \
-  --gpu_list "2,3,4,5"
+  --gpu_list "0,1,2,3"
+
+
+
+CUDA_VISIBLE_DEVICES=0 \
+vllm serve /volume/pt-train/users/wzhang/ghchen/zh/models/xverify-0_5B \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --tensor-parallel-size 1 \
+  --served-model-name xVerify-0.5B-I
 
   
 ```

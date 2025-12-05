@@ -2,7 +2,9 @@ from config import PipelineConfig
 from pipeline import RouterEvaluationPipeline,get_task_score
 from train_router import generate_logits,set_random_seed,complete_probe_training_pipeline_with_mixed_datasets,complete_layerwise_probe_training_pipeline
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2,3,4,5"
+config_env = PipelineConfig.from_yaml()
+if config_env.inference.cuda_visible_devices:
+    os.environ["CUDA_VISIBLE_DEVICES"] = config_env.inference.cuda_visible_devices
 import copy
 import json
 import argparse
@@ -73,40 +75,35 @@ if __name__ == '__main__':
     ]
     
     tasks = [
-        # "math",
-        # "mt-bench",
+        "math",
         "mmlu_pro_biology", "mmlu_pro_business",
         "mmlu_pro_chemistry", "mmlu_pro_computer_science",
         "mmlu_pro_economics", "mmlu_pro_engineering",
         "mmlu_pro_health", "mmlu_pro_history", "mmlu_pro_law", 
         "mmlu_pro_math", "mmlu_pro_other", "mmlu_pro_philosophy", 
         "mmlu_pro_physics", "mmlu_pro_psychology",
-        # "magpie_5k_test",  
-        # "alpaca_5k_test",
-        # # "metamath_5k_test",
-        # "numina_cot_5k_test",
-        # "mmlu_test",
-
+        "magpie_5k_test",  
+        "alpaca_5k_test",
+         "metamath_5k_test",
+        "big_math_5k_test",
+        "mmlu_test",
     ]  
-
-    train_tasks =["alpaca_5k_train","numina_cot_5k_train","mmlu_train"]
+    train_tasks =["numina_cot_5k_train"]
     
-    probe_type = ["hs_last_mlp","mean","coe_dual_mlp"]
+    probe_type = ["hs_last_mlp","mean","max","coe_dual_mlp"]
     def _build_hs_path(task: str):
         base_dir = os.path.join("..", "hs")
         if task.startswith("mmlu_pro_"):
             base_dir = os.path.join(base_dir, "mmlu_pro")
         return os.path.join(base_dir, f"Llama-3.1-8B-Instruct_{task}.pt")
-        # return os.path.join(base_dir, f"Qwen2.5-1.5B-Instruct_{task}.pt")
-
 
     if mode == "get_scores":
-        for task in ["magpie_5k_test","alpaca_5k_test","alpaca_5k_train"]:
+        for task in train_tasks:
             score = get_task_score(config, task=task)
             print(f"{task}: {score}")
     
     elif mode == "get_logits":
-        for task in ["dapo-math-17k_dedup"]:
+        for task in ["numina_cot_5k_train"]:
             task_path = os.path.join("./results",f"{task}.jsonl")
             if task.startswith("mmlu_pro_"):
                 task_path = os.path.join("./results/mmlu_pro",f"{task}.jsonl")
@@ -114,21 +111,15 @@ if __name__ == '__main__':
     
     elif mode == "train":
         for type in probe_type:
-            config.training.probe_save_path= "./probe_save/max_k"
+            config.training.probe_save_path= "./probe_save/test/"
             config.router.probe_type = type
             pipeline = RouterEvaluationPipeline(config)
-            # complete_probe_training_pipeline_with_mixed_datasets(
-            #     config, 
-            #     mix_strategy="balanced",
-            #     task_list = ["numina_cot_5k_train","mmlu_"]
-            
-            # )
         
             # 不同采样大小训练
-            for i in [400]:
+            for i in [4000]:
                 complete_probe_training_pipeline_with_mixed_datasets(
-                    config, task_list=train_tasks,
-                    mix_strategy="balanced", max_samples=i
+                    config, task_list=train_tasks,max_samples= i,
+                    mix_strategy="balanced"
                 )
             
         # 层级训练
@@ -174,7 +165,8 @@ if __name__ == '__main__':
         
     # elif mode == "train_rm":
         # config.router.router_type="trained_deberta"
-        # complete_reward_training_pipeline                
+        # complete_reward_training_pipeline  
+                      
     elif mode == "eval_single":
         for task in tasks:
             hidden_states_file = _build_hs_path(task)
@@ -192,18 +184,17 @@ if __name__ == '__main__':
         
         for pf in probe_files:
 
-            m = re.search(r'cot_5k_train_(.+)\.pt$', pf)
-            
+            m = re.search(r'.*_train_([^.]+)\.pt$', pf)
             if m:
-                probe_type = m.group(1)  # 提取 train 后面的所有内容作为 probe_type
-                metric_results_dir = f"metric_results/weighted/{probe_type}"
+                probe_type = m.group(1) 
+                metric_results_dir = f"metric_results/base/{probe_type}"
                 
                 probe_configs.append({
                     "checkpoint_path": pf,
                     "probe_type": probe_type,
                     "metric_results_dir": metric_results_dir
                 })
-        batch_evaluate_probes(config, probe_configs, tasks)    
+        batch_evaluate_probes(config, probe_configs, ["magpie_5k_test","alpaca_5k_test"])    
 
     elif mode == "eval_max_k":  #data_size
         #统一一下两类方法命名格式
@@ -216,13 +207,6 @@ if __name__ == '__main__':
         probe_configs = []
         for pf in probe_files:
             filename = os.path.basename(pf)
-            
-
-            # sample_match = re.search(r'4000samples_probe_(\w+)\.pt$', filename)
-            # sample_match = re.search(r'cot_5k_train_(\w+)_probe\.pt$', filename)
-            # sample_match = re.search(r'balanced_probe_(\w+)\.pt$', filename)
-            # sample_match = re.search(r'_train_(\w+)_probe\.pt$', filename)
-
             sample_match = re.search(r'_cot_5k_train_(\w+)_(\d+k)\.pt$', filename)
 
             if sample_match:
@@ -271,54 +255,48 @@ if __name__ == '__main__':
 
         batch_evaluate_probes(config, probe_configs, mmlu_pro_tasks)
 
-    elif mode == "semantic_entropy":
-        config.metric_results_dir = "metric_results/weighted/semantic_entropy"
-        config.router.router_type = "semantic_entropy"
-        config.router.model_path = None 
-        config.router.num_samples = 5  # semantic entropy计算的样本数
-        
-        pipeline = RouterEvaluationPipeline(config)
-              
-        results = {}
-        
-        # 评估每个任务
-        for i, task in enumerate(tasks):
-            print(f"\n{'='*60}")
-            hidden_states_file = _build_hs_path(task)
-            
+    elif mode == "self_based":
+       
+        strategies = [
+            {
+                "name": "semantic_entropy",
+                "metric_results_dir": "metric_results/base/semantic_entropy",
+                "num_samples": 5,
+            },
+            {
+                "name": "self_questioning",
+                "metric_results_dir": "metric_results/base/self_questioning",
+                "num_samples": 8,
+            },
+        ]
 
-            datasets = [task]
-            pipeline.evaluate_complete_pipeline(
-                hidden_states_file=hidden_states_file,
-                datasets=datasets
-            )
-
-    elif mode == "self_questioning":
-  
-        config.metric_results_dir = "metric_results/weighted/self_questioning"
-        config.router.router_type = "self_questioning"
-        config.router.model_path = None  
-        config.router.num_samples = 8  # self-ask计算的样本数
-        
-        pipeline = RouterEvaluationPipeline(config)
-        
-        
-        results = {}
-        
-        # 评估每个任务
-        for i, task in enumerate(tasks):
+        for strat in strategies:
             print(f"\n{'='*60}")
-            print(f"评估任务 {i+1}/{len(tasks)}: {task}")
+            print(f"🚀 Running self-based strategy: {strat['name']}")
             print(f"{'='*60}")
 
-            hidden_states_file = _build_hs_path(task)
-            
-           
-            datasets = [task]
-            task_results = pipeline.evaluate_complete_pipeline(
+            # Create a config copy for this strategy (preserve base config)
+            config_copy = copy.deepcopy(config)
+            config_copy.metric_results_dir = strat["metric_results_dir"]
+            config_copy.router.router_type = strat["name"]
+            config_copy.router.model_path = None
+            config_copy.router.num_samples = strat["num_samples"]
+
+            pipeline_test = RouterEvaluationPipeline(config_copy)
+
+            for task in tasks:
+                print(f"\nEvaluating task: {task}")
+                hidden_states_file = _build_hs_path(task)
+
+                if not os.path.exists(hidden_states_file):
+                    print(f"Warning: Hidden states file not found: {hidden_states_file}")
+                    continue
+
+                datasets = [task]
+                pipeline_test.evaluate_complete_pipeline(
                     hidden_states_file=hidden_states_file,
                     datasets=datasets
-            )
+                )
                 
     
     elif mode == "logits_based_routers":
@@ -356,7 +334,7 @@ if __name__ == '__main__':
                 # Create a config copy for this router
                 config_copy = copy.deepcopy(config)
                 config_copy.router.router_type = router_type
-                config_copy.metric_results_dir = f"metric_results/weighted/{router_type}"
+                config_copy.metric_results_dir = f"metric_results/base/{router_type}"
 
                 # Create pipeline with the specific router config
                 pipeline_test = RouterEvaluationPipeline(config_copy)
