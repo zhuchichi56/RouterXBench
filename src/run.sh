@@ -4,9 +4,9 @@
 source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate router
 
 # 默认参数
-DATASETS="${1:-alpaca_5k_train}"
-PROBE_TYPES="${2:- coe_dual_mlp}" #hs_last_mlp mean max
-MAX_SAMPLES="${3:-4000}"
+DATASETS="${1:-mmlu_test}"
+PROBE_TYPES="${2:- mean}" #hs_last_mlp mean max
+MAX_SAMPLES="${3:-10000}"
 
 echo "========================================="
 echo "CoBench 完整 Pipeline"
@@ -18,7 +18,7 @@ echo "最大样本数: $MAX_SAMPLES"
 # cd inference
 # python start.py \
 #   --model_path "/volume/pt-train/models/Llama-3.1-8B-Instruct" \
-#   --base_port 8000 \
+#   --base_port 8001 \
 #   --gpu_list "0,1,2,3"
 
 
@@ -32,9 +32,9 @@ echo "最大样本数: $MAX_SAMPLES"
 #   --trust-remote-code
 
 # scores
-python run_new.py --mode get_scores --datasets $DATASETS
-# # logits
-python run_new.py --mode get_logits --datasets $DATASETS
+# python run_new.py --mode get_scores --datasets $DATASETS
+# # # logits
+# python run_new.py --mode get_logits --datasets $DATASETS
 # # training probe
 python run_new.py --mode train --datasets $DATASETS --probe_types $PROBE_TYPES --max_samples $MAX_SAMPLES --save_loss_history
 

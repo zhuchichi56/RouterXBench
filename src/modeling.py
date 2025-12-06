@@ -1,3 +1,11 @@
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset
+from torch.distributions import Dirichlet
+from typing import List, Tuple
+import numpy as np
+
+
 class DynamicFusionProbe(nn.Module):
     """动态融合每一层信号的probe"""
     def __init__(self, input_dim: int, num_layers: int, output_dim: int = 1, probe_type: str = "softmax"):

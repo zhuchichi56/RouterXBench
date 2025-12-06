@@ -303,6 +303,7 @@ class MeanProbe(nn.Module):
             # Multi-layer MLP
             layers = []
             prev_dim = input_dim
+            print(f"hidden_dims:{hidden_dims}")
             for hidden_dim in hidden_dims:
                 layers.append(nn.Linear(prev_dim, hidden_dim))
                 layers.append(nn.ReLU())

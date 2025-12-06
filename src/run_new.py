@@ -57,7 +57,6 @@ def save_training_history(history, probe_type, task_list, max_samples=None, save
         "tasks": task_list,
         "datasets": task_list,  # 添加数据集信息(与tasks相同)
         "max_samples": max_samples,  # 添加使用的最大样本数
-        "max_samples_k": f"{max_samples/1000:.1f}k" if max_samples else None,  # 以k为单位显示
         "timestamp": timestamp,
         "initial_lr": initial_lr,
         "best_val_loss": best_val_loss,
@@ -82,16 +81,6 @@ def save_training_history(history, probe_type, task_list, max_samples=None, save
 
 
 def batch_evaluate_probes(base_config, probe_configs, eval_tasks):
-    """
-    批量评估不同probe配置
-
-    Args:
-        base_config: 基础配置对象
-        probe_configs: probe配置列表
-        eval_tasks: 评估任务列表
-    """
-    all_results = {}
-
     for i, probe_config in enumerate(probe_configs):
         config_copy = copy.deepcopy(base_config)
         config_copy.router.checkpoint_path = probe_config['checkpoint_path']
@@ -133,24 +122,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='CoBench Router Evaluation and Training Framework',
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
-示例用法:
-  # 获取指定数据集的 scores
-  python run.py --mode get_scores --datasets math mmlu_test
-
-  # 获取指定数据集的 logits
-  python run.py --mode get_logits --datasets numina_cot_5k_train
-
-  # 训练 probe 模型并保存训练历史
-  python run.py --mode train --datasets numina_cot_5k_train --probe_types hs_last_mlp mean --max_samples 4000 --save_loss_history
-
-  # 评估单个任务
-  python run.py --mode eval_single --datasets math
-
-  # 评估不同的路由器策略
-  python run.py --mode logits_based_routers
-  python run.py --mode self_based
-        '''
     )
 
     parser.add_argument("--mode", type=str, required=True,
@@ -184,12 +155,10 @@ if __name__ == '__main__':
     config = PipelineConfig().from_yaml()
     pipeline = RouterEvaluationPipeline(config)
 
-
     # ==================== 模式: get_scores ====================
     if mode == "get_scores":
         datasets = args.datasets 
         print(f"🎯 获取以下数据集的 scores: {datasets}")
-
         for task in datasets:
             print(f"\n{'='*60}")
             print(f"📊 处理任务: {task}")

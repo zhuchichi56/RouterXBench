@@ -107,8 +107,8 @@ class ProbeTrainer:
         # Build kwargs based on probe type
         kwargs = {}
 
-        if self.probe_type in ["hs_last_mlp", "hs_mlp", "coe_dual_mlp", "coe_c_scalar", "coe_r_scalar"]:
-            # MLP probes
+        if self.probe_type in ["hs_last_mlp", "hs_mlp", "coe_dual_mlp", "coe_c_scalar", "coe_r_scalar", "mean", "max", "mean+max"]:
+            # MLP probes (including mean/max probes that support MLP structure)
             if "mlp_hidden_dims" in self.probe_config and self.probe_config["mlp_hidden_dims"]:
                 kwargs["hidden_dims"] = self.probe_config["mlp_hidden_dims"]
 
@@ -143,8 +143,17 @@ class ProbeTrainer:
         input_dim = self.get_input_dim(train_dataset[0])
 
         self.model = self.create_model(input_dim).to(self.device)
+
+        # Print detailed model structure
+        print("\n" + "="*80)
+        print("Model Architecture:")
+        print("-"*80)
+        print(self.model)
+        print("\n" + "-"*80)
+        
         if num_gpus > 1:
             self.model = nn.DataParallel(self.model)
+            print(f"🔧 Using DataParallel with {num_gpus} GPUs")
 
         # Data loaders
         train_loader = DataLoader(train_dataset, batch_size=effective_batch_size, shuffle=True,

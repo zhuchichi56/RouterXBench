@@ -1,29 +1,19 @@
 import fire
 import numpy as np
-from pathlib import Path
-from typing import List, Dict, Optional
+from typing import  Dict
 from data import DataManager, register_custom_dataset, list_available_datasets
 from router import RouterManager, get_available_probe_types
 from metric import BatchMetricEvaluator
 from config import PipelineConfig
-from router import create_router_manager
-from loguru import logger
 import json
 import os
 from loss_calculator import llm_as_a_judge
-# # Configure logger with beautiful formatting
-# logger.remove()  # Remove default handler
-# logger.add(
-#     sink=lambda msg: print(msg, end=""),  # Print to stdout
-#     format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | {message}",
-#     level="INFO"
-# )
 
 
 class RouterEvaluationPipeline:
     def __init__(self, config: PipelineConfig):
         self.config = config
-        self.data_manager = DataManager(config.data_dir, config.output_dir)
+        self.data_manager = DataManager(config.data_dir, config.output_dir, inference_config=config.inference)
         self.router_manager = RouterManager()
         self.metric_evaluator = BatchMetricEvaluator(config.metric_results_dir)
         
@@ -54,8 +44,6 @@ class RouterEvaluationPipeline:
         max_tokens = self.config.inference.max_tokens
         temperature = self.config.inference.temperature
         output_path = self.config.output_dir
-        # judge_model_cfg = getattr(self.config.inference, "judge_model", "gpt-5")
-        # judge_max_workers = getattr(self.config.inference, "max_workers", 64)
         if '/' in small_model_path:
             small_model_name = small_model_path.split('/')[-1]
         else:
@@ -132,8 +120,7 @@ class RouterEvaluationPipeline:
         for  small_result,large_result in zip(small_results,large_results):
             small_score = small_result.get("score", 0.0)
             large_score = large_result.get("score", 0.0)
-            if task.startswith('alpaca') or task.startswith('magpie'): #label
-               
+            if task.startswith('alpaca') or task.startswith('magpie'): #label               
                 score = 1 if small_score >= large_score else 0
             else:
                
@@ -146,40 +133,8 @@ class RouterEvaluationPipeline:
                 "score": float(score)
             }
             output_data.append(entry)
-        
-      # Check if there are multiple run files in large_model_output_dir and calculate pass@k
-        run_files = []
-        for run_id in range(100):
-            run_file = os.path.join(large_model_output_dir, f"{task}_run{run_id}.jsonl")
-            if os.path.exists(run_file):
-                run_files.append(run_file)
 
-        if len(run_files) > 0:
-            print(f"Found {len(run_files)} run files, calculating pass@{len(run_files)}...")
-            
-            # Calculate pass@k (简单版：k次中至少1次对)
-            pass_at_10_results = self.data_manager.evaluator.evaluate_pass_at_10_from_runs(
-                run_files_dir=large_model_output_dir,
-                dataset_name=task,
-                k=len(run_files),  # 用实际的run文件数量
-                run_prefix="run",
-                response_field="large_response"
-            )
-            
-            overall_pass_at_10 = sum(r["pass_at_10"] for r in pass_at_10_results) / len(pass_at_10_results) if pass_at_10_results else 0.0
-            passed = sum(1 for r in pass_at_10_results if r["pass_at_10"] == 1.0)
-            total = len(pass_at_10_results)
-            print(f"\nOverall pass@10: {overall_pass_at_10 * 100:.2f}%")
-            print(f"Passed: {passed}/{total}")
-            
-            # 按顺序对齐
-            for i in range(len(output_data)):
-                if i < len(pass_at_10_results):
-                    output_data[i]["pass_at_10"] = pass_at_10_results[i]["pass_at_10"]
-                else:
-                    output_data[i]["pass_at_10"] = 0.0
-
-
+          
         with open(output_file, 'w', encoding='utf-8') as f:
             for entry in output_data:
                 f.write(json.dumps(entry, ensure_ascii=False) + '\n')
@@ -274,8 +229,6 @@ class RouterEvaluationPipeline:
         """
         # Use all config parameters
         small_model_path = self.config.inference.weak_model_path
-        openai_api_key = self.config.inference.openai_api_key
-        openai_api_base = self.config.inference.openai_api_base
         large_model_path = self.config.inference.strong_model_path
         small_model_name = os.path.basename(small_model_path)
         if large_model_path == "false":
@@ -283,8 +236,6 @@ class RouterEvaluationPipeline:
         else:
             large_model_name = os.path.basename(large_model_path)
         
-        max_tokens = self.config.inference.max_tokens
-        temperature = self.config.inference.temperature
         recovery_rate_band = self.config.recovery_rate_band
         lpm_call_rate_band = self.config.lpm_call_rate_band
         router_config = self.config.router.to_dict(self.config.inference)
@@ -301,7 +252,6 @@ class RouterEvaluationPipeline:
             results_dir = "results"
 
         small_file = os.path.join(results_dir, f"{small_model_name}", f"{dataset_name}.jsonl")
-        pass_at_10_file = os.path.join(results_dir, f"{dataset_name}.jsonl")
         large_file = os.path.join(results_dir, f"{large_model_name}", f"{dataset_name}.jsonl")
         print(f"small_file: {small_file}")
 
@@ -323,70 +273,20 @@ class RouterEvaluationPipeline:
                     if line:
                         large_results.append(json.loads(line))
 
-       # TODO: 检查文件中是否有 pass_at_10 字段 改成传参
-        has_pass_at_10 = False
-        if os.path.exists(pass_at_10_file):
-            with open(pass_at_10_file, 'r', encoding='utf-8') as f:
-                first_line = f.readline().strip()
-                if first_line:
-                    try:
-                        first_item = json.loads(first_line)
-                        has_pass_at_10 = "pass_at_10" in first_item
-                    except json.JSONDecodeError:
-                        has_pass_at_10 = False
-        has_pass_at_10 = False
-        if has_pass_at_10:
-            print(f"Found pass@10 file, filtering samples...")
-            pass_at_10_scores = []
-            with open(pass_at_10_file, 'r', encoding='utf-8') as f:
-                for line in f:
-                    line = line.strip()
-                    if line:
-                        pass_at_10_scores.append(json.loads(line)["pass_at_10"])
+        # 计算准确率（使用所有数据）
+        small_accuracy = sum(r["score"] for r in small_results) / len(small_results) if small_results else 0.0
+        large_accuracy = sum(r["score"] for r in large_results) / len(large_results) if large_results else 0.0
 
-            # **过滤掉 pass@10 = 0 的样本**
-            print(f"\nOriginal samples: {len(small_results)}")
-            
-            # 找出 pass@10 > 0 的索引
-            valid_indices = [i for i, score in enumerate(pass_at_10_scores) if score > 0]
-            print(f"Samples with pass@10 > 0: {len(valid_indices)}")
-            print(f"Filtered out {len(small_results) - len(valid_indices)} samples")
-            
-            # 过滤所有数据
-            small_results = [small_results[i] for i in valid_indices]
-            large_results = [large_results[i] for i in valid_indices]
-            
-            # 计算准确率（基于过滤后的数据）
-            small_accuracy = sum(r["score"] for r in small_results) / len(small_results) if small_results else 0.0
-            large_accuracy = sum(r["score"] for r in large_results) / len(large_results) if large_results else 0.0
+        print(f"{datasets[0]} - Small model: {small_accuracy:.3f}, Large model: {large_accuracy:.3f}")
 
-            print(f"{datasets[0]} - Small model: {small_accuracy:.3f}, Large model: {large_accuracy:.3f}")
-            
-            model_results = {}
-            model_results[datasets[0]] = {
-                "small_results": small_results,
-                "large_results": large_results,
-                "small_accuracy": small_accuracy,
-                "large_accuracy": large_accuracy,
-                "valid_indices": valid_indices  # 保存有效索引，后面router也要用
-            }
-        else:
-            print(f"No pass@10 file found, using all samples...")
-            
-            # 计算准确率（使用所有数据）
-            small_accuracy = sum(r["score"] for r in small_results) / len(small_results) if small_results else 0.0
-            large_accuracy = sum(r["score"] for r in large_results) / len(large_results) if large_results else 0.0
-
-            print(f"{datasets[0]} - Small model: {small_accuracy:.3f}, Large model: {large_accuracy:.3f}")
-            
-            model_results = {}
-            model_results[datasets[0]] = {
-                "small_results": small_results,
-                "large_results": large_results,
-                "small_accuracy": small_accuracy,
-                "large_accuracy": large_accuracy,
-                "valid_indices": list(range(len(small_results)))  # 所有样本都有效
-            }
+        model_results = {}
+        model_results[datasets[0]] = {
+            "small_results": small_results,
+            "large_results": large_results,
+            "small_accuracy": small_accuracy,
+            "large_accuracy": large_accuracy,
+            "valid_indices": list(range(len(small_results)))  # 所有样本都有效
+        }
 
         # Step 2: Generate router scores
         print(f"Step 2: Generating router scores using {router_config['type']} router")
@@ -621,7 +521,7 @@ class RouterEvaluationPipeline:
         # Generate answers using both models
         small_model_path = self.config.inference.weak_model_path
 
-        # large_model_path = self.config.inference.strong_model_path
+        large_model_path = self.config.inference.strong_model_path
 
         print(f"Evaluating {len(questions)} MT-Bench questions")
 
@@ -700,61 +600,6 @@ class RouterEvaluationPipeline:
 
             return all_responses
 
-        def _format_chat_template(self, messages, model_path):
-            """Format messages using appropriate chat template"""
-            # For GPT models, use direct message format
-            if "gpt" in model_path.lower():
-                return json.dumps(messages)
-
-            # For other models, try to use a standard chat template format
-            # This mimics the behavior of get_conversation_template() in original MT-Bench
-            if "llama" in model_path.lower():
-                # Llama-style formatting
-                formatted = ""
-                for msg in messages:
-                    if msg["role"] == "user":
-                        formatted += f"<s>[INST] {msg['content']} [/INST]"
-                    elif msg["role"] == "assistant":
-                        formatted += f"{msg['content']}</s>"
-                return formatted
-            elif "qwen" in model_path.lower():
-                # Qwen-style formatting
-                formatted = ""
-                for msg in messages:
-                    if msg["role"] == "user":
-                        formatted += f"<|im_start|>user\n{msg['content']}<|im_end|>\n"
-                    elif msg["role"] == "assistant":
-                        formatted += f"<|im_start|>assistant\n{msg['content']}<|im_end|>\n"
-                if not formatted.endswith("<|im_start|>assistant\n"):
-                    formatted += "<|im_start|>assistant\n"
-                return formatted
-            else:
-                # Default format - try vllm_client's template handling
-                conversation = []
-                for msg in messages:
-                    if msg["role"] == "user":
-                        conversation.append(f"User: {msg['content']}")
-                    elif msg["role"] == "assistant":
-                        conversation.append(f"Assistant: {msg['content']}")
-                return "\n\n".join(conversation) + "\n\nAssistant:"
-
-        def _clean_response(self, response):
-            """Clean response similar to original MT-Bench"""
-            if not response:
-                return ""
-
-            # Remove common prefixes that models might add
-            response = response.strip()
-            if response.startswith("Assistant:"):
-                response = response.replace("Assistant:", "", 1).strip()
-
-            # Remove special tokens (basic cleanup)
-            special_tokens = ["<|im_end|>", "</s>", "<s>", "[/INST]"]
-            for token in special_tokens:
-                response = response.replace(token, "")
-
-            return response.strip()
-
         # Generate small model answers
         print("Generating small model responses...")
         small_responses = generate_multi_turn_responses(small_model_path, questions)
@@ -762,11 +607,11 @@ class RouterEvaluationPipeline:
         # Generate large model answers
         print("Generating large model responses...")
 
-        # large_responses = generate_multi_turn_responses(large_model_path, questions)
+        large_responses = generate_multi_turn_responses(large_model_path, questions)
 
         # Format answers for judge evaluation
         small_answers = []
-        # large_answers = []
+        large_answers = []
 
         for i, question in enumerate(questions):
             small_answers.append({
@@ -774,11 +619,10 @@ class RouterEvaluationPipeline:
                 "choices": [{"turns": small_responses[i]}]
             })
 
-
-            # large_answers.append({
-            #     "question_id": question["question_id"],
-            #     "choices": [{"turns": large_responses[i]}]
-            # })
+            large_answers.append({
+                "question_id": question["question_id"],
+                "choices": [{"turns": large_responses[i]}]
+            })
 
         # Evaluate with LLM-as-a-Judge
         print("Evaluating small model with LLM-as-a-Judge...")
@@ -786,27 +630,27 @@ class RouterEvaluationPipeline:
 
 
         # print("Evaluating large model with LLM-as-a-Judge...")
-        # large_scores = llm_as_a_judge(questions, large_answers, judge_model, ref_answers)
+        large_scores = llm_as_a_judge(questions, large_answers, judge_model, ref_answers)
 
         # Calculate statistics
         valid_small_scores = [s for s in small_scores if s > 0]
-        # valid_large_scores = [s for s in large_scores if s > 0]
+        valid_large_scores = [s for s in large_scores if s > 0]
 
         results = {
             "questions": len(questions),
             "small_model": small_model_path,
-            # "large_model": large_model_path,
+            "large_model": large_model_path,
             "judge_model": judge_model,
             "small_scores": small_scores,
-            # "large_scores": large_scores,
+            "large_scores": large_scores,
             "small_avg": sum(valid_small_scores) / len(valid_small_scores) if valid_small_scores else 0,
-            # "large_avg": sum(valid_large_scores) / len(valid_large_scores) if valid_large_scores else 0,
+            "large_avg": sum(valid_large_scores) / len(valid_large_scores) if valid_large_scores else 0,
             "small_valid": len(valid_small_scores),
-            # "large_valid": len(valid_large_scores)
+            "large_valid": len(valid_large_scores)
         }
 
         print(f"Small model average score: {results['small_avg']:.2f} ({results['small_valid']}/{results['questions']} valid)")
-        # print(f"Large model average score: {results['large_avg']:.2f} ({results['large_valid']}/{results['questions']} valid)")
+        print(f"Large model average score: {results['large_avg']:.2f} ({results['large_valid']}/{results['questions']} valid)")
 
         return results
 

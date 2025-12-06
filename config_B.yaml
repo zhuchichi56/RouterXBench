@@ -8,15 +8,16 @@ lpm_call_rate_band: [0.25, 0.3]
 inference:
   # Machine B paths - modify these for your actual paths
   strong_model_path: "gpt-5"
-  # weak_model_path: "/volume/pt-train/models/Llama-3.1-8B-Instruct"
+  weak_model_path: "/volume/pt-train/models/Llama-3.1-8B-Instruct"
   # weak_model_path: "/volume/pt-train/models/Qwen2.5-1.5B-Instruct"
 #测qwen 2.5 7b的情况
+
   max_tokens: 2048
   temperature: 0.0
   top_p: 0.9
   skip_special_tokens: true
 
-  base_port: 8000  # Different port for Machine B
+  base_port: 8001  # Different port for Machine B
   strong_gpu_ids: [1, 0]
   weak_gpu_ids: [0,1,2,3]
 
@@ -28,7 +29,7 @@ inference:
   batch_size: 8
   template_type: "default"
   system_prompt: "You are a helpful AI assistant."
-  cuda_visible_devices: "4,5,6,7"
+  cuda_visible_devices: "0,1,2,3,4,5,6,7"
 
   # xVerify model configuration for math evaluation
   xverify_model_name: "xVerify-0.5B"
@@ -49,7 +50,7 @@ training:
   learning_rate: 0.0001
 
   # Probe architecture parameters
-  # mlp_hidden_dims: [2048, 1024]  # Hidden layers for MLP probe, set to null or [] for single layer
+  mlp_hidden_dims: [512]  # Hidden layers for MLP probe, set to null or [] for single layer
 
   reward_model_name: "microsoft/deberta-v3-base"
   reward_output_dir: "reward_model"

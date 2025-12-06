@@ -68,11 +68,18 @@ def stratified_sample(ds, n_samples, stratify_by="source"):
     
     return result_df
 
-def main():
+def main(total_samples=10000, train_ratio=0.8):
+    """
+    Args:
+        total_samples: 总共需要的样本数量，默认 10000
+        train_ratio: 训练集比例，默认 0.8 (80% train, 20% test)
+    """
     print("=" * 60)
     print("开始加载 Big-Math-RL-Verified-Processed 数据集...")
     print("=" * 60)
-    
+    print(f"目标样本数: {total_samples}")
+    print(f"Train/Test 划分比例: {train_ratio:.0%} / {1-train_ratio:.0%}")
+
     # 设置输出目录
     output_dir = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/data"
     
@@ -112,22 +119,48 @@ def main():
     print("\n" + "=" * 60)
     print("开始按难度分层抽样...")
     print("=" * 60)
-    
-    # 方案: 总共抽取 10k 题,让 Llama-3.1-8B 达到约50%通过率
-    # 根据 solve_rate 和 pass@1 的换算关系:
-    # - solve_rate 0.8-1.0 → pass@1 约 60-80% (简单题)
-    # - solve_rate 0.6-0.8 → pass@1 约 40-60% (中等偏简单)
-    # - solve_rate 0.4-0.6 → pass@1 约 25-40% (中等偏难)
-    # - solve_rate 0.2-0.4 → pass@1 约 12-25% (难题)
-    # - solve_rate <0.2   → pass@1 约 5-12%  (极难题)
-    
-    # 配置目标: 小模型50%, GPT-4o 75%
-    # 1. 简单题 (0.8-1.0): 3000题 → 8B约70%, GPT-4o约90% → 贡献 1050 / 1350
-    # 2. 中等偏简单 (0.6-0.8): 3000题 → 8B约50%, GPT-4o约80% → 贡献 750 / 1200
-    # 3. 中等偏难 (0.4-0.6): 2000题 → 8B约32%, GPT-4o约65% → 贡献 320 / 650
-    # 4. 难题 (0.2-0.4): 1400题 → 8B约18%, GPT-4o约45% → 贡献 126 / 315
-    # 5. 极难 (<0.2): 300题 → 8B约8%, GPT-4o约25% → 贡献 24 / 75
-    # 总计: 2270/5000 = 45.4% (8B), 3590/5000 = 71.8% (GPT-4o)
+
+    # 难度分层比例配置 (保持原始比例关系)
+    # 目标: 让 Llama-3.1-8B 达到约50%通过率, GPT-4o 达到约75%通过率
+    # 原始配置 (10k总量):
+    # - 简单题 (0.8-1.0): 30%
+    # - 中等偏简单 (0.6-0.8): 30%
+    # - 中等偏难 (0.4-0.6): 20%
+    # - 难题 (0.2-0.4): 14%
+    # - 极难 (<0.2): 1.5%
+    # 注: 剩余 4.5% 用于微调确保总数正确
+
+    difficulty_ratios = {
+        "easy": 0.30,           # 简单题
+        "medium_easy": 0.30,    # 中等偏简单
+        "medium_hard": 0.20,    # 中等偏难
+        "hard": 0.14,           # 难题
+        "very_hard": 0.015      # 极难题
+    }
+
+    # 计算每个难度层的目标样本数
+    n_easy = int(total_samples * difficulty_ratios["easy"])
+    n_medium_easy = int(total_samples * difficulty_ratios["medium_easy"])
+    n_medium_hard = int(total_samples * difficulty_ratios["medium_hard"])
+    n_hard = int(total_samples * difficulty_ratios["hard"])
+    n_very_hard = int(total_samples * difficulty_ratios["very_hard"])
+
+    # 微调确保总数正确
+    current_total = n_easy + n_medium_easy + n_medium_hard + n_hard + n_very_hard
+    diff = total_samples - current_total
+    if diff > 0:
+        # 补充到最大的类别（简单题）
+        n_easy += diff
+    elif diff < 0:
+        # 从最大的类别削减
+        n_easy += diff  # diff是负数
+
+    print(f"\n难度层划分 (总计 {total_samples} 题):")
+    print(f"  - 简单题 (0.8-1.0): {n_easy} 题 ({n_easy/total_samples*100:.1f}%)")
+    print(f"  - 中等偏简单 (0.6-0.8): {n_medium_easy} 题 ({n_medium_easy/total_samples*100:.1f}%)")
+    print(f"  - 中等偏难 (0.4-0.6): {n_medium_hard} 题 ({n_medium_hard/total_samples*100:.1f}%)")
+    print(f"  - 难题 (0.2-0.4): {n_hard} 题 ({n_hard/total_samples*100:.1f}%)")
+    print(f"  - 极难 (<0.2): {n_very_hard} 题 ({n_very_hard/total_samples*100:.1f}%)")
     
     print("\n1. 筛选简单题 (solve_rate: 0.8-1.0)")
     easy = select_by_difficulty(ds, 0.8, 1.01, "简单")
@@ -148,21 +181,21 @@ def main():
     print("\n" + "=" * 60)
     print("执行分层抽样 (按 source 均衡)...")
     print("=" * 60)
-    
-    print("\n--- 简单题层 (目标: 3000题) ---")
-    easy_sampled = stratified_sample(easy, 3000, "source")
-    
-    print("\n--- 中等偏简单层 (目标: 3000题) ---")
-    medium_easy_sampled = stratified_sample(medium_easy, 3000, "source")
-    
-    print("\n--- 中等偏难层 (目标: 2000题) ---")
-    medium_hard_sampled = stratified_sample(medium_hard, 2000, "source")
-    
-    print("\n--- 难题层 (目标: 1400题) ---")
-    hard_sampled = stratified_sample(hard, 1400, "source")
-    
-    print("\n--- 极难层 (目标: 150题) ---")
-    very_hard_sampled = stratified_sample(very_hard,150, "source")
+
+    print(f"\n--- 简单题层 (目标: {n_easy}题) ---")
+    easy_sampled = stratified_sample(easy, n_easy, "source")
+
+    print(f"\n--- 中等偏简单层 (目标: {n_medium_easy}题) ---")
+    medium_easy_sampled = stratified_sample(medium_easy, n_medium_easy, "source")
+
+    print(f"\n--- 中等偏难层 (目标: {n_medium_hard}题) ---")
+    medium_hard_sampled = stratified_sample(medium_hard, n_medium_hard, "source")
+
+    print(f"\n--- 难题层 (目标: {n_hard}题) ---")
+    hard_sampled = stratified_sample(hard, n_hard, "source")
+
+    print(f"\n--- 极难层 (目标: {n_very_hard}题) ---")
+    very_hard_sampled = stratified_sample(very_hard, n_very_hard, "source")
     
     # 合并所有层
     final_df = pd.concat([
@@ -248,10 +281,10 @@ def main():
         
         # 打乱顺序
         tier_df = tier_df.sample(frac=1, random_state=42).reset_index(drop=True)
-        
-        # 计算划分点 (80% train, 20% test)
+
+        # 计算划分点 (使用传入的 train_ratio)
         n_total = len(tier_df)
-        n_train = int(n_total * 0.8)
+        n_train = int(n_total * train_ratio)
         
         tier_train = tier_df.iloc[:n_train]
         tier_test = tier_df.iloc[n_train:]
@@ -278,23 +311,28 @@ def main():
     print(f"\nTest集难度分布:")
     print(test_df['difficulty_tier'].value_counts().sort_index())
     
+    # 动态生成文件名 (根据实际样本数)
+    n_train_samples = len(train_df)
+    n_test_samples = len(test_df)
+    n_total_samples = len(output_df)
+
     # 保存train集
-    train_file = os.path.join(output_dir, "big_data_train_8k.jsonl")
+    train_file = os.path.join(output_dir, f"big_math_train_{n_train_samples//1000}k.jsonl")
     train_df.to_json(train_file, orient='records', lines=True, force_ascii=False)
     print(f"\n✓ Train数据已保存至: {train_file}")
-    
+
     # 保存test集
-    test_file = os.path.join(output_dir, "big_data_test_2k.jsonl")
+    test_file = os.path.join(output_dir, f"big_math_test_{n_test_samples//1000}k.jsonl")
     test_df.to_json(test_file, orient='records', lines=True, force_ascii=False)
     print(f"✓ Test数据已保存至: {test_file}")
-    
-    # 同时保存完整10k数据(可选,用于参考)
-    output_file = os.path.join(output_dir, "big_data_10k_full.jsonl")
+
+    # 同时保存完整数据(可选,用于参考)
+    output_file = os.path.join(output_dir, f"big_math_{n_total_samples//1000}k.jsonl")
     output_df.to_json(output_file, orient='records', lines=True, force_ascii=False)
     print(f"✓ 完整数据已保存至: {output_file}")
     
     # 生成统计报告
-    report_file = os.path.join(output_dir, "big_data_sampling_report.txt")
+    report_file = os.path.join(output_dir, "big_math_sampling_report.txt")
     with open(report_file, 'w') as f:
         f.write("Big-Math Benchmark 抽样报告 (10k, Train/Test划分)\n")
         f.write("=" * 60 + "\n\n")
@@ -382,4 +420,28 @@ def main():
     print("=" * 60)
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Big-Math 难度分层抽样脚本")
+    parser.add_argument(
+        "--total_samples",
+        type=int,
+        default=10000,
+        help="总共需要的样本数量 (默认: 10000)"
+    )
+    parser.add_argument(
+        "--train_ratio",
+        type=float,
+        default=0.8,
+        help="训练集比例 (默认: 0.8, 即 80%% train, 20%% test)"
+    )
+
+    args = parser.parse_args()
+
+    # 验证参数
+    if args.total_samples <= 0:
+        raise ValueError("total_samples 必须大于 0")
+    if not 0 < args.train_ratio < 1:
+        raise ValueError("train_ratio 必须在 (0, 1) 范围内")
+
+    main(total_samples=args.total_samples, train_ratio=args.train_ratio)

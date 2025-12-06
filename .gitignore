@@ -4,6 +4,7 @@ src/qwen2.5-results/
 outputs/
 no_use/
 hs/
+probe_save/
 wandb/
 visualizations/
 src/metric_results/
@@ -19,3 +20,9 @@ __pycache__/
 *.pyc
 __MACOSX/
 ._*
+.git.bfg-report/
+.spec-workflow/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json

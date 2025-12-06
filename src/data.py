@@ -46,6 +46,7 @@ class DatasetRegistry:
         "magpie_5k": DatasetConfig("magpie_5k", "general", "magpie_5k.jsonl"),
         "alpaca_5k": DatasetConfig("alpaca_5k","general","alpaca_5k.jsonl"),
         "dapo-math-17k_dedup": DatasetConfig("dapo-math-17k_dedup","math","dapo-math-17k_dedup.jsonl"),
+        "big_math_10k": DatasetConfig("big_math_10k","math","big_math_10k.jsonl"),
         # for train
         # "mmlu_5k": DatasetConfig("mmlu_5k", "mmlu", "mmlu_5k.jsonl"),
         "mmlu_train": DatasetConfig("mmlu_train", "mmlu", "mmlu_train.jsonl"),
@@ -112,15 +113,15 @@ class ModelEvaluator:
     def __init__(self, data_loader: DataLoader, inference_config=None):
         self.data_loader = data_loader
         self.loss_calc = MultiModalLossCalculator(model=None, tokenizer=None, device=None, inference_config=inference_config)
-        # self.judge_model 
-        # self.max_workers 
+        # Extract max_workers from inference_config if available
+        self.max_workers = inference_config.max_workers if inference_config and hasattr(inference_config, 'max_workers') else 32 
 
     def evaluate_model(self, model_path: str, dataset_name: str,
-                      max_tokens: int = 512, temperature: float = 0.0, 
+                      max_tokens: int = 512, temperature: float = 0.0,
                       model_type: str = "weak") -> List[Dict]:
         data, dataset_type = self.data_loader.load_dataset(dataset_name)
         prompts = self.data_loader.format_prompts(data, dataset_type)
-   
+
         print(f"Generated {len(prompts)} prompts")
         responses = parallel_inference(
                 prompts,
@@ -130,114 +131,37 @@ class ModelEvaluator:
                 type=model_type
             )
 
-        results = []
-        
-       
+        # Evaluate responses
+        scores = []
         if dataset_type == "general":
-            conversations = []
+            # Use llm_judge_general for general datasets (consistent with evaluate_single_dataset)
+            questions = [{"instruction": item['instruction']} for item in data]
+            answers = [{"response": response} for response in responses]
+            ref_answers = [{"response": item.get('response', '')} for item in data]
+            scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=self.max_workers)
+        else:
+            # Process non-general datasets individually
             for item, response in zip(data, responses):
-                conversation = [
-                    {"role": "user", "content": item["instruction"]},
-                    {"role": "assistant", "content": response}
-                ]
-                conversations.append(conversation)
-            
-            reward_scores = evaluate_skywork_reward(conversations, device="cuda:0")
-
-            scores = reward_scores
-            
-        results = []
-        for i, (item, response) in enumerate(zip(data, responses)):
-            instruction = item["instruction"]
-            gold_response = item.get("response", "")
-            
-            if dataset_type == "general":
-                score = scores[i]  
-            else:
-                is_correct = self.loss_calc._evaluate_response(response, gold_response, instruction, dataset_type)
+                gold_response = item.get('response', '')
+                is_correct = self.loss_calc._evaluate_response(
+                    response, gold_response, item['instruction'], dataset_type
+                )
                 score = 1.0 if is_correct else 0.0
-            
-            
+                scores.append(score)
+
+        # Build results
+        results = []
+        for i, (item, response, score) in enumerate(zip(data, responses, scores)):
             result = {
                 "id": i,
-                "instruction": instruction,
-                "response": gold_response,
+                "instruction": item["instruction"],
+                "response": item.get("response", ""),
                 "generated_response": response,
                 "score": score,
                 "dataset": dataset_name,
                 "dataset_type": dataset_type
             }
             results.append(result)
-        return results
-
-    def evaluate_pass_at_10_from_runs(self, 
-                                run_files_dir: str,
-                                dataset_name: str,
-                                k: int = 10,
-                                run_prefix: str = "run",
-                                response_field: str = "large_response") -> List[Dict]:
-        """
-        Calculate pass@k: at least 1 correct in k attempts
-        Returns: List of results, one per question
-        """
-        import json
-        from pathlib import Path
-        from collections import defaultdict
-        
-        run_dir = Path(run_files_dir)
-        data, dataset_type = self.data_loader.load_dataset(dataset_name)
-        
-        # Read all run files
-        all_responses_by_index = defaultdict(list)
-        
-        for run_id in range(100):
-            run_file = run_dir / f"{dataset_name}_{run_prefix}{run_id}.jsonl"
-            if not run_file.exists():
-                break
-            
-            with open(run_file, 'r', encoding='utf-8') as f:
-                for line in f:
-                    if not line.strip():
-                        continue
-                    item = json.loads(line)
-                    index = item.get('index', item.get('id', -1))
-                    if index == -1:
-                        continue
-                    response = item.get(response_field, '')
-                    all_responses_by_index[index].append(response)
-        
-        # Calculate pass@k for each question
-        results = []
-        
-        for i, item in enumerate(data):
-            instruction = item["instruction"]
-            gold_response = item.get("response", "")
-            responses = all_responses_by_index.get(i, [])
-            
-            # Skip if not enough responses
-            if len(responses) < k:
-                results.append({
-                    "id": i,
-                    "instruction": instruction,
-                    "pass_at_10": 0.0,  # 不够k次就算失败
-                    "n_responses": len(responses)
-                })
-                continue
-            
-            # Check if at least 1 correct in first k responses
-            has_correct = False
-            for response in responses[:k]:
-                if self.loss_calc._evaluate_response(response, gold_response, instruction, dataset_type):
-                    has_correct = True
-                    break
-            
-            results.append({
-                "id": i,
-                "instruction": instruction,
-                "pass_at_10": 1.0 if has_correct else 0.0,
-                "n_responses": k
-            })
-        
         return results
 
     def evaluate_single_model_from_file(self, file_path: str, dataset_name: str, model_type: str = "weak") -> Dict:
@@ -273,7 +197,7 @@ class ModelEvaluator:
             questions = [{"instruction": data[i]['instruction']} for i in need_judge]
             answers = [{"response": response_getter(entries[i])} for i in need_judge]
             ref_answers = [{"response": data[i].get('response', '')} for i in need_judge]
-            judged_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, 64)
+            judged_scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, self.max_workers)
             for idx, judged in zip(need_judge, judged_scores):
                 scores[idx] = judged
             return scores
@@ -329,8 +253,6 @@ class ModelEvaluator:
                                dataset_name: str,
                                output_path: str,
                                model_type: str = "weak",
-                               openai_api_base: Optional[str] = None,
-                               openai_api_key: Optional[str] = None,
                                **kwargs) -> Dict:
         """
         评估单个模型在数据集上的表现
@@ -340,8 +262,6 @@ class ModelEvaluator:
             dataset_name: 数据集名称
             output_path: 输出文件路径
             model_type: 模型类型 ("weak" 或 "strong")
-            openai_api_base: OpenAI API基础URL
-            openai_api_key: OpenAI API密钥
             **kwargs: 其他参数（如 max_tokens, temperature）
 
         Returns:
@@ -371,7 +291,7 @@ class ModelEvaluator:
             questions = [{"instruction": item['instruction']} for item in data]
             answers = [{"response": entry.get('generated_response', '')} for entry in generated]
             ref_answers = [{"response": item.get('response', '')} for item in data]
-            scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=32)
+            scores = llm_judge_general(questions, answers, "gpt-5", ref_answers, max_workers=self.max_workers)
         else:
             # Process non-general datasets individually
             for item, entry in zip(data, generated):
