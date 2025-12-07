@@ -4,7 +4,7 @@
 source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate router
 
 # 默认参数
-DATASETS="${1:-mmlu_test}"
+DATASETS="${1:-alpaca_10k}"
 PROBE_TYPES="${2:- mean}" #hs_last_mlp mean max
 MAX_SAMPLES="${3:-10000}"
 
@@ -15,6 +15,10 @@ echo "数据集: $DATASETS"
 echo "Probe 类型: $PROBE_TYPES"
 echo "最大样本数: $MAX_SAMPLES"
 
+# ========================================
+# 测试数据的步骤
+# ========================================
+# 启动模型服务
 # cd inference
 # python start.py \
 #   --model_path "/volume/pt-train/models/Llama-3.1-8B-Instruct" \
@@ -22,7 +26,7 @@ echo "最大样本数: $MAX_SAMPLES"
 #   --gpu_list "0,1,2,3"
 
 
-
+# 如果测试非general数据 需要启动xVerify
 # CUDA_VISIBLE_DEVICES=4 \
 # vllm serve /volume/pt-train/users/wzhang/ghchen/zh/models/xVerify-9B-C \
 #   --host 0.0.0.0 \
@@ -30,6 +34,8 @@ echo "最大样本数: $MAX_SAMPLES"
 #   --tensor-parallel-size 1 \
 #   --served-model-name xVerify \
 #   --trust-remote-code
+
+# 等待模型服务启动完成后，运行 scores
 
 # scores
 # python run_new.py --mode get_scores --datasets $DATASETS
