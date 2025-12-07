@@ -10,8 +10,6 @@ inference:
   strong_model_path: "gpt-5"
   weak_model_path: "/volume/pt-train/models/Llama-3.1-8B-Instruct"
   # weak_model_path: "/volume/pt-train/models/Qwen2.5-1.5B-Instruct"
-#测qwen 2.5 7b的情况
-
   max_tokens: 2048
   temperature: 0.0
   top_p: 0.9
@@ -24,6 +22,9 @@ inference:
   openai_api_key: "sk-e9OcUwV80NLvl00o73E5F3FcFa2d4a6cB7D46cB3D6263a1a"
   openai_api_base: "https://api.ai-gaochao.cn/v1"
   judge_model: "gpt-5"
+
+  # Azure OpenAI configuration
+  use_azure: true  # Set to true to use Azure OpenAI, false for OpenAI API
 
   max_workers: 1024
   batch_size: 8
@@ -50,7 +51,7 @@ training:
   learning_rate: 0.0001
 
   # Probe architecture parameters
-  mlp_hidden_dims: [512]  # Hidden layers for MLP probe, set to null or [] for single layer
+  # mlp_hidden_dims: [64]  # Hidden layers for MLP probe, set to null or [] for single layer
 
   reward_model_name: "microsoft/deberta-v3-base"
   reward_output_dir: "reward_model"

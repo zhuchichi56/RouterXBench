@@ -1,12 +1,15 @@
 import os
 import json
 import threading
+import asyncio
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Any, Optional
 from openai import OpenAI
 from loguru import logger
 from tqdm import tqdm
 from config import PipelineConfig
+
+# Azure imports are lazy-loaded to avoid dependency errors when not using Azure
 
 
 def load_finished_queries(output_file: str) -> Dict[str, str]:
@@ -52,7 +55,7 @@ def save_result_atomic(result: Dict, output_file: str, lock: threading.Lock):
             f.write(json.dumps(result, ensure_ascii=False) + "\n")
 
 
-def parallel_inference_gpt(
+def _parallel_inference_gpt_openai(
     queries: List[str],
     output_file: str,
     model: str = "gpt-5",
@@ -145,6 +148,195 @@ def parallel_inference_gpt(
     # Fallback: return what we have
     completed = load_finished_queries(output_file)
     return [completed.get(str(i + 1), "") for i in range(len(queries))]
+
+
+def _parallel_inference_gpt_azure(
+    queries: List[str],
+    output_file: str,
+    model: str = "gpt-5",
+    temperature: float = 0.7,
+    top_p: float = 1.0,
+    max_tokens: int = 1024,
+    system_prompt: Optional[str] = None,
+    max_workers: Optional[int] = None,
+    batch_size: int = 16,
+    inference_config=None,
+    **kwargs
+) -> List[str]:
+    """Azure OpenAI implementation using async methods."""
+
+    # Lazy import Azure dependencies
+    try:
+        from .gpt_inference_azure import get_client, build_messages, get_response
+        from azure.identity import AzureCliCredential
+    except ImportError as e:
+        logger.error(f"Azure dependencies not installed. Please run: pip install azure-identity")
+        raise ImportError(
+            "Azure OpenAI backend requires azure-identity package. "
+            "Install it with: pip install azure-identity"
+        ) from e
+
+    resolved_config = inference_config or PipelineConfig.from_yaml().inference
+
+    # Check if all results already exist
+    loaded = load_responses_from_file(output_file, queries)
+    if loaded is not None:
+        return loaded
+
+    resolved_system_prompt = system_prompt if system_prompt is not None else resolved_config.system_prompt
+    concurrency = max_workers if max_workers is not None else resolved_config.max_workers
+
+    lock = threading.Lock()
+
+    # Load finished queries for resuming
+    finished = load_finished_queries(output_file)
+    logger.info(f"Loaded {len(finished)} finished queries from {output_file}")
+
+    # Prepare pending queries
+    pending_queries = []
+    for idx, user_query in enumerate(queries):
+        query_id = str(idx + 1)
+        if query_id in finished:
+            continue
+        pending_queries.append({
+            "query_id": query_id,
+            "instruction": user_query,
+        })
+
+    logger.info(f"Pending queries: {len(pending_queries)}")
+
+    async def infer_one_azure(query: Dict[str, Any], credential: AzureCliCredential) -> Optional[Dict]:
+        try:
+            client, resolved_model = get_client(model_name=model, credential=credential)
+            messages = build_messages(query["instruction"], resolved_system_prompt)
+
+            # For GPT-5, don't pass max_tokens and temperature
+            if "gpt-5" in resolved_model or "gpt-5" in model:
+                response_text = await asyncio.to_thread(
+                    get_response,
+                    client,
+                    resolved_model,
+                    messages,
+                )
+            else:
+                response_text = await asyncio.to_thread(
+                    get_response,
+                    client,
+                    resolved_model,
+                    messages,
+                    max_tokens,
+                    temperature,
+                    top_p,
+                )
+
+            return {
+                "query_id": query["query_id"],
+                "instruction": query["instruction"],
+                "response": response_text,
+            }
+        except Exception as e:
+            logger.error(f"Error for query_id {query.get('query_id')}: {e}")
+            return None
+
+    async def run_all_azure():
+        credential = AzureCliCredential()
+        semaphore = asyncio.Semaphore(concurrency)
+
+        async def process_with_semaphore(q):
+            async with semaphore:
+                result = await infer_one_azure(q, credential)
+                if result:
+                    save_result_atomic(result, output_file, lock)
+                return result
+
+        tasks = [process_with_semaphore(q) for q in pending_queries]
+
+        # Use tqdm for progress tracking
+        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc="Processing"):
+            await coro
+
+    # Run async tasks
+    asyncio.run(run_all_azure())
+
+    # Load all results in order
+    loaded = load_responses_from_file(output_file, queries)
+    if loaded is not None:
+        return loaded
+
+    # Fallback: return what we have
+    completed = load_finished_queries(output_file)
+    return [completed.get(str(i + 1), "") for i in range(len(queries))]
+
+
+def parallel_inference_gpt(
+    queries: List[str],
+    output_file: str,
+    model: str = "gpt-5",
+    temperature: float = 0.7,
+    top_p: float = 1.0,
+    max_tokens: int = 1024,
+    system_prompt: Optional[str] = None,
+    max_workers: Optional[int] = None,
+    batch_size: int = 16,
+    inference_config=None,
+    use_azure: Optional[bool] = None,
+    **kwargs
+) -> List[str]:
+    """
+    Unified GPT inference function that routes to OpenAI or Azure based on config.
+
+    Args:
+        queries: List of user queries to process
+        output_file: Path to save results
+        model: Model name (e.g., "gpt-5", "gpt-4o")
+        temperature: Sampling temperature
+        top_p: Nucleus sampling parameter
+        max_tokens: Maximum tokens in response
+        system_prompt: System prompt for the model
+        max_workers: Maximum concurrent workers
+        batch_size: Batch size (kept for compatibility)
+        inference_config: Optional config object
+        use_azure: If True, use Azure; if False, use OpenAI; if None, use config default
+        **kwargs: Additional arguments
+
+    Returns:
+        List of response strings in same order as queries
+    """
+    resolved_config = inference_config or PipelineConfig.from_yaml().inference
+
+    # Determine which backend to use
+    should_use_azure = use_azure if use_azure is not None else getattr(resolved_config, 'use_azure', False)
+
+    if should_use_azure:
+        logger.info("Using Azure OpenAI backend")
+        return _parallel_inference_gpt_azure(
+            queries=queries,
+            output_file=output_file,
+            model=model,
+            temperature=temperature,
+            top_p=top_p,
+            max_tokens=max_tokens,
+            system_prompt=system_prompt,
+            max_workers=max_workers,
+            batch_size=batch_size,
+            inference_config=inference_config,
+            **kwargs
+        )
+    else:
+        logger.info("Using OpenAI backend")
+        return _parallel_inference_gpt_openai(
+            queries=queries,
+            output_file=output_file,
+            model=model,
+            temperature=temperature,
+            top_p=top_p,
+            max_tokens=max_tokens,
+            system_prompt=system_prompt,
+            max_workers=max_workers,
+            batch_size=batch_size,
+            inference_config=inference_config,
+            **kwargs
+        )
 
 
 if __name__ == "__main__":

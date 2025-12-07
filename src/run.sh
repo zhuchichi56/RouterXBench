@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # 激活conda环境
-source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate router
+source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate llf
 
 # 默认参数
 DATASETS="${1:-alpaca_10k}"
 PROBE_TYPES="${2:- mean}" #hs_last_mlp mean max
-MAX_SAMPLES="${3:-10000}"
+MAX_SAMPLES="${3:-4000}"
 
 echo "========================================="
 echo "CoBench 完整 Pipeline"
@@ -36,7 +36,6 @@ echo "最大样本数: $MAX_SAMPLES"
 #   --trust-remote-code
 
 # 等待模型服务启动完成后，运行 scores
-
 # scores
 # python run_new.py --mode get_scores --datasets $DATASETS
 # # # logits

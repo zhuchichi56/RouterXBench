@@ -24,122 +24,264 @@ def read_jsonl(file_name: str) -> List[Dict[str, Any]]:
     with path.open("r", encoding="utf-8") as f:
         return [json.loads(line) for line in f if line.strip()]
 
-
 def get_endpoints():
     gpt_4o = [
         {
             "endpoints": "https://conversationhubeastus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
         {
             "endpoints": "https://conversationhubeastus2.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
         {
             "endpoints": "https://conversationhubnorthcentralus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
         {
             "endpoints": "https://conversationhubsouthcentralus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
         {
             "endpoints": "https://conversationhubwestus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
+        # {
+        #     "endpoints": "https://conversationhubwestus3.openai.azure.com/",
+        #     "speed": 150,
+        #     "model": "gpt-4o"
+        # },
         {
             "endpoints": "https://readineastus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
         {
             "endpoints": "https://readineastus2.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
         {
             "endpoints": "https://readinnorthcentralus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
+        # {
+        #     "endpoints": "https://readinsouthcentralus.openai.azure.com/",
+        #     "speed": 150,
+        #     "model": "gpt-4o"
+        # },
         {
             "endpoints": "https://readinwestus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o"
         },
+        # {
+        #     "endpoints": "https://readinwestus3.openai.azure.com/",
+        #     "speed": 150,
+        #     "model": "gpt-4o"
+        # },
         {
             "endpoints": "https://conversationhubeastus.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
         {
             "endpoints": "https://conversationhubeastus2.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
         {
             "endpoints": "https://conversationhubnorthcentralus.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
         {
             "endpoints": "https://conversationhubsouthcentralus.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
+        # {
+        #     "endpoints": "https://conversationhubwestus.openai.azure.com/",
+        #     "speed": 450,
+        #     "model": "gpt-4o-global"
+        # },
         {
             "endpoints": "https://readineastus.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
         {
             "endpoints": "https://readineastus2.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
         {
             "endpoints": "https://readinnorthcentralus.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
         {
             "endpoints": "https://readinwestus.openai.azure.com/",
             "speed": 450,
-            "model": "gpt-4o-global",
+            "model": "gpt-4o-global"
         },
     ]
-    gpt_4_turbo = [
+
+    gpt_4o_mini = [
+        # https://conversationhubeastus.openai.azure.com/
+        # https://conversationhubeastus2.openai.azure.com/
+        # https://conversationhubnorthcentralus.openai.azure.com/
+        # https://conversationhubsouthcentralus.openai.azure.com/
+        # https://conversationhubswedencentral.openai.azure.com/
+        # https://conversationhubwestus.openai.azure.com/
+        # https://readineastus.openai.azure.com/
+        # https://readineastus2.openai.azure.com/
+        # https://readinnorthcentralus.openai.azure.com/
+        # https://readinwestus.openai.azure.com/
+        # https://malicata-azure-ai-foundry.cognitiveservices.azure.com/
         {
-            "endpoints": "https://conversationhubswedencentral.openai.azure.com/",
+            "endpoints": "https://conversationhubeastus.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4-turbo",
+            "model": "gpt-4o-mini"
         },
         {
             "endpoints": "https://conversationhubeastus2.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://conversationhubnorthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://conversationhubsouthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://conversationhubswedencentral.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://conversationhubwestus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://readineastus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
         },
         {
             "endpoints": "https://readineastus2.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-4o",
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://readinnorthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://readinwestus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
+        },
+        {
+            "endpoints": "https://malicata-azure-ai-foundry.cognitiveservices.azure.com/",
+            "speed": 150,
+            "model": "gpt-4o-mini"
+        },
+
+    ]
+
+    gpt_4_turbo = [
+        {
+            "endpoints": "https://conversationhubeastus2.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4-turbo"
+        },
+        {
+            "endpoints": "https://conversationhubswedencentral.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4-turbo"
+        },
+        {
+            "endpoints": "https://readineastus2.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4-turbo"
+        },
+        {
+            "endpoints": "https://readinswedencentral.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4-turbo"
         },
     ]
+
+    gpt_4_1 = [
+        {
+            "endpoints": "https://conversationhubnorthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-DZS"
+        },
+        {
+            "endpoints": "https://conversationhubsouthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-DZS"
+        },
+        {
+            "endpoints": "https://conversationhubswedencentral.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-DZS"
+        },
+        {
+            "endpoints": "https://readinnorthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-DZS"
+        },
+        {
+            "endpoints": "https://conversationhubeastus2.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-global"
+        },
+        {
+            "endpoints": "https://conversationhubnorthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-global"
+        },
+        {
+            "endpoints": "https://conversationhubswedencentral.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-global"
+        },
+        {
+            "endpoints": "https://readinnorthcentralus.openai.azure.com/",
+            "speed": 150,
+            "model": "gpt-4.1-global"
+        },
+    ]
+
     gpt_5 = [
         {
             "endpoints": "https://conversationhubeastus2.openai.azure.com/",
             "speed": 150,
-            "model": "gpt-5-global",
+            "model": "gpt-5-global"
         },
     ]
+
     return {
         "gpt-4o": gpt_4o,
+        "gpt-4o-mini": gpt_4o_mini,
         "gpt-4-turbo": gpt_4_turbo,
+        "gpt-4.1": gpt_4_1,
         "gpt-5": gpt_5,
     }
 
@@ -198,13 +340,19 @@ def get_response(
     temperature: float = 0.7,
     top_p: float = 1.0,
 ) -> str:
-    response = client.chat.completions.create(
-        model=resolved_model,
-        max_tokens=max_tokens,
-        temperature=temperature,
-        top_p=top_p,
-        messages=messages,
-    )
+    if "gpt-5" in resolved_model:
+        response = client.chat.completions.create(
+            model=resolved_model,
+            messages=messages,
+        )
+    else:
+        response = client.chat.completions.create(
+            model=resolved_model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            top_p=top_p,
+            messages=messages,
+        )
     content = response.choices[0].message.content
     return content
 
@@ -407,46 +555,64 @@ def check_api_error_indices(input_file: str, output_file: str) -> None:
 
 
 if __name__ == "__main__":
-    input_files = [
-    "data/numina_cot_5k_test.jsonl",
-    "data/numina_cot_5k_train.jsonl", 
-    "data/mmlu_test.jsonl",
-    "data/mmlu_pro/biology_converted.jsonl",
-    "data/mmlu_pro/business_converted.jsonl",
-    "data/mmlu_pro/chemistry_converted.jsonl",
-    "data/mmlu_pro/computer_science_converted.jsonl",
-    "data/mmlu_pro/economics_converted.jsonl",
-    "data/mmlu_pro/engineering_converted.jsonl",
-    "data/mmlu_pro/health_converted.jsonl",
-    "data/mmlu_pro/history_converted.jsonl",
-    "data/mmlu_pro/law_converted.jsonl",
-    "data/mmlu_pro/math_converted.jsonl",
-    "data/mmlu_pro/other_converted.jsonl",
-    "data/mmlu_pro/philosophy_converted.jsonl",
-    "data/mmlu_pro/physics_converted.jsonl",
-    "data/mmlu_pro/psychology_converted.jsonl",
-]
-    output_files = [
-        "results/gpt-4o/numina_cot_5k_test.jsonl",
-        "results/gpt-4o/numina_cot_5k_train.jsonl",
-        "results/gpt-4o/mmlu_test.jsonl",
-        "results/gpt-4o/mmlu_pro/biology_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/business_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/chemistry_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/computer_science_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/economics_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/engineering_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/health_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/history_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/law_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/math_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/other_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/philosophy_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/physics_converted.jsonl",
-        "results/gpt-4o/mmlu_pro/psychology_converted.jsonl",
+    input_files_normal = [
+        "src/data/alpaca_5k_test.jsonl",
+        "src/data/magpie_5k_test.jsonl",
     ]
 
-    output_root = "outputs"
-    for input_file, output_file in zip(input_files, output_files):
-        print(f"\n\n#### Processing {input_file} ####")
-        # output_file = os.path.join(output_root, input_file)
+    input_files_box = [
+        "src/data/numina_cot_5k_test.jsonl",
+        "src/data/mmlu_test.jsonl",
+        "src/data/mmlu_train.jsonl",
+        "src/data/mmlu_pro/biology_converted.jsonl",
+        "src/data/mmlu_pro/business_converted.jsonl",
+        "src/data/mmlu_pro/chemistry_converted.jsonl",
+        "src/data/mmlu_pro/computer_science_converted.jsonl",
+        "src/data/mmlu_pro/economics_converted.jsonl",
+        "src/data/mmlu_pro/engineering_converted.jsonl",
+        "src/data/mmlu_pro/health_converted.jsonl",
+        "src/data/mmlu_pro/history_converted.jsonl",
+        "src/data/mmlu_pro/law_converted.jsonl",
+        "src/data/mmlu_pro/math_converted.jsonl",
+        "src/data/mmlu_pro/other_converted.jsonl",
+        "src/data/mmlu_pro/philosophy_converted.jsonl",
+        "src/data/mmlu_pro/physics_converted.jsonl",
+        "src/data/mmlu_pro/psychology_converted.jsonl",
+        "src/data/math.jsonl",
+        "src/data/big_math_5k_train.jsonl",
+    ]
+
+    data = [
+        {
+            "input_files": input_files_normal,
+            "output_root": "outputs_normal_gpt5",
+            "system_prompt": "You are a helpful AI.",
+        },
+        {
+            "input_files": input_files_box,
+            "output_root": "outputs_box_gpt5",
+            "system_prompt": "Please reason step by step, and put your final answer within \\boxed{{}}",
+        },
+    ]
+
+
+    for item in data:
+        input_files = item["input_files"]
+        output_root = item["output_root"]
+        system_prompt = item["system_prompt"]
+
+        for input_file in input_files:
+            print(f"\n\n#### Processing {input_file} ####")
+            for run in range(1):
+                output_file = os.path.join(output_root, input_file.replace(".jsonl", f"_run{run}.jsonl"))
+                main(
+                    input_file=input_file,
+                    output_file=output_file,
+                    # model_name="gpt-4o",
+                    # max_tokens=2048,
+                    # temperature=0.7,
+                    # top_p=1.0,
+                    model_name="gpt-5",
+                    system_prompt=system_prompt,
+                    concurrency=150,
+                )

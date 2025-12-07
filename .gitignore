@@ -22,7 +22,4 @@ __MACOSX/
 ._*
 .git.bfg-report/
 .spec-workflow/
-.vscode/*
-!.vscode/settings.json
-!.vscode/launch.json
-!.vscode/tasks.json
+.vscode/

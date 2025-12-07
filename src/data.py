@@ -282,6 +282,15 @@ class ModelEvaluator:
             **kwargs
         )
 
+        # 对于 general 数据，推理完成后立即保存（防止后续联网失败）
+        if dataset_type == "general":
+            import os
+            os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
+            with open(output_path, 'w', encoding='utf-8') as f:
+                for entry in generated:
+                    f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+            print(f"✓ [步骤1/2] 已保存推理结果到 {output_path}（共 {len(generated)} 条，暂不含最终 score）")
+
         # 评估模型
         scores = []
         results = []
@@ -317,10 +326,11 @@ class ModelEvaluator:
 
         accuracy = sum(scores) / len(scores) if scores else 0.0
 
-        # 保存结果
+        # 保存最终结果
         with open(output_path, 'w', encoding='utf-8') as f:
             for result in results:
                 f.write(json.dumps(result, ensure_ascii=False) + '\n')
+
 
         print(f"{dataset_name} - {model_type.capitalize()} model: {accuracy:.3f}")
 
