@@ -33,7 +33,7 @@ inference:
   cuda_visible_devices: "0,1,2,3,4,5,6,7"
 
   # xVerify model configuration for math evaluation
-  xverify_model_name: "xVerify-0.5B"
+  xverify_model_name: "xVerify"
   xverify_model_url: "http://127.0.0.1:8000/v1"
   xverify_inference_mode: "api"
   xverify_api_key: "dummy"
