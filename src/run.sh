@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # 激活conda环境
-source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate llf
+source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate router
 
 # 默认参数
-DATASETS="${1:- alpaca_5k_test}"
+DATASETS="${1:- alpaca_10k}"
 PROBE_TYPES="${2:- mean}" #hs_last_mlp mean max
-MAX_SAMPLES="${3:-4000}"
+MAX_SAMPLES="${3:-10000}"
 
 echo "========================================="
 echo "CoBench 完整 Pipeline"

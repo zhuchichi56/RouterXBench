@@ -47,6 +47,7 @@ class DatasetRegistry:
         "alpaca_5k": DatasetConfig("alpaca_5k","general","alpaca_5k.jsonl"),
         "dapo-math-17k_dedup": DatasetConfig("dapo-math-17k_dedup","math","dapo-math-17k_dedup.jsonl"),
         "big_math_10k": DatasetConfig("big_math_10k","math","big_math_10k.jsonl"),
+        "alpaca_10k" :DatasetConfig("alpaca_10k","general","alpaca_10k.jsonl"),
         # for train
         # "mmlu_5k": DatasetConfig("mmlu_5k", "mmlu", "mmlu_5k.jsonl"),
         "mmlu_train": DatasetConfig("mmlu_train", "mmlu", "mmlu_train.jsonl"),
