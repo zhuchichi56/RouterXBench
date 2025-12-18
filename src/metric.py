@@ -10,20 +10,18 @@ from pathlib import Path
 class ReliableMetrics:
     @staticmethod
     def calculate(small_scores: np.ndarray, large_scores: np.ndarray,
-                 router_scores: np.ndarray) -> Dict:
+                 router_scores: np.ndarray, dataset_type: str = 'general') -> Dict:
         min_len = min(len(small_scores), len(large_scores), len(router_scores))
         small_scores = small_scores[:min_len]
         large_scores = large_scores[:min_len]
         router_scores = router_scores[:min_len]
-        if np.any(large_scores > 5) or np.any(small_scores > 5):
-            # 如果有分数大于1，就看小模型是否 >= 大模型
+        if dataset_type == 'general':
+            # general类型：对于评分制数据（alpaca, magpie），比较小模型和大模型分数
             labels = (small_scores >= large_scores).astype(int)
         else:
-            # 原来的逻辑：处理分数差值
-            acc_diff = 1 - small_scores
-            labels = (acc_diff <= 0).astype(int)
+            # 其他类型：直接使用small_scores作为labels
+            labels = small_scores
        
-
         if len(np.unique(labels)) > 1:
             auroc = roc_auc_score(labels, router_scores)
             fpr, tpr, thresholds = roc_curve(labels, router_scores)
@@ -60,8 +58,7 @@ class AdaptiveMetrics:
         small_mean = small_scores.mean()
         large_mean = large_scores.mean()
         
-        
-        
+           
         # 分数越低越优先触发大模型调用，因此直接按升序累积
         sorted_indices = np.argsort(router_scores)
         sorted_small = small_scores[sorted_indices]
@@ -90,13 +87,11 @@ class AdaptiveMetrics:
         
 
         # Calculate LPM within指定 call-rate 区间
-        lpm_low = max(0.0, min(1.0, lpm_call_rate_band[0]))
-        lpm_high = max(lpm_low, min(1.0, lpm_call_rate_band[1]))
+        lpm_low =  lpm_call_rate_band[0]
+        lpm_high = lpm_call_rate_band[1]
         start_idx = np.searchsorted(call_rates, lpm_low, side='left')
         end_idx = np.searchsorted(call_rates, lpm_high, side='right')
-        if end_idx <= start_idx:
-            end_idx = min(start_idx + 1, len(call_rates))
-        start_idx = min(start_idx, len(call_rates) - 1)
+
         LPM = np.mean(accuracies[start_idx:end_idx])
         lpm_threshold = accuracies[min(end_idx - 1, len(accuracies) - 1)]
 
@@ -141,11 +136,11 @@ class MetricEvaluator:
         self.adaptive_metrics = AdaptiveMetrics()
 
     def evaluate_from_results(self, small_results: List[Dict], large_results: List[Dict],
-                            router_scores: np.ndarray, **kwargs) -> Dict:
+                            router_scores: np.ndarray, dataset_type: str = 'general', **kwargs) -> Dict:
         small_scores = np.array([r['score'] for r in small_results])
         large_scores = np.array([r['score'] for r in large_results])
 
-        reliable = self.reliable_metrics.calculate(small_scores, large_scores, router_scores)
+        reliable = self.reliable_metrics.calculate(small_scores, large_scores, router_scores, dataset_type)
         adaptive = self.adaptive_metrics.calculate(small_scores, large_scores, router_scores, **kwargs)
         print(reliable)
         return {
@@ -159,8 +154,8 @@ class MetricEvaluator:
         }
 
     def evaluate_from_scores(self, small_scores: np.ndarray, large_scores: np.ndarray,
-                           router_scores: np.ndarray, **kwargs) -> Dict:
-        reliable = self.reliable_metrics.calculate(small_scores, large_scores, router_scores)
+                           router_scores: np.ndarray, dataset_type: str = 'general', **kwargs) -> Dict:
+        reliable = self.reliable_metrics.calculate(small_scores, large_scores, router_scores, dataset_type)
         adaptive = self.adaptive_metrics.calculate(small_scores, large_scores, router_scores, **kwargs)
 
         return {
@@ -264,9 +259,9 @@ class BatchMetricEvaluator:
 
 
 def evaluate_single_dataset(small_scores: np.ndarray, large_scores: np.ndarray,
-                           router_scores: np.ndarray, **kwargs) -> Dict:
+                           router_scores: np.ndarray, dataset_type: str = 'general', **kwargs) -> Dict:
     evaluator = MetricEvaluator()
-    return evaluator.evaluate_from_scores(small_scores, large_scores, router_scores, **kwargs)
+    return evaluator.evaluate_from_scores(small_scores, large_scores, router_scores, dataset_type, **kwargs)
 
 
 def plot_results(adaptive_metrics: Dict, save_path: Optional[str] = None):

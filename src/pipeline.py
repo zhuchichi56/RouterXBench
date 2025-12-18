@@ -222,7 +222,6 @@ class RouterEvaluationPipeline:
         print(f"Saved {len(output_data)} MT-Bench evaluation results to {output_file}")
         return output_file
 
-
     def evaluate_complete_pipeline(self, hidden_states_file: str, datasets) -> Dict:
         """
         Simplified evaluation using only config parameters
@@ -471,8 +470,7 @@ class RouterEvaluationPipeline:
             "model_results": model_results,
             "router_scores": {k: v.tolist() for k, v in router_scores_dict.items()},
             "metric_results": metric_results
-        }
-        
+        }        
 
     def register_dataset(self, name: str, dataset_type: str, file_path: str):
         """Register a new dataset"""

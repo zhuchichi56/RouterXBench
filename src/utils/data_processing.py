@@ -15,7 +15,7 @@ def extract_method_from_dirname(dirname):
     known_methods = [
         "coe", "entropy", "confidence_margin", "max_logits",
         "top10_variance", "semantic_entropy", "self_questioning",
-        "dynamic_dirichlet", "probe"
+        "dirichlet", "probe"
     ]
 
     for method in known_methods:
@@ -71,6 +71,13 @@ def load_individual_datasets(method_dir, method_name):
                     "HPM": data["adaptive_metrics"]["HPM"],
                     "MPM": data["adaptive_metrics"]["MPM"]
                 }
+
+                # 如果是alpaca或magpie数据集，auroc、LPM、MPM除以10，HPM不变
+                if 'alpaca' in dataset_name.lower() or 'magpie' in dataset_name.lower():
+                    
+                    metrics["LPM"] = metrics["LPM"] / 10.0 if metrics["LPM"] is not None else None
+                    metrics["MPM"] = metrics["MPM"] / 10.0 if metrics["MPM"] is not None else None
+                    # HPM 保持不变
 
                 results[dataset_name] = metrics
 
@@ -199,7 +206,7 @@ def print_metric_comparison_table(all_path_results, metric, method_names):
         # "mean": ("Probe", "ProbeMean"),
         "probe": ("Probe", "Probe"),
         # "dynamic": ("Probe", "DynamicDirichlet"),
-        # "dynamic_dirichlet": ("Probe", "DynamicDirichlet")
+        "dirichlet": ("Probe", "Dirichlet")
     }
 
     def fmt(x):
@@ -351,41 +358,102 @@ def scan_methods(base_path):
     return methods
 
 
+def load_probe_results_from_train_set(train_set_name):
+    """从训练集目录加载probe结果
+
+    Args:
+        train_set_name: 训练集名称，例如 mmlu, alpaca_5k_train, big_math_5k
+
+    Returns:
+        (individual_results, mmlu_pro_averages): 与其他函数相同格式的结果
+    """
+    metric_results_base = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results"
+    train_dir = os.path.join(metric_results_base, train_set_name)
+
+    if not os.path.exists(train_dir):
+        print(f"Error: Train directory does not exist: {train_dir}")
+        return {}, {}
+
+    # 使用probe方法名加载数据
+    print(f"Loading probe results from: {train_dir}")
+    individual_results = load_individual_datasets(train_dir, "probe")
+    mmlu_pro_averages = load_mmlu_pro_categories(train_dir, "probe")
+
+    return individual_results, mmlu_pro_averages
+
+
 def main():
-    # 基础路径
-    base_path = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results/base"
+    import sys
 
-    # 自动扫描所有方法
-    print(f"Scanning methods in: {base_path}")
-    methods = scan_methods(base_path)
+    # 解析命令行参数
+    mode = "base"  # 默认模式
+    if len(sys.argv) > 1:
+        mode = sys.argv[1].lower()
 
-    if not methods:
-        print("No methods found!")
-        return
+    metric_results_base = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results"
 
-    print(f"Found {len(methods)} methods:")
-    for method_name, method_path in methods:
-        print(f"  - {method_name}")
+    print(f"Running in mode: {mode}")
+    print("="*80)
 
     all_path_results = []
     method_names = []
 
-    for method_name, method_dir in methods:
-        print(f"\n{'='*80}")
-        print(f"Loading data for method: {method_name}")
-        print(f"{'='*80}")
+    if mode == "base":
+        # 原有的base模式
+        base_path = os.path.join(metric_results_base, "base")
 
-        print("Loading individual dataset metrics...")
-        individual_results = load_individual_datasets(method_dir, method_name)
+        print(f"Scanning methods in: {base_path}")
+        methods = scan_methods(base_path)
 
-        print("Loading MMLU Pro category metrics...")
-        mmlu_pro_averages = load_mmlu_pro_categories(method_dir, method_name)
+        if not methods:
+            print("No methods found!")
+            return
+
+        print(f"Found {len(methods)} methods:")
+        for method_name, method_path in methods:
+            print(f"  - {method_name}")
+
+        for method_name, method_dir in methods:
+            print(f"\n{'='*80}")
+            print(f"Loading data for method: {method_name}")
+            print(f"{'='*80}")
+
+            print("Loading individual dataset metrics...")
+            individual_results = load_individual_datasets(method_dir, method_name)
+
+            print("Loading MMLU Pro category metrics...")
+            mmlu_pro_averages = load_mmlu_pro_categories(method_dir, method_name)
+
+            all_path_results.append((individual_results, mmlu_pro_averages))
+            method_names.append(method_name)
+
+            print(f"Loaded {sum(1 for r in individual_results.values() if r is not None)} individual datasets")
+            print(f"Loaded {sum(1 for r in mmlu_pro_averages.values() if r is not None)} MMLU Pro categories")
+
+    elif mode in ["mmlu", "alpaca", "big_math","alpaca+big_math"]:
+        # Probe模式：从训练集目录加载probe结果
+        train_set_mapping = {
+            "mmlu": "mmlu",
+            "alpaca": "alpaca_5k_train",
+            "big_math": "big_math_5k",
+            "alpaca+big_math":"alpaca+big_math"
+        }
+
+        train_set_name = train_set_mapping[mode]
+        print(f"Loading probe results for training set: {train_set_name}")
+
+        individual_results, mmlu_pro_averages = load_probe_results_from_train_set(train_set_name)
 
         all_path_results.append((individual_results, mmlu_pro_averages))
-        method_names.append(method_name)
+        method_names.append(f"probe_{train_set_name}")
 
         print(f"Loaded {sum(1 for r in individual_results.values() if r is not None)} individual datasets")
         print(f"Loaded {sum(1 for r in mmlu_pro_averages.values() if r is not None)} MMLU Pro categories")
+
+    else:
+        print(f"Error: Unknown mode '{mode}'")
+        print("Available modes: base, mmlu, alpaca, big_math")
+        return
 
     # 打印对比表格
     metrics = ["auroc", "LPM", "HPM", "MPM"]

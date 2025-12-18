@@ -267,7 +267,7 @@ if __name__ == '__main__':
                     if probe_types and detected_probe_type not in probe_types:
                         continue
 
-                    metric_results_dir = f"metric_results/eval/{detected_probe_type}"
+                    metric_results_dir = config.metric_results_dir
 
                     probe_configs.append({
                         "checkpoint_path": pf,

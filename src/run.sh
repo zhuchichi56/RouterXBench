@@ -4,16 +4,16 @@
 source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate router
 
 # 默认参数
-DATASETS="${1:- alpaca_5k_test}"
-PROBE_TYPES="${2:- mean}"
-MAX_SAMPLES="${3:-12000}"
+DATASETS="${1:- mmlu_train big_math_5k_train}"
+PROBE_TYPES="${2:-dynamic_dirichlet}"
+MAX_SAMPLES="${3:-8000}"
+
 
 # MMLU Pro 测试数据集
 MMLU_PRO_TASKS="mmlu_pro_biology mmlu_pro_business mmlu_pro_chemistry mmlu_pro_computer_science mmlu_pro_economics mmlu_pro_engineering mmlu_pro_health mmlu_pro_history mmlu_pro_law mmlu_pro_math mmlu_pro_other mmlu_pro_philosophy mmlu_pro_physics mmlu_pro_psychology"
 
 # 完整测试数据集列表
 TEST_DATASETS="${4:-math mmlu_pro_biology mmlu_pro_business mmlu_pro_chemistry mmlu_pro_computer_science mmlu_pro_economics mmlu_pro_engineering mmlu_pro_health mmlu_pro_history mmlu_pro_law mmlu_pro_math mmlu_pro_other mmlu_pro_philosophy mmlu_pro_physics mmlu_pro_psychology magpie_5k_test alpaca_5k_test big_math_5k_test mmlu_test}"
-
 echo "========================================="
 echo "CoBench 完整 Pipeline"
 echo "========================================="
@@ -27,17 +27,15 @@ echo "最大样本数: $MAX_SAMPLES"
 # ========================================
 # 启动模型服务
 # cd inference
-# python start.py \
-#   --model_path "/volume/pt-train/models/Llama-3.1-8B-Instruct" \
-#   --base_port 8001 \
-#   --gpu_list "0,1,2,3"
+# 
+
 
 
 # 如果测试非general数据 需要启动xVerify
-# CUDA_VISIBLE_DEVICES=4 \
+# CUDA_VISIBLE_DEVICES=7 \
 # vllm serve /volume/pt-train/users/wzhang/ghchen/zh/models/xVerify-9B-C \
 #   --host 0.0.0.0 \
-#   --port 8000 \
+#   --port 8002 \
 #   --tensor-parallel-size 1 \
 #   --served-model-name xVerify \
 #   --trust-remote-code
@@ -48,13 +46,13 @@ python run_new.py --mode get_scores --datasets $DATASETS
 # # # logits
 # python run_new.py --mode get_logits --datasets $DATASETS
 # # training probe
-# python run_new.py --mode train --datasets $DATASETS --probe_types $PROBE_TYPES --max_samples $MAX_SAMPLES #--save_loss_history
+# python run_new.py --mode train --datasets $DATASETS --probe_types $PROBE_TYPES --max_samples $MAX_SAMPLES --save_loss_history
 
 
 # # 评估
-# python run_new.py --mode eval_probe --datasets $TESTASETS --probe_types $PROBE_TYPES
+# python run_new.py --mode eval_probe --datasets $TEST_DATASETS --probe_types $PROBE_TYPES
 # python run_new.py --mode logits_based_routers --datasets $TEST_DATASETS 
-
+# python run_new.py --mode self_based --datasets $TEST_DATASETS 
 echo ""
 echo "========================================="
 echo "🎉 完整 Pipeline 执行成功！"

@@ -14,6 +14,8 @@ import json
 import torch
 from torch.utils.data import DataLoader
 import numpy as np
+import argparse
+from typing import List, Optional
 
 
 
@@ -35,7 +37,9 @@ def evaluate_uncertainty(model_path: str, test_data, num_samples: int = 100):
         metadata['input_dim'],
         metadata['num_layers'],
         metadata['output_dim'],
-        probe_type=probe_type
+        probe_type=probe_type,
+        mlp_hidden_dims=metadata.get('mlp_hidden_dims', None),
+        dropout=metadata.get('dropout', 0.1)
     ).to(device)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
@@ -109,7 +113,8 @@ def evaluate_uncertainty(model_path: str, test_data, num_samples: int = 100):
 
     return uncertainty_stats
 
-def test_mixed_datasets(test_configs, probe_type):
+def test_mixed_datasets(test_configs, probe_type, mlp_hidden_dims: List[int] = None,
+                       dropout: float = 0.1, save_dir: str = None):
     """测试混合数据集的函数"""
     print(f"🌟 Training on MIXED datasets:")
     
@@ -150,17 +155,19 @@ def test_mixed_datasets(test_configs, probe_type):
         
         print(f"💾 Saved mixed data to: {mixed_file}")
         print(f"🚀 Training {probe_type} probe on mixed dataset...")
-        
+
         # 使用现有的测试函数
-        results = test_dynamic_probe_on_task(mixed_task_name, mixed_file, probe_type)
-        
+        results = test_dynamic_probe_on_task(mixed_task_name, mixed_file, probe_type,
+                                            mlp_hidden_dims=mlp_hidden_dims, dropout=dropout,
+                                            save_dir=save_dir)
+
         # 清理临时文件
         try:
             os.remove(mixed_file)
             print(f"🗑️ Cleaned up temporary file")
         except:
             pass
-        
+
         if results:
             # 添加数据集信息到结果中
             results['dataset_info'] = dataset_info
@@ -175,7 +182,9 @@ def test_mixed_datasets(test_configs, probe_type):
         traceback.print_exc()
         return None
 
-def test_dynamic_probe_on_task(task: str, hidden_states_file: str, probe_type: str = "softmax"):
+def test_dynamic_probe_on_task(task: str, hidden_states_file: str, probe_type: str = "softmax",
+                              mlp_hidden_dims: List[int] = None, dropout: float = 0.1,
+                              save_dir: str = None):
     """测试动态probe在特定任务上的性能"""
 
     print(f"=" * 60)
@@ -191,8 +200,10 @@ def test_dynamic_probe_on_task(task: str, hidden_states_file: str, probe_type: s
         results = run_dynamic_probe_pipeline(
             task=task,
             hidden_states_file=hidden_states_file,
-            save_dir="/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/probe_save/test",
-            probe_type=probe_type
+            save_dir=save_dir or "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/probe_save/test",
+            probe_type=probe_type,
+            mlp_hidden_dims=mlp_hidden_dims,
+            dropout=dropout
         )
 
         # 输出结果
@@ -234,7 +245,9 @@ def test_dynamic_probe_on_task(task: str, hidden_states_file: str, probe_type: s
         print(f"❌ Error during testing: {e}")
         return None
 
-def test_mixed_datasets_with_sampling(test_configs, probe_type, max_samples=None):
+def test_mixed_datasets_with_sampling(test_configs, probe_type, max_samples=None,
+                                     mlp_hidden_dims: List[int] = None, dropout: float = 0.1,
+                                     save_dir: str = None):
     """测试混合数据集的函数，支持采样限制"""
     print(f"🌟 Training on MIXED datasets (max_samples: {max_samples}):")
     
@@ -283,17 +296,19 @@ def test_mixed_datasets_with_sampling(test_configs, probe_type, max_samples=None
         
         print(f"💾 Saved mixed data to: {mixed_file}")
         print(f"🚀 Training {probe_type} probe on mixed dataset...")
-        
+
         # 使用现有的测试函数
-        results = test_dynamic_probe_on_task(mixed_task_name, mixed_file, probe_type)
-        
+        results = test_dynamic_probe_on_task(mixed_task_name, mixed_file, probe_type,
+                                            mlp_hidden_dims=mlp_hidden_dims, dropout=dropout,
+                                            save_dir=save_dir)
+
         # 清理临时文件
         try:
             os.remove(mixed_file)
             print(f"🗑️ Cleaned up temporary file")
         except:
             pass
-        
+
         if results:
             # 添加数据集信息到结果中
             results['dataset_info'] = dataset_info
@@ -310,30 +325,57 @@ def test_mixed_datasets_with_sampling(test_configs, probe_type, max_samples=None
         return None
 
 
-def main_with_sampling():
-    """主测试函数 - 支持不同采样大小"""
+def main_with_sampling(datasets=None, probe_types=None, max_samples=None,
+                      mlp_hidden_dims: List[int] = None, dropout: float = 0.1,
+                      save_dir: str = None):
+    """主测试函数 - 支持不同采样大小
 
-    # 定义测试任务和对应的hidden states文件
-    test_configs = [
-        # {
-        #     "task": "alpaca_5k_train",
-        #     "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_alpaca_5k_train.pt"
-        # },
-        # {
-        #     "task": "mmlu_train",
-        #     "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_mmlu_train.pt"
-        # },
-        {
+    Args:
+        datasets: 数据集名称列表，如 ["alpaca_5k", "mmlu_train", "big_math"]
+        probe_types: probe类型列表，如 ["softmax", "dirichlet"]
+        max_samples: 最大采样数，如 12000
+        mlp_hidden_dims: MLP隐藏层维度列表，如 [64, 128]
+        dropout: Dropout比率
+        save_dir: 保存目录路径
+    """
+
+    # 数据集映射表
+    dataset_map = {
+        "alpaca_5k": {
+            "task": "alpaca_5k_train",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_alpaca_5k_train.pt"
+        },
+        "mmlu_train": {
+            "task": "mmlu_train",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_mmlu_train.pt"
+        },
+        "big_math": {
             "task": "big_math_5k_train",
             "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_big_math_5k_train.pt"
         }
-    ]
+    }
 
-    # 测试两种probe类型
-    probe_types = ["softmax", "dirichlet"]
-    
+    # 使用传入的参数或默认值
+    if datasets is None:
+        datasets = ["alpaca_5k", "mmlu_train", "big_math"]
+
+    if probe_types is None:
+        probe_types = ["softmax", "dirichlet"]
+
+    # 根据数据集名称构建test_configs
+    test_configs = []
+    for dataset_name in datasets:
+        if dataset_name in dataset_map:
+            test_configs.append(dataset_map[dataset_name])
+        else:
+            print(f"⚠️  Unknown dataset: {dataset_name}, skipping...")
+
+    if not test_configs:
+        print("❌ No valid datasets specified!")
+        return
+
     # 定义不同的采样大小
-    sample_sizes = [None]  # None表示使用全部数据
+    sample_sizes = [max_samples] if max_samples else [None]  # None表示使用全部数据
     
     all_results = {}
 
@@ -348,9 +390,11 @@ def main_with_sampling():
             size_label = f"{sample_size}samples" if sample_size else "allsamples"
             print(f"\n🎯 Training with sample size: {size_label}")
             print(f"{'-'*60}")
-            
+
             # 测试混合数据集
-            mixed_results = test_mixed_datasets_with_sampling(test_configs, probe_type, sample_size)
+            mixed_results = test_mixed_datasets_with_sampling(test_configs, probe_type, sample_size,
+                                                             mlp_hidden_dims=mlp_hidden_dims,
+                                                             dropout=dropout, save_dir=save_dir)
             
             if mixed_results:
                 mixed_summary = {
@@ -716,9 +760,70 @@ def main_leave_one_category_mmlu_pro():
     return all_results
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Dynamic Fusion Probe Training and Testing',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # 基本用法
+  python test_dynamic.py --datasets alpaca_5k mmlu_train --probe_types softmax
+
+  # 使用 MLP 结构和自定义配置
+  python test_dynamic.py \\
+    --datasets alpaca_5k mmlu_train big_math \\
+    --probe_types softmax dirichlet \\
+    --max_samples 12000 \\
+    --mlp_hidden_dims 64 128 \\
+    --dropout 0.5 \\
+    --save_dir custom/save/path
+
+  # 单数据集训练
+  python test_dynamic.py --datasets alpaca_5k --probe_types dirichlet --max_samples 5000
+        """
+    )
+
+    parser.add_argument('--datasets', type=str, nargs='+',
+                       default=["alpaca_5k", "mmlu_train", "big_math"],
+                       help='数据集名称列表（空格分隔），可选: alpaca_5k, mmlu_train, big_math')
+
+    parser.add_argument('--probe_types', type=str, nargs='+',
+                       default=["softmax", "dirichlet"],
+                       help='Probe 类型列表（空格分隔），可选: softmax, dirichlet')
+
+    parser.add_argument('--max_samples', type=int, default=12000,
+                       help='最大采样数量（默认: 12000）')
+
+    parser.add_argument('--mlp_hidden_dims', type=int, nargs='*', default=None,
+                       help='MLP 隐藏层维度列表（空格分隔），例如: 64 128。留空表示单层线性分类器')
+
+    parser.add_argument('--dropout', type=float, default=0.1,
+                       help='Dropout 比率（默认: 0.1）')
+
+    parser.add_argument('--save_dir', type=str,
+                       default="/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/probe_save/",
+                       help='模型和历史保存目录')
+
+    args = parser.parse_args()
+
+    print(f"📋 Running with parameters:")
+    print(f"   Datasets: {args.datasets}")
+    print(f"   Probe types: {args.probe_types}")
+    print(f"   Max samples: {args.max_samples}")
+    print(f"   MLP hidden dims: {args.mlp_hidden_dims}")
+    print(f"   Dropout: {args.dropout}")
+    print(f"   Save directory: {args.save_dir}")
+    print()
+
     # 运行混合数据集的采样实验
-    main_with_sampling()
-    
+    main_with_sampling(
+        datasets=args.datasets,
+        probe_types=args.probe_types,
+        max_samples=args.max_samples,
+        mlp_hidden_dims=args.mlp_hidden_dims,
+        dropout=args.dropout,
+        save_dir=args.save_dir
+    )
+
     # main_leave_one_category_mmlu_pro()
 
     # main_single_datasets_with_sampling()

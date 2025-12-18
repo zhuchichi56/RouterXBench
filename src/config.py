@@ -174,7 +174,7 @@ class PipelineConfig:
             return "A"
 
         machine_id = detect_machine()
-        config_file = f"../config_{machine_id}.yaml"
+        config_file = f"/volume/pt-train/users/wzhang/ghchen/zh/CoBench/config_{machine_id}.yaml"
 
         if not os.path.exists(config_file):
             print(f"配置文件 {config_file} 不存在，使用默认配置")

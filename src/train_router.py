@@ -12,7 +12,7 @@ import fire
 from config import PipelineConfig
 import os
 import torch.nn.functional as F
-from router import MLPProbe, ConvProbe, MeanProbe, MaxProbe, MeanMaxProbe, TransformerProbe, ZScoreNormalizer
+from router import MLPProbe, ConvProbe, MeanProbe, MaxProbe, MeanMaxProbe, TransformerProbe, ZScoreNormalizer, DynamicFusionProbe
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import multiprocessing as mp
 import gc
@@ -32,7 +32,6 @@ class ProbeDataset(Dataset):
         hidden_states = torch.tensor(item.get("hidden_states", []), dtype=torch.float32)
         label = torch.tensor(item.get("acc_label", 0), dtype=torch.float32)
 
-        # 调试：检查是否缺少 acc_label
         if not hasattr(self, '_debug_checked'):
             self._debug_checked = True
             if "acc_label" not in item:
@@ -53,7 +52,7 @@ class ProbeDataset(Dataset):
         else:
             features = hidden_states
 
-        if self.normalizer and self.probe_type not in ["pca_conv", "mean", "max", "mean+max", "transformer"]:
+        if self.normalizer and self.probe_type not in ["pca_conv", "mean", "max", "mean+max", "transformer", "dynamic_softmax", "dynamic_dirichlet"]:
             features = self.normalizer(features)
 
         return features, label
@@ -63,7 +62,8 @@ class ProbeTrainer:
     PROBE_CLASSES = {
         "hs_last_mlp": MLPProbe, "hs_mlp": MLPProbe, "coe_dual_mlp": MLPProbe,
         "coe_c_scalar": MLPProbe, "coe_r_scalar": MLPProbe, "pca_conv": ConvProbe,
-        "mean": MeanProbe, "max": MaxProbe, "mean+max": MeanMaxProbe, "transformer": TransformerProbe
+        "mean": MeanProbe, "max": MaxProbe, "mean+max": MeanMaxProbe, "transformer": TransformerProbe,
+        "dynamic_softmax": DynamicFusionProbe, "dynamic_dirichlet": DynamicFusionProbe
     }
 
     def __init__(self, probe_type: str, device: Optional[str] = None, probe_config: Optional[Dict] = None):
@@ -74,7 +74,7 @@ class ProbeTrainer:
         self.probe_config = probe_config or {}
 
     def build_normalizer(self, train_dataset) -> Optional[ZScoreNormalizer]:
-        if self.probe_type in ["pca_conv", "mean", "max", "mean+max", "transformer","hs_mlp","hs_last_mlp"]:
+        if self.probe_type in ["pca_conv", "mean", "max", "mean+max", "transformer", "hs_mlp", "hs_last_mlp", "dynamic_softmax", "dynamic_dirichlet"]:
             return None
 
         features = []
@@ -97,7 +97,10 @@ class ProbeTrainer:
             return hidden_states.shape[0]
         elif self.probe_type in ["coe_dual_mlp", "coe_c_scalar", "coe_r_scalar"]:
 
-            return hidden_states.shape[0] 
+            return hidden_states.shape[0]
+        elif self.probe_type in ["dynamic_softmax", "dynamic_dirichlet"]:
+            # 输入形状 [batch_size, num_layers, hidden_dim]，返回 hidden_dim
+            return hidden_states.shape[2] if len(hidden_states.shape) > 2 else hidden_states.shape[1]
         return hidden_states.shape[1]
         
 
@@ -128,6 +131,13 @@ class ProbeTrainer:
             if "transformer_num_layers" in self.probe_config:
                 kwargs["num_layers"] = self.probe_config["transformer_num_layers"]
 
+        elif self.probe_type in ["dynamic_softmax", "dynamic_dirichlet"]:
+            # DynamicFusionProbe：需要 num_layers 参数
+            # 从 probe_config 中获取 num_layers，如果没有则默认为 32（Llama 默认层数）
+            num_layers = self.probe_config.get("num_layers", 32)
+            probe_subtype = "softmax" if self.probe_type == "dynamic_softmax" else "dirichlet"
+            return probe_class(input_dim, num_layers, output_dim, probe_type=probe_subtype)
+
         return probe_class(input_dim, output_dim, **kwargs)
 
     def train(self, train_data: List[Dict], val_data: List[Dict], epochs: int = 50,
@@ -149,7 +159,6 @@ class ProbeTrainer:
         # Print detailed model structure
         print("\n" + "="*80)
         print("Model Architecture:")
-        print("-"*80)
         print(self.model)
         print("\n" + "-"*80)
         

@@ -254,7 +254,7 @@ class ZScoreNormalizer:
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
         return (x.float().cpu() - self.mu) / self.std
 
-# TODO:多加几层
+
 class MLPProbe(nn.Module):
     def __init__(self, input_dim: int, output_dim: int, hidden_dims: Optional[List[int]] = None, dropout: float = 0.1):
         super().__init__()
@@ -409,28 +409,38 @@ class DynamicFusionProbe(nn.Module):
         # 最终的分类器
         self.classifier = nn.Linear(input_dim, output_dim)
 
-    def forward(self, hidden_states, return_uncertainty=False):
+    def forward(self, hidden_states, return_uncertainty=False, return_weights=False):
         """
         Args:
             hidden_states: [batch_size, num_layers, hidden_dim]
             return_uncertainty: 是否返回不确定性指标 (仅对Dirichlet有效)
+            return_weights: 是否返回alpha权重 [batch_size, num_layers]
         Returns:
             logits: [batch_size, output_dim]
             uncertainty: (optional) 不确定性指标
+            weights: (optional) alpha权重 [batch_size, num_layers]
         """
         batch_size = hidden_states.size(0)
 
         if self.probe_type == "softmax":
             # 原始方法：简单softmax权重
             weights = torch.softmax(self.layer_weights, dim=0)  # [num_layers]
-            weights = weights.unsqueeze(0).unsqueeze(-1)  # [1, num_layers, 1]
-            fused_features = torch.sum(hidden_states * weights, dim=1)  # [batch_size, hidden_dim]
+            weights_expanded = weights.unsqueeze(0).unsqueeze(-1)  # [1, num_layers, 1]
+            fused_features = torch.sum(hidden_states * weights_expanded, dim=1)  # [batch_size, hidden_dim]
 
             logits = self.classifier(fused_features)
 
+            # 构建返回值
+            result = [logits]
             if return_uncertainty:
-                return logits, None  # 原始方法不提供不确定性
-            return logits
+                result.append(None)  # 原始方法不提供不确定性
+            if return_weights:
+                # 返回每个样本的权重 [batch_size, num_layers]
+                result.append(weights.unsqueeze(0).expand(batch_size, -1))
+
+            if len(result) == 1:
+                return result[0]
+            return tuple(result)
 
         elif self.probe_type == "dirichlet":
             # Dirichlet方法：从Dirichlet分布采样权重
@@ -442,26 +452,34 @@ class DynamicFusionProbe(nn.Module):
                 # 训练时：从Dirichlet分布采样
                 dirichlet_dist = Dirichlet(concentration)
                 weights = dirichlet_dist.rsample((batch_size,))  # [batch_size, num_layers]
-                weights = weights.unsqueeze(-1)  # [batch_size, num_layers, 1]
+                weights_for_fusion = weights.unsqueeze(-1)  # [batch_size, num_layers, 1]
 
                 # 计算不确定性：使用熵
                 uncertainty = dirichlet_dist.entropy()  # [batch_size]
             else:
                 # 推理时：使用期望值
-                weights = (concentration / concentration.sum()).unsqueeze(0).unsqueeze(-1)  # [1, num_layers, 1]
-                weights = weights.expand(batch_size, -1, -1)  # [batch_size, num_layers, 1]
+                weights = (concentration / concentration.sum()).unsqueeze(0)  # [1, num_layers]
+                weights = weights.expand(batch_size, -1)  # [batch_size, num_layers]
+                weights_for_fusion = weights.unsqueeze(-1)  # [batch_size, num_layers, 1]
 
                 # 计算不确定性：基于浓度参数的总和
                 total_concentration = concentration.sum()
                 uncertainty = torch.log(total_concentration).expand(batch_size)
 
             # 加权融合
-            fused_features = torch.sum(hidden_states * weights, dim=1)  # [batch_size, hidden_dim]
+            fused_features = torch.sum(hidden_states * weights_for_fusion, dim=1)  # [batch_size, hidden_dim]
             logits = self.classifier(fused_features)
 
+            # 构建返回值
+            result = [logits]
             if return_uncertainty:
-                return logits, uncertainty
-            return logits
+                result.append(uncertainty)
+            if return_weights:
+                result.append(weights)  # [batch_size, num_layers]
+
+            if len(result) == 1:
+                return result[0]
+            return tuple(result)
 
 
 

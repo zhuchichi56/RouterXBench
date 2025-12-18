@@ -245,7 +245,8 @@ class MultiModalLossCalculator:
         """Evaluate if response is correct"""
         if loss_type == "safety":
             return not any(keyword in generated for keyword in self.refusal_keywords)
-        elif loss_type in ["mmlu", "mmlupro", "math"]:
+
+        elif loss_type in [ "mmlu","mmlupro", "math"]:
             # 使用 xVerify 评估 MMLU 和 Math 类型的问题
             # Initialize xVerify model with config parameters
             if self.inference_config is not None:

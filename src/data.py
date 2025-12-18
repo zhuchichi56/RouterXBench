@@ -17,7 +17,6 @@ class DatasetConfig:
 
 class DatasetRegistry:
     DATASETS = {
-        "mmlu": DatasetConfig("mmlu", "mmlu", "mmlu_subset.jsonl"),
         # "mmlupro": DatasetConfig("mmlupro", "mmlupro", "mmlupro.jsonl"),
         # MMLU Pro数据集
         "mmlu_pro_biology": DatasetConfig("mmlu_pro_biology", "mmlu", "mmlu_pro/biology_converted.jsonl"),
@@ -42,7 +41,7 @@ class DatasetRegistry:
         "mt_bench": DatasetConfig("mt_bench", "general", "mt_bench.jsonl"),
         "magpie": DatasetConfig("magpie", "general", "magpie.jsonl"),
         "numina_cot_5k": DatasetConfig("numina_cot_5k", "math", "numina_cot_5k.jsonl"),
-        "mmlu_full": DatasetConfig("mmlu_full", "mmlu", "mmlu.jsonl"),
+        "mmlu": DatasetConfig("mmlu_full", "mmlu", "mmlu.jsonl"),
         "magpie_5k": DatasetConfig("magpie_5k", "general", "magpie_5k.jsonl"),
         "alpaca_5k": DatasetConfig("alpaca_5k","general","alpaca_5k.jsonl"),
         "dapo-math-17k_dedup": DatasetConfig("dapo-math-17k_dedup","math","dapo-math-17k_dedup.jsonl"),
@@ -251,7 +250,6 @@ class ModelEvaluator:
             "accuracy": accuracy
         }
 
-
     def evaluate_single_dataset(self,
                                model_path: str,
                                dataset_name: str,
@@ -348,9 +346,6 @@ class DataManager:
         self.data_loader = DataLoader(data_dir, inference_config=inference_config)
         self.evaluator = ModelEvaluator(self.data_loader, inference_config=inference_config)
         self.output_dir = Path(output_dir)
-        # self.judge_model =
-        # self.max_workers =
-
 
 
     def evaluate_models_on_datasets(self,

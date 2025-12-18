@@ -13,7 +13,8 @@ import os
 
 class DynamicFusionProbe(nn.Module):
     """动态融合每一层信号的probe"""
-    def __init__(self, input_dim: int, num_layers: int, output_dim: int = 1, probe_type: str = "softmax"):
+    def __init__(self, input_dim: int, num_layers: int, output_dim: int = 1, probe_type: str = "softmax",
+                 mlp_hidden_dims: List[int] = None, dropout: float = 0.1):
         super().__init__()
         self.num_layers = num_layers
         self.input_dim = input_dim
@@ -29,8 +30,21 @@ class DynamicFusionProbe(nn.Module):
         else:
             raise ValueError(f"Unknown probe_type: {probe_type}")
 
-        # 最终的分类器
-        self.classifier = nn.Linear(input_dim, output_dim)
+        # 最终的分类器（支持多层 MLP）
+        if mlp_hidden_dims is None or len(mlp_hidden_dims) == 0:
+            # 单层分类器
+            self.classifier = nn.Linear(input_dim, output_dim)
+        else:
+            # 多层 MLP
+            layers = []
+            prev_dim = input_dim
+            for hidden_dim in mlp_hidden_dims:
+                layers.append(nn.Linear(prev_dim, hidden_dim))
+                layers.append(nn.ReLU())
+                layers.append(nn.Dropout(dropout))
+                prev_dim = hidden_dim
+            layers.append(nn.Linear(prev_dim, output_dim))
+            self.classifier = nn.Sequential(*layers)
 
     def forward(self, hidden_states, return_uncertainty=False):
         """
@@ -107,7 +121,9 @@ def train_dynamic_probe(train_data: List[Tuple[np.ndarray, float]],
                        batch_size: int = 32,
                        lr: float = 1e-4,
                        save_path: str = None,
-                       probe_type: str = "softmax") -> Dict:
+                       probe_type: str = "softmax",
+                       mlp_hidden_dims: List[int] = None,
+                       dropout: float = 0.1) -> Dict:
     """训练动态融合probe"""
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -123,8 +139,11 @@ def train_dynamic_probe(train_data: List[Tuple[np.ndarray, float]],
     print(f"Input dim: {input_dim}, Num layers: {num_layers}")
 
     # 创建模型
-    model = DynamicFusionProbe(input_dim, num_layers, probe_type=probe_type).to(device)
+    model = DynamicFusionProbe(input_dim, num_layers, probe_type=probe_type,
+                              mlp_hidden_dims=mlp_hidden_dims, dropout=dropout).to(device)
     print(f"Using probe type: {probe_type}")
+    if mlp_hidden_dims:
+        print(f"MLP hidden dims: {mlp_hidden_dims}, dropout: {dropout}")
 
     # 数据加载器
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -136,6 +155,8 @@ def train_dynamic_probe(train_data: List[Tuple[np.ndarray, float]],
 
     best_val_loss = float('inf')
     train_losses, val_losses = [], []
+    val_accuracies = []
+    val_aurocs = []
 
     for epoch in range(epochs):
         # 训练阶段
@@ -159,6 +180,8 @@ def train_dynamic_probe(train_data: List[Tuple[np.ndarray, float]],
         val_loss = 0.0
         correct = 0
         total = 0
+        all_probs = []
+        all_labels = []
 
         with torch.no_grad():
             for batch_features, batch_labels in val_loader:
@@ -169,18 +192,31 @@ def train_dynamic_probe(train_data: List[Tuple[np.ndarray, float]],
                 loss = criterion(outputs, batch_labels)
                 val_loss += loss.item()
 
-                predictions = torch.sigmoid(outputs) > 0.5
+                probs = torch.sigmoid(outputs)
+                predictions = probs > 0.5
                 correct += (predictions == batch_labels.bool()).sum().item()
                 total += batch_labels.size(0)
+
+                all_probs.extend(probs.cpu().numpy())
+                all_labels.extend(batch_labels.cpu().numpy())
 
         train_loss /= len(train_loader)
         val_loss /= len(val_loader)
         val_accuracy = correct / total
 
+        # 计算 AUROC
+        try:
+            from sklearn.metrics import roc_auc_score
+            val_auroc = roc_auc_score(all_labels, all_probs)
+        except:
+            val_auroc = 0.0
+
         train_losses.append(train_loss)
         val_losses.append(val_loss)
+        val_accuracies.append(val_accuracy)
+        val_aurocs.append(val_auroc)
 
-        print(f"Epoch {epoch+1}: Train Loss={train_loss:.4f}, Val Loss={val_loss:.4f}, Val Acc={val_accuracy:.4f}")
+        print(f"Epoch {epoch+1}: Train Loss={train_loss:.4f}, Val Loss={val_loss:.4f}, Val Acc={val_accuracy:.4f}, Val AUROC={val_auroc:.4f}")
 
         # 打印学习到的层权重/浓度参数
         if epoch % 10 == 0:
@@ -203,7 +239,9 @@ def train_dynamic_probe(train_data: List[Tuple[np.ndarray, float]],
                         'input_dim': input_dim,
                         'num_layers': num_layers,
                         'output_dim': 1,
-                        'probe_type': probe_type
+                        'probe_type': probe_type,
+                        'mlp_hidden_dims': mlp_hidden_dims,
+                        'dropout': dropout
                     }
                 }, save_path)
                 print(f"Best model saved to {save_path}")
@@ -225,6 +263,8 @@ def train_dynamic_probe(train_data: List[Tuple[np.ndarray, float]],
     return {
         'train_losses': train_losses,
         'val_losses': val_losses,
+        'val_accuracies': val_accuracies,
+        'val_aurocs': val_aurocs,
         'best_val_loss': best_val_loss,
         'probe_type': probe_type,
         **extra_info
@@ -246,7 +286,9 @@ def test_dynamic_probe(test_data: List[Tuple[np.ndarray, float]],
         metadata['input_dim'],
         metadata['num_layers'],
         metadata['output_dim'],
-        probe_type=probe_type
+        probe_type=probe_type,
+        mlp_hidden_dims=metadata.get('mlp_hidden_dims', None),
+        dropout=metadata.get('dropout', 0.1)
     ).to(device)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
@@ -305,7 +347,9 @@ def test_dynamic_probe(test_data: List[Tuple[np.ndarray, float]],
 def run_dynamic_probe_pipeline(task: str,
                               hidden_states_file: str,
                               save_dir: str = "probe_save",
-                              probe_type: str = "softmax"):
+                              probe_type: str = "softmax",
+                              mlp_hidden_dims: List[int] = None,
+                              dropout: float = 0.1):
     """运行完整的动态probe训练和测试流程"""
 
     print(f"Running dynamic probe pipeline for task: {task}")
@@ -338,7 +382,8 @@ def run_dynamic_probe_pipeline(task: str,
 
     # 训练
     print(f"Training dynamic fusion probe with {probe_type} method...")
-    results = train_dynamic_probe(train_data, val_data, save_path=save_path, probe_type=probe_type)
+    results = train_dynamic_probe(train_data, val_data, save_path=save_path, probe_type=probe_type,
+                                 mlp_hidden_dims=mlp_hidden_dims, dropout=dropout)
 
     print(f"Training completed. Best val loss: {results['best_val_loss']:.4f}")
     print(f"Final layer weights: {results['final_layer_weights']}")
@@ -349,10 +394,49 @@ def run_dynamic_probe_pipeline(task: str,
 
     print(f"Test accuracy: {test_results['accuracy']:.4f}")
 
+    # 保存训练历史和配置到 JSON 文件
+    history_file = os.path.join(save_dir, f"{task}_{probe_type}_history.json")
+    history_data = {
+        'config': {
+            'task': task,
+            'probe_type': probe_type,
+            'mlp_hidden_dims': mlp_hidden_dims,
+            'dropout': dropout,
+            'epochs': 50,
+            'batch_size': 32,
+            'learning_rate': 1e-4,
+            'train_samples': len(train_data),
+            'val_samples': len(val_data)
+        },
+        'training_history': {
+            'train_losses': results['train_losses'],
+            'val_losses': results['val_losses'],
+            'val_accuracies': results['val_accuracies'],
+            'val_aurocs': results['val_aurocs']
+        },
+        'final_results': {
+            'best_val_loss': float(results['best_val_loss']),
+            'test_accuracy': float(test_results['accuracy']),
+            'final_layer_weights': results['final_layer_weights'].tolist() if hasattr(results['final_layer_weights'], 'tolist') else list(results['final_layer_weights'])
+        }
+    }
+
+    # 如果是 dirichlet 类型，添加额外的信息
+    if probe_type == "dirichlet":
+        history_data['final_results']['final_concentration'] = results['final_concentration'].tolist() if hasattr(results['final_concentration'], 'tolist') else list(results['final_concentration'])
+        history_data['final_results']['final_global_concentration'] = float(results['final_global_concentration'])
+
+    import json
+    with open(history_file, 'w') as f:
+        json.dump(history_data, f, indent=2)
+
+    print(f"📊 Training history saved to: {history_file}")
+
     return {
         'training_results': results,
         'test_results': test_results,
-        'model_path': save_path
+        'model_path': save_path,
+        'history_file': history_file
     }
 
 
