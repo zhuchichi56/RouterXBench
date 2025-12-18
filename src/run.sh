@@ -27,7 +27,10 @@ echo "最大样本数: $MAX_SAMPLES"
 # ========================================
 # 启动模型服务
 # cd inference
-# 
+#  python start.py \
+#   --model_path "/mnt/yixiali/MODELS/meta-llama/Llama-3.1-8B-Instruct" \
+#   --base_port 8001 \
+#   --gpu_list "1"
 
 
 

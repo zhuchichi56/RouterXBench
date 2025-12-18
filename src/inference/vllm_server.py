@@ -20,6 +20,10 @@ config_table = {
     "mistral": {
         "max_model_len": 2000,
         "id2score": {28734: "0", 28740: "1"}
+    },
+    "qwen3": {
+        "max_model_len": 32768,
+        "id2score": {}
     }
 }
 
@@ -145,6 +149,18 @@ if __name__ == "__main__":
                       tokenizer_mode="auto",
                       trust_remote_code=True,
                       max_model_len=config["max_model_len"],
+                      gpu_memory_utilization=0.95)
+        elif model_key in ["qwen3"] and "max_model_len" in config:
+            # 读取自定义 chat template
+            import os
+            template_path = os.path.join(os.path.dirname(__file__), "qwen3_nonthinking.jinja")
+            with open(template_path, "r") as f:
+                chat_template_content = f.read()
+            llm = LLM(model=model_path,
+                      tokenizer_mode="auto",
+                      trust_remote_code=True,
+                      max_model_len=config["max_model_len"],
+                      chat_template=chat_template_content,
                       gpu_memory_utilization=0.95)
         else:
             # 对于未知模型或不需要max_model_len的模型，使用默认配置
