@@ -4,7 +4,7 @@
 source /volume/pt-train/users/wzhang/ghchen/zh/miniconda3/bin/activate router
 
 # 默认参数
-DATASETS="${1:- alpaca_5k_train}"
+DATASETS="${1:- hotpotqa_500}"
 PROBE_TYPES="${2:-dynamic_dirichlet}"
 MAX_SAMPLES="${3:-4000}"
 
@@ -27,16 +27,16 @@ echo "最大样本数: $MAX_SAMPLES"
 # ========================================
 # 启动模型服务
 # cd inference
-# vllm serve /volume/pt-train/users/wzhang/ghchen/zh/models/Qwen3-8B --chat-template ./qwen3_nonthinking.jinja
+# vllm serve /volume/pt-train/users/wzhang/ghchen/zh/models/Qwen3-8B --chat-template ./qwen3_nonthinking.jinja \
 #  python start.py \
 #   --model_path "/volume/pt-train/users/wzhang/ghchen/zh/models/Qwen3-8B" \
 #   --base_port 8001 \
-#   --gpu_list "4,5"
+#   --gpu_list "1,2"
 
 
 
-# 如果测试非general数据 需要启动xVerify
-# CUDA_VISIBLE_DEVICES=0 \
+# # 如果测试非general数据 需要启动xVerify
+# CUDA_VISIBLE_DEVICES=3 \
 # vllm serve /volume/pt-train/users/wzhang/ghchen/zh/models/xVerify-9B-C \
 #   --host 0.0.0.0 \
 #   --port 8000 \
@@ -44,44 +44,35 @@ echo "最大样本数: $MAX_SAMPLES"
 #   --served-model-name xVerify \
 #   --trust-remote-code
 
-# 等待模型服务启动完成后，运行 scores
-# scores
+# # 等待模型服务启动完成后，运行 scores
+# # scores
 
-CUDA_VISIBLE_DEVICES=2 vllm serve /volume/pt-train/models/Llama-3.1-8B-Instruct \
-    --host 0.0.0.0 \
-    --port 8001 \
-    --tensor-parallel-size 1 \
-    --gpu-memory-utilization 0.95 \
-    --enable_prefix_caching
+# CUDA_VISIBLE_DEVICES=0 vllm serve /volume/pt-train/models/Qwen3-8B \
+#     --host 0.0.0.0 \
+#     --port 8001 \
+#     --tensor-parallel-size 1 \
+#     --gpu-memory-utilization 0.95 \
+#     --enable_prefix_caching
 
-python agent.py\
-    --agent_name /volume/pt-train/models/Llama-3.1-8B-Instruct\
-    --dataset mmlu_test --num_samples 5\
-    --agent_tools DuckDuckGoSearchTool \
-    --max_steps 5\     --concurrent_limit 20  \
-    --n_runs 1     --use_openai_server     --api_base "http://localhost:8001/v1"
+# python agent.py\
+#     --agent_name /volume/pt-train/models/Qwen3-8B \
+#     --dataset med_qa_1k\
+#     --agent_tools DuckDuckGoSearchTool \
+#     --max_steps 5\     --concurrent_limit 20  \
+#     --n_runs 1     --use_openai_server     --api_base "http://localhost:8001/v1"
 
 # python run_new.py --mode get_scores --datasets $DATASETS
 # # # logits
-python run_new.py --mode get_logits --datasets $DATASETS
+# python run_new.py --mode get_logits --datasets $DATASETS
 # # training probe
-# python run_new.py --mode train --datasets $DATASETS --probe_types $PROBE_TYPES --max_samples $MAX_SAMPLES --save_loss_history
+# python run_new.py --mode train --datasets $DATASETS --probe_types $PROBE_TYPES --max_samples $MAX_SAMPLES
 
 
 # # 评估
 python run_new.py --mode eval_probe --datasets $TEST_DATASETS --probe_types $PROBE_TYPES
-# python run_new.py --mode logits_based_routers --datasets $TEST_DATASETS 
-# python run_new.py --mode self_based --datasets $TEST_DATASETS 
-echo ""
-echo "========================================="
-echo "🎉 完整 Pipeline 执行成功！"
-echo "========================================="
-echo "结果保存位置:"
-echo "  - Scores:    results/"
-echo "  - Logits:    ../hs/"
-echo "  - 模型:      probe_save/test/"
-echo "  - 训练历史:   probe_save/loss/"
-echo "  - 评估结果:   metric_results/dynamic/<dataset>_dynamic_fusion_sampling/"
+# python run_new.py --mode logits_based_routers --datasets $DATASETS 
+# python run_new.py --mode self_based --datasets $DATASETS 
+
 
 
 # ========================================

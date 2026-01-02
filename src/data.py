@@ -64,6 +64,10 @@ class DatasetRegistry:
          "test": DatasetConfig("test", "general", "test.jsonl"),
          "alpaca_10k": DatasetConfig("alpaca_10k", "general", "alpaca_10k.jsonl"),
          "big_math_10k": DatasetConfig("big_math_10k", "math", "big_math_10k.jsonl"),
+         "med_qa_1k": DatasetConfig("med_qa_1k", "mmlu", "med_qa_1k.jsonl"),
+         # HotpotQA: 适合测试搜索Agent的数据集（需要多跳推理）
+         "hotpotqa_500": DatasetConfig("hotpotqa_500", "qa", "hotpotqa_500.jsonl"),
+         "hotpotqa_4k": DatasetConfig("hotpotqa_4k", "qa", "hotpotqa_4k.jsonl"),
 
     }
 

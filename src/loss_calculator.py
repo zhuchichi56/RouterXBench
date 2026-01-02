@@ -32,7 +32,7 @@ class MultiModalLossCalculator:
         self.device = device
         self.inference_config = inference_config
         self.random_loss_threshold = math.log(getattr(self.tokenizer, 'vocab_size', 50000))
-        self.max_tokens = {"safety": 128, "mmlu": 128, "math": 1024}
+        self.max_tokens = {"safety": 128, "mmlu": 128, "math": 1024, "qa": 256}
         
         #TODO: ADD More 
         self.refusal_keywords = [
@@ -166,6 +166,9 @@ class MultiModalLossCalculator:
         elif loss_type == "math":
             system_msg = "Solve the math problem step by step. Put your final answer in \\boxed{}."
             user_msg = instruction
+        elif loss_type == "qa":
+            system_msg = "You are a helpful AI assistant. Answer the question concisely and accurately based on the information provided or your knowledge."
+            user_msg = instruction
         elif loss_type == "safety":
             system_msg = "You are a helpful AI assistant."
             user_msg = instruction
@@ -246,7 +249,7 @@ class MultiModalLossCalculator:
         if loss_type == "safety":
             return not any(keyword in generated for keyword in self.refusal_keywords)
 
-        elif loss_type in [ "mmlu","mmlupro", "math"]:
+        elif loss_type in [ "mmlu","mmlupro", "math","qa"]:
             # 使用 xVerify 评估 MMLU 和 Math 类型的问题
             # Initialize xVerify model with config parameters
             if self.inference_config is not None:

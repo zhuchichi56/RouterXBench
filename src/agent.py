@@ -83,19 +83,25 @@ def process_single_question(
             tools=tools,
             model=model,
             stream_outputs=False,
-            add_base_tools=True,
-            additional_authorized_imports=[],
             use_structured_outputs_internally=True,
             verbosity_level=LogLevel.OFF,
         )
 
         try:
-            # ✅ 应用模板
-            task_inference = get_template(
-                question,
-                template_type=template_type,
-                tokenizer=tokenizer
-            )
+            # 方案1: 不使用template，直接在问题中引导使用搜索
+            if template_type == "search_guided":
+                task_inference = f"""If you are uncertain, use web_search to find information.
+
+{question}
+
+Remember: For multiple choice questions, your final answer must be a single letter (A, B, C, D, or E)."""
+            # 方案2: 使用原有template
+            else:
+                task_inference = get_template(
+                    question,
+                    template_type=template_type,
+                    tokenizer=tokenizer
+                )
             agent.run(task_inference, max_steps=max_steps)
             return agent
         except Exception as e:
@@ -263,7 +269,7 @@ async def process_all_questions(
     use_openai_server=False,
     api_base="http://localhost:8000/v1"
 ):
-    """异步批量处理所有问题，保持原始顺序"""
+    """异步批量处理所有问题，按id顺序保存"""
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     semaphore = asyncio.Semaphore(concurrent_limit)
 
@@ -280,29 +286,41 @@ async def process_all_questions(
         for input_item in inputs
     ]
 
-    results = []
+    # 创建id到索引的映射，用于排序
+    id_to_index = {item["id"]: idx for idx, item in enumerate(inputs)}
+
+    # 收集所有结果，按完成顺序
+    completed_results = {}
+    next_to_save_idx = 0
+
     with tqdm(total=len(tasks), desc="Processing questions") as pbar:
         for coro in asyncio.as_completed(tasks):
             result = await coro
-            results.append(result)
+            result_id = result["id"]
+            result_idx = id_to_index[result_id]
+            completed_results[result_idx] = result
             pbar.update(1)
 
+            # 检查是否有错误
             error_info = result["example"]["runs"][0]["error_info"]
             if error_info and ("Azure CLI" in error_info or "az login" in error_info):
                 print("检测到Azure CLI错误，停止执行")
-                results_sorted = sorted(results, key=lambda x: x["id"])
+                # 按照id顺序保存所有已完成的结果
+                sorted_indices = sorted(completed_results.keys())
                 with open(output_file, 'a', encoding='utf-8') as f:
-                    for r in results_sorted:
-                        json.dump(make_json_serializable(r["example"]), f, ensure_ascii=False)
+                    for idx in sorted_indices:
+                        json.dump(make_json_serializable(completed_results[idx]["example"]), f, ensure_ascii=False)
                         f.write('\n')
                 return
 
-    results_sorted = sorted(results, key=lambda x: x["id"])
-    with open(output_file, 'a', encoding='utf-8') as f:
-        for result in results_sorted:
-            json.dump(make_json_serializable(result["example"]), f, ensure_ascii=False)
-            f.write('\n')
-            f.flush()
+            # 尝试保存所有可以按顺序保存的结果
+            with open(output_file, 'a', encoding='utf-8') as f:
+                while next_to_save_idx in completed_results:
+                    result_to_save = completed_results.pop(next_to_save_idx)
+                    json.dump(make_json_serializable(result_to_save["example"]), f, ensure_ascii=False)
+                    f.write('\n')
+                    f.flush()
+                    next_to_save_idx += 1
 
 async def main_async():
     parser = argparse.ArgumentParser(description="Agent 推理与评估（异步版本）")
@@ -310,7 +328,9 @@ async def main_async():
     parser.add_argument("--dataset", type=str, default="gsm8k")
     parser.add_argument("--num_samples", type=int, default=None)
     parser.add_argument("--agent_tools", type=str, nargs="+", default=None)
-    parser.add_argument("--template_type", type=str, default="default", choices=["default", "alpaca", "tags", "direct"])
+    parser.add_argument("--template_type", type=str, default="default",
+                       choices=["default", "alpaca", "tags", "direct", "search_guided"],
+                       help="search_guided: 引导模型使用搜索工具")
     parser.add_argument("--max_workers", type=int, default=8)
     parser.add_argument("--max_steps", type=int, default=20)
     parser.add_argument("--n_runs", type=int, default=1, help="每个问题运行次数")

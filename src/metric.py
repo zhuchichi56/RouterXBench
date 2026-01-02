@@ -169,26 +169,29 @@ class MetricEvaluator:
         }
 
     def plot_adaptive_curve(self, adaptive_metrics: Dict, save_path: Optional[str] = None):
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(6, 5))
 
         call_rates = adaptive_metrics['call_rates']
         accuracies = adaptive_metrics['accuracies']
         large_mean = adaptive_metrics['large_mean']
         small_mean = adaptive_metrics['small_mean']
-        
+
+        # Calculate random baseline
+        random_accuracies = small_mean + (large_mean - small_mean) * call_rates
 
         plt.plot(call_rates * 100, accuracies * 100, 'b-', linewidth=2, label='Accuracy Curve')
-        plt.axhspan(small_mean * 100, large_mean * 100,
-                   alpha=0.2, color='red', label=f'Target Band [{small_mean*100:.0f}%, {large_mean*100:.0f}%]')
+        plt.plot(call_rates * 100, random_accuracies * 100, 'g--', linewidth=2, label='Random Selection')
 
         max_acc_idx = np.argmax(accuracies)
         plt.plot(call_rates[max_acc_idx] * 100, accuracies[max_acc_idx] * 100,
-                'ro', markersize=8, label=f'Max Accuracy ({accuracies[max_acc_idx]*100:.1f}%)')
+                'ro', markersize=10, label=f'Max Accuracy ({accuracies[max_acc_idx]*100:.1f}%)')
 
-        plt.xlabel('Large Model Call Rate (%)')
-        plt.ylabel('Overall Accuracy (%)')
-        plt.title('Adaptive Framework Accuracy Curve')
-        plt.legend()
+        plt.xlabel('Call Rate (%)', fontsize=14, fontweight='bold')
+        plt.ylabel('Accuracy (%)', fontsize=14, fontweight='bold')
+        plt.title('Accuracy vs Call Rate', fontsize=16, fontweight='bold')
+        plt.legend(fontsize=12, frameon=True)
+        plt.xticks(fontsize=12, fontweight='bold')
+        plt.yticks(fontsize=12, fontweight='bold')
         plt.grid(True, alpha=0.3)
         plt.xlim(0, 100)
         plt.ylim(min(accuracies) * 100 - 2, max(accuracies) * 100 + 2)

@@ -54,90 +54,6 @@ def load_and_merge_data(test_configs: List[Dict[str, str]], max_samples: Optiona
     return all_data
 
 
-def evaluate_uncertainty_dirichlet(model_path: str, eval_data: List[Any], num_samples: int = 50) -> Optional[Dict[str, float]]:
-    """仅对 Dirichlet probe 做不确定性评估（MC 采样）。"""
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    ckpt = torch.load(model_path, map_location=device)
-    meta = ckpt.get("metadata", {})
-    probe_type = meta.get("probe_type", "softmax")
-
-    if probe_type != "dirichlet":
-        print("Uncertainty evaluation only supports Dirichlet probes. Skip.")
-        return None
-
-    model = DynamicFusionProbe(
-        meta["input_dim"],
-        meta["num_layers"],
-        meta["output_dim"],
-        probe_type=probe_type,
-        mlp_hidden_dims=meta.get("mlp_hidden_dims", None),
-        dropout=meta.get("dropout", 0.1),
-        use_input_dependent=meta.get("use_input_dependent", False),
-    ).to(device)
-    model.load_state_dict(ckpt["model_state_dict"])
-    model.eval()
-
-    loader = DataLoader(DynamicProbeDataset(eval_data), batch_size=32, shuffle=False)
-
-    all_unc = []
-    all_pred = []
-    all_y = []
-
-    print(f"Evaluating Dirichlet uncertainty with num_samples={num_samples}")
-
-    with torch.no_grad():
-        for x, y in loader:
-            x = x.to(device)
-
-            # MC sampling: 每次 forward 时强制 train() 以启用采样/随机性（按你原逻辑）
-            preds = []
-            uncs = []
-            for _ in range(num_samples):
-                model.train()
-                logits, unc = model(x, return_uncertainty=True)
-                p = torch.sigmoid(logits).squeeze(-1)
-
-                preds.append(p.detach().cpu().numpy())
-                uncs.append(unc.detach().cpu().numpy())
-
-            preds = np.asarray(preds)            # [S, B]
-            uncs = np.asarray(uncs)              # [S, B]
-            pred_mean = preds.mean(axis=0)       # [B]
-            unc_mean = uncs.mean(axis=0)         # [B]
-
-            all_pred.append(pred_mean)
-            all_unc.append(unc_mean)
-            all_y.append(y.numpy())
-
-    all_pred = np.concatenate(all_pred, axis=0)
-    all_unc = np.concatenate(all_unc, axis=0)
-    all_y = np.concatenate(all_y, axis=0)
-
-    bin_pred = (all_pred > 0.5).astype(int)
-    correct = (bin_pred == all_y)
-
-    correct_unc = all_unc[correct]
-    wrong_unc = all_unc[~correct]
-
-    # 注意：全对或全错时 corrcoef 会产生 NaN，这里做个保护
-    corr = np.corrcoef(all_unc, correct.astype(float))[0, 1]
-    if np.isnan(corr):
-        corr = 0.0
-
-    stats = {
-        "mean_uncertainty": float(all_unc.mean()),
-        "std_uncertainty": float(all_unc.std()),
-        "correct_mean_uncertainty": float(correct_unc.mean()) if correct_unc.size else 0.0,
-        "incorrect_mean_uncertainty": float(wrong_unc.mean()) if wrong_unc.size else 0.0,
-        "uncertainty_accuracy_correlation": float(corr),
-    }
-
-    print("Uncertainty stats:")
-    for k, v in stats.items():
-        print(f"  {k}: {v:.4f}" if isinstance(v, float) else f"  {k}: {v}")
-
-    return stats
-
 
 def train_and_test(
     task_name: str,
@@ -146,7 +62,7 @@ def train_and_test(
     mlp_hidden_dims: Optional[List[int]],
     dropout: float,
     save_dir: str,
-    use_input_dependent: bool,
+    # use_input_dependent: bool,
     epochs: int,
 ) -> Dict[str, Any]:
     """单次训练/测试封装。"""
@@ -157,7 +73,7 @@ def train_and_test(
         probe_type=probe_type,
         mlp_hidden_dims=mlp_hidden_dims,
         dropout=dropout,
-        use_input_dependent=use_input_dependent,
+
         epochs=epochs,
     )
 
@@ -197,8 +113,7 @@ Examples:
         "--datasets",
         type=str,
         nargs="+",
-        default=["alpaca_5k", "mmlu_train", "big_math"],
-        help="数据集名称列表（空格分隔），可选: alpaca_5k, mmlu_train, big_math",
+        default=["alpaca_5k", "mmlu_train", "big_math","hotpotqa"],
     )
     parser.add_argument(
         "--probe_types",
@@ -233,11 +148,6 @@ Examples:
         help="模型和历史保存目录",
     )
     parser.add_argument(
-        "--use_input_dependent",
-        action="store_true",
-        help="是否使用输入依赖的 Dirichlet（仅对 dirichlet 类型有效）",
-    )
-    parser.add_argument(
         "--epochs",
         type=int,
         default=50,
@@ -253,23 +163,28 @@ Examples:
     print(f"  mlp_hidden_dims: {args.mlp_hidden_dims}")
     print(f"  dropout: {args.dropout}")
     print(f"  save_dir: {args.save_dir}")
-    print(f"  use_input_dependent: {args.use_input_dependent}")
+    # print(f"  use_input_dependent: {args.use_input_dependent}")
     print(f"  epochs: {args.epochs}")
     print("")
 
     dataset_map = {
         "alpaca_5k": {
             "task": "alpaca_5k_train",
-            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Qwen3-8B_alpaca_5k_train.pt",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_alpaca_10k.pt",
         },
         "mmlu_train": {
             "task": "mmlu_train",
-            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Qwen3-8B_mmlu_train.pt",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_mmlu_train.pt",
         },
         "big_math": {
             "task": "big_math_5k_train",
-            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Qwen3-8B_big_math_5k_train.pt",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_big_math_10k.pt",
         },
+        "hotpotqa":{
+            "task": "hotpotqa_4k",
+            "hidden_states_file": "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/hs/Llama-3.1-8B-Instruct_hotpotqa_4k.pt",
+ 
+        }
     }
 
     # 构建 test_configs
@@ -309,7 +224,7 @@ Examples:
                 mlp_hidden_dims=args.mlp_hidden_dims,
                 dropout=args.dropout,
                 save_dir=args.save_dir,
-                use_input_dependent=args.use_input_dependent,
+                # use_input_dependent=args.use_input_dependent,
                 epochs=args.epochs,
             )
 

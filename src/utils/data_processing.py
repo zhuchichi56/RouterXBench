@@ -208,6 +208,7 @@ def print_metric_comparison_table(all_path_results, metric, method_names):
         # "dynamic": ("Probe", "DynamicDirichlet"),
         "dirichlet": ("Probe", "Dirichlet"),
         "dynamic_fusion_sampling": ("Probe", "DirichletSampling")
+
     }
 
     def fmt(x):
@@ -420,7 +421,7 @@ def main():
             print(f"{'='*80}")
 
             # 特殊处理probe_sampling目录，其子目录以_dynamic_fusion_sampling结尾
-            actual_method_name = "dynamic_fusion_sampling" if method_name == "probe_sampling" else method_name
+            actual_method_name = "dynamic_fusion" if method_name == "probe_sampling" else method_name
 
             print("Loading individual dataset metrics...")
             individual_results = load_individual_datasets(method_dir, actual_method_name)
@@ -435,7 +436,7 @@ def main():
             print(f"Loaded {sum(1 for r in individual_results.values() if r is not None)} individual datasets")
             print(f"Loaded {sum(1 for r in mmlu_pro_averages.values() if r is not None)} MMLU Pro categories")
 
-    elif mode in ["mmlu", "alpaca", "big_math","alpaca+big_math","dynamic"]:
+    elif mode in ["mmlu", "alpaca", "big_math","alpaca+big_math","dynamic","test"]:
         # Probe模式：从训练集目录加载probe结果
         train_set_mapping = {
             "mmlu": "mmlu",
@@ -443,6 +444,7 @@ def main():
             "big_math": "big_math_5k",
             "alpaca+big_math":"alpaca+big_math",
             "dynamic":"dynamic",
+            "test":"test"
         }
 
         train_set_name = train_set_mapping[mode]

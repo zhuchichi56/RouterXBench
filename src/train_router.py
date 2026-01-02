@@ -756,8 +756,7 @@ def complete_probe_training_pipeline_with_mixed_datasets(
     save_path = os.path.join(save_dir, filename)
 
     results = train_probe_model(train_data, val_data, probe_type, save_path,
-                               probe_config=probe_config, epochs=epochs, batch_size=batch_size, lr=lr,
-                               use_input_dependent=use_input_dependent)
+                               probe_config=probe_config, epochs=epochs, batch_size=batch_size, lr=lr)
 
     print(f"Mixed dataset probe training complete!")
     print(f"Best val loss: {results['best_val_loss']:.4f}")

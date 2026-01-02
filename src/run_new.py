@@ -81,6 +81,9 @@ def save_training_history(history, probe_type, task_list, max_samples=None, save
 
 
 def batch_evaluate_probes(base_config, probe_configs, eval_tasks):
+    # 从配置中获取模型名称
+    model_name = _extract_model_name_from_path(base_config.inference.weak_model_path)
+
     for i, probe_config in enumerate(probe_configs):
         config_copy = copy.deepcopy(base_config)
         config_copy.router.checkpoint_path = probe_config['checkpoint_path']
@@ -96,7 +99,7 @@ def batch_evaluate_probes(base_config, probe_configs, eval_tasks):
         for task in eval_tasks:
             print(f"\nEvaluating task: {task}")
 
-            hidden_states_file = _build_hs_path(task)
+            hidden_states_file = _build_hs_path(task, model_name)
 
             if not os.path.exists(hidden_states_file):
                 print(f"Warning: Hidden states file not found: {hidden_states_file}")
@@ -110,12 +113,22 @@ def batch_evaluate_probes(base_config, probe_configs, eval_tasks):
             )
 
 
-def _build_hs_path(task: str):
+def _extract_model_name_from_path(model_path: str) -> str:
+    """从模型路径中提取模型名称"""
+    return os.path.basename(model_path.rstrip('/'))
+
+
+def _build_hs_path(task: str, model_name: str = None):
     """构建hidden states文件路径"""
+    if model_name is None:
+        # 从配置文件中读取 weak_model_path
+        config = PipelineConfig.from_yaml()
+        model_name = _extract_model_name_from_path(config.inference.weak_model_path)
+
     base_dir = os.path.join("..", "hs")
     if task.startswith("mmlu_pro_"):
         base_dir = os.path.join(base_dir, "mmlu_pro")
-    return os.path.join(base_dir, f"Llama-3.1-8B-Instruct_{task}.pt")
+    return os.path.join(base_dir, f"{model_name}_{task}.pt")
 
 
 if __name__ == '__main__':
@@ -284,6 +297,9 @@ if __name__ == '__main__':
 
         # 如果没有指定 probe_dir，使用当前配置的 probe
         else:
+            # 从配置中获取模型名称
+            model_name = _extract_model_name_from_path(config.inference.weak_model_path)
+
             for probe_type in probe_types:
                 print(f"\n{'='*60}")
                 print(f" 使用 Probe 类型: {probe_type}")
@@ -301,7 +317,7 @@ if __name__ == '__main__':
                 for task in datasets:
                     print(f"\n📊 评估任务: {task}")
 
-                    hidden_states_file = _build_hs_path(task)
+                    hidden_states_file = _build_hs_path(task,model_name)
 
                     if not os.path.exists(hidden_states_file):
                         print(f"⚠️  警告: Hidden states 文件不存在: {hidden_states_file}")
@@ -316,37 +332,11 @@ if __name__ == '__main__':
                     except Exception as e:
                         print(f"❌ {task} 使用 {probe_type} 评估失败: {e}")
 
-    # ==================== 模式: eval_max_k ====================
-    elif mode == "eval_max_k":
-        probe_dir = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/probe_save/max_k"
-        probe_files = sorted(glob.glob(f"{probe_dir}/*.pt"))
-
-        print(f"在 {probe_dir} 中找到 {len(probe_files)} 个 probe 文件")
-
-        probe_configs = []
-        for pf in probe_files:
-            filename = os.path.basename(pf)
-            sample_match = re.search(r'_cot_5k_train_(\w+)_(\d+k)\.pt$', filename)
-
-            if sample_match:
-                base_probe = sample_match.group(1)
-                samples = sample_match.group(2)
-                probe_type = base_probe
-
-                metric_results_dir = f"metric_results/max_k/{samples}_{probe_type}"
-
-                probe_configs.append({
-                    "checkpoint_path": pf,
-                    "probe_type": probe_type,
-                    "metric_results_dir": metric_results_dir,
-                })
-
-        eval_datasets = args.datasets
-        batch_evaluate_probes(config, probe_configs, eval_datasets)
-
-
-    # ==================== 模式: self_based ====================
+    
     elif mode == "self_based":
+        # 从配置中获取模型名称
+        model_name = _extract_model_name_from_path(config.inference.weak_model_path)
+
         strategies = [
             {
                 "name": "semantic_entropy",
@@ -360,7 +350,7 @@ if __name__ == '__main__':
             },
         ]
 
-        eval_datasets = args.datasets 
+        eval_datasets = args.datasets
 
         for strat in strategies:
             print(f"\n{'='*60}")
@@ -377,7 +367,7 @@ if __name__ == '__main__':
 
             for task in eval_datasets:
                 print(f"\n评估任务: {task}")
-                hidden_states_file = _build_hs_path(task)
+                hidden_states_file = _build_hs_path(task, model_name)
 
                 if not os.path.exists(hidden_states_file):
                     print(f"警告: Hidden states 文件不存在: {hidden_states_file}")
@@ -388,8 +378,6 @@ if __name__ == '__main__':
                     hidden_states_file=hidden_states_file,
                     datasets=datasets
                 )
-
-    # ==================== 模式: logits_based_routers ====================
     elif mode == "logits_based_routers":
         from router import RouterManager
 
