@@ -1,4 +1,4 @@
-# CoBench
+# CoBench：Towards Fair and Comprehensive Evaluation of Routers in Collaborative LLM Systems
 
 <p>
   <img alt="Python" src="https://img.shields.io/badge/Python-3.10%2B-blue">
@@ -15,7 +15,7 @@ The main entrypoint is `src/main.py` with three modes:
 - `train`: train routers (probe / embedding_mlp / trained_deberta / ...)
 - `eval`: evaluate routers on datasets and write results to `src/metric_results/`
 
-## <img src="./assets/icons/overview.svg" width="18" alt="overview icon"> Overview 
+## 🗺️ Overview 
 
 
 <p align="center">
@@ -71,7 +71,7 @@ Notes (matching current CoBench code):
 
 These bands are controlled in config by `recovery_rate_band` and `lpm_call_rate_band` (see `config_B.yaml` and `src/config.py`).
 
-## <img src="./assets/icons/rocket.svg" width="18" alt="quickstart icon"> Quickstart
+## 🚀 Quickstart
 
 ### TL;DR: run CoBench end-to-end
 
@@ -150,7 +150,7 @@ bash src/scripts/eval.sh
 - **logits**: generates weak-model logits + hidden states (used by logits-based routers and probes), written under `logits_output/` and `hs/`.
 - **embeddings**: generates query embeddings (used by `embedding_mlp`), written under `query_embeddings_output/`.
 
-## <img src="./assets/icons/router.svg" width="18" alt="router icon"> Routers
+## 🔀 Routers
 
 Select the router via `router.router_type` in `config_B.yaml`:
 
@@ -183,7 +183,7 @@ python main.py --mode eval --datasets math mmlu_test alpaca_5k_test
 
 > Note: `dynamic_dirichlet` requires hidden states for the dataset (by default under repo-root `hs/`, named like `<weak_model_name>_<dataset>.pt`; MMLU-Pro uses `hs/mmlu_pro/`).
 
-## <img src="./assets/icons/dataset.svg" width="18" alt="dataset icon"> Datasets
+## 📚 Datasets
 
 Built-in dataset names are defined in `src/data.py:DatasetRegistry`. Commonly used ones:
 
