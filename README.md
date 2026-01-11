@@ -35,21 +35,21 @@ CoBench provides four router families:
 
 CoBench supports two probe types used in our setup:
 
-- `probe_type=mean`: uniform (deterministic) fusion, \(\hat{z}(x)=\frac{1}{L}\sum_{l=1}^{L} z^{(l)}(x)\).
+- `probe_type=mean`: uniform (deterministic) fusion, $\hat{z}(x)=\frac{1}{L}\sum_{l=1}^{L} z^{(l)}(x)$.
 - `probe_type=dynamic_dirichlet`: **DynamicDirichlet** with a Dirichlet distribution over layer weights (below).
 
-Given per-layer hidden states \(z^{(1)}(x),\dots,z^{(L)}(x)\), we learn a distribution over layer-weights:
+Given per-layer hidden states $z^{(1)}(x),\dots,z^{(L)}(x)$, we learn a distribution over layer-weights:
 
-\[
+$$
 \alpha(x) \sim \mathrm{Dir}(\beta(x)), \quad \hat{z}(x) = \sum_{l=1}^{L}\alpha_l(x)\, z^{(l)}(x)
-\]
+$$
 
-Then a probe head maps \(\hat{z}(x)\) to a **probe score** (sigmoid) used for routing.
+Then a probe head maps $\hat{z}(x)$ to a **probe score** (sigmoid) used for routing.
 
 Notes (matching current CoBench code):
 
-- **Training**: sample \(\alpha\) from Dirichlet for regularization (stochastic fusion).
-- **Inference**: use the Dirichlet **expected weights** (deterministic fusion). The concentration mass (e.g. \(\beta_0=\sum_l \beta_l\)) can serve as an uncertainty proxy (the default pipeline uses the sigmoid score for routing).
+- **Training**: sample $\alpha$ from Dirichlet for regularization (stochastic fusion).
+- **Inference**: use the Dirichlet **expected weights** (deterministic fusion). The concentration mass (e.g. $\beta_0=\sum_l \beta_l$) can serve as an uncertainty proxy (the default pipeline uses the sigmoid score for routing).
 
 ### Evaluation framework: what we measure
 
