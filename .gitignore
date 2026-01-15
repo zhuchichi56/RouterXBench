@@ -3,6 +3,8 @@ results/
 src/results/
 src/qwen2.5-results/
 src/query_embeddings_output/
+src/logs/
+src/deberta_checkpoints/
 outputs/
 no_use/
 external/xverify/
@@ -12,7 +14,6 @@ wandb/
 /visualizations/
 src/utils/visualizations/
 src/metric_results/
-*.jsonl
 *.jpg
 *.csv
 *.pt
