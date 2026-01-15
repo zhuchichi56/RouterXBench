@@ -208,3 +208,13 @@ python src/utils/download_med_qa.py -n 1000
 - This repo may reference `external/xverify` for certain correctness evaluation workflows.
 - Logs are written under `src/logs/`.
 
+
+
+## 👥 Author Contributions
+
+- **Wanxing Wu** (Institut Polytechnique de Paris): Led the project, proposed the initial idea, implemented and improved the code, conducted major experiments, and wrote the paper.
+- **He Zhu** (Peking University): Developed the code architecture and implemented core methods, substantially enhanced the methodology, contributed to experimental design, and co-wrote and revised the manuscript with critical insights.
+- **Yixia Li** (Southern University of Science and Technology): Conducted experiments, participated in idea development and experimental design, and co-wrote and extensively revised the manuscript.
+- **Guanhua Chen** (Southern University of Science and Technology): Supervised and guided the project, and provided resources.
+- **Hongru Wang** (University of Edinburgh): Contributed to manuscript revision.
+- **Lei Yang**, **Zhao Jiehui** (Deepxi Co.), **Jian Yang** (Beihang University), **Benyou Wang**, **Bingyi Jing** (Chinese University of Hong Kong, Shenzhen): Contributed through discussions.
