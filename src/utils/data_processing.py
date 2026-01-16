@@ -1,6 +1,5 @@
 import json
 import os
-os.environ["WANDB_API_KEY"] = "79a88980fe13540412ac35e9673ca1ebe5e23380"
 from collections import defaultdict
 import pandas as pd
 import numpy as np
