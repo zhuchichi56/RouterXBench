@@ -8,6 +8,7 @@ from datasets import load_dataset
 import pandas as pd
 from collections import Counter
 import random
+from pathlib import Path
 
 # Set random seed for reproducibility
 random.seed(42)
@@ -81,8 +82,8 @@ def main(total_samples=10000, train_ratio=0.8):
     print(f"Target sample count: {total_samples}")
     print(f"Train/Test split ratio: {train_ratio:.0%} / {1-train_ratio:.0%}")
 
-    # Output directory
-    output_dir = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/data"
+    # Output directory (relative to src directory)
+    output_dir = str(Path(__file__).parent.parent / "data")
     
     # Load full dataset
     ds = load_dataset(

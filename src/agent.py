@@ -433,7 +433,7 @@ Example:
 
 1. Start vLLM server:
 screen -S vllm
-vllm serve /volume/pt-train/models/Llama-3.1-8B-Instruct \
+vllm serve /path/to/your/model \
     --host 0.0.0.0 \
     --port 8000 \
     --tensor-parallel-size 1 \
@@ -442,7 +442,7 @@ vllm serve /volume/pt-train/models/Llama-3.1-8B-Instruct \
 
 2. Run async Agent (with Template and Evaluate):
 python src/agent.py \
-    --agent_name /volume/pt-train/models/Llama-3.1-8B-Instruct \
+    --agent_name /path/to/your/model \
     --dataset gsm8k \
     --num_samples 100 \
     --agent_tools DuckDuckGoSearchTool \

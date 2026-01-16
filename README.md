@@ -41,7 +41,7 @@ The figure summarizes two things:
   - **MPM (Mid-band Performance Mean)**: medium call-rate band
   - **HCR (High-band Call-Rate)**: high call-rate regime
 
-These bands are controlled in config by `recovery_rate_band` and `lpm_call_rate_band` (see `config_B.yaml` and `src/config.py`).
+These bands are controlled in config by `recovery_rate_band` and `lpm_call_rate_band` (see `config.yaml` and `src/config.py`).
 
 ## 🔀 Routers
 
@@ -49,7 +49,7 @@ All routers are implemented in `src/router.py` (and wired into the pipeline via 
 
 ### Methodology: router families
 
-Select the router via `router.router_type` in `config_B.yaml`:
+Select the router via `router.router_type` in `config.yaml`:
 
 - **Verb-based** (`router_type=self_based`): routers that operate on model-generated text (verbalized signals), e.g. `semantic_entropy`, `self_questioning`.
 - **Logits-based** (`router_type=logits_based_routers`): routers that operate on weak-model logits (and derived statistics), e.g. `max_logits`, `top10_variance`, `entropy`, `confidence_margin`, `logits_margin` (and `coe`).
@@ -88,7 +88,7 @@ Notes (matching current CoBench code):
 At a high level you will:
 
 - **(0) Setup environment** from `requirements.txt`
-- **(1) Configure** models + evaluation knobs in `config_B.yaml`
+- **(1) Configure** models + evaluation knobs in `config.yaml`
 - **(2) Start services**: vLLM (weak/strong as needed) and xVerify (for math/mmlu/qa)
 - **(3) Prepare** artifacts: `scores` / `logits` / `embeddings`
 - **(4) Train** routers (probes / embedding_mlp / deberta)
@@ -122,7 +122,7 @@ pip install -r external/xverify/requirements.txt
 
 ### Step 1: Configure
 
-Default config is `config_B.yaml` (see `src/config.py:PipelineConfig.from_yaml`). You typically update:
+Default config is `config.yaml` (see `src/config.py:PipelineConfig.from_yaml`). You typically update:
 
 - `inference.weak_model_path` / `inference.strong_model_path`
 - `inference.base_port`, `inference.{weak,strong}_gpu_ids`, `inference.cuda_visible_devices`
@@ -144,7 +144,7 @@ Example: start xVerify server (from `src/scripts/run.sh`):
 
 ```bash
 CUDA_VISIBLE_DEVICES=3 \
-vllm serve /volume/pt-train/users/wzhang/ghchen/zh/models/xVerify-9B-C \
+vllm serve /path/to/xVerify-9B-C \
   --host 0.0.0.0 \
   --port 8000 \
   --tensor-parallel-size 1 \

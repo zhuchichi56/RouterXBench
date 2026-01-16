@@ -217,12 +217,13 @@ if __name__ == "__main__":
     ]
     
     print("Testing parallel inference...")
+    # Note: Replace with your actual model path or use config
     results = parallel_inference(
         test_prompts,
         max_tokens=100,
         temperature=0.7,
         top_p=0.9,
-        model_name_or_path="/volume/pt-train/models/Llama-3.1-8B-Instruct"
+        model_name_or_path="your_model_path_here"  # Replace with actual model path
     )#、
     
     print("\nResults:")
@@ -230,7 +231,7 @@ if __name__ == "__main__":
         print(f"\nPrompt: {prompt}")
         print(f"Response: {result}")
 
-# python start.py --model_path /home/zhe/models/lukeminglkm/instagger_llama2 --base_port 8000 --gpu_list 1,2,3,4,5,6,7
+# Example: python start.py --model_path /path/to/your/model --base_port 8000 --gpu_list 1,2,3,4,5,6,7
 
 
 

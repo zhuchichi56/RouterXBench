@@ -35,12 +35,11 @@ def stop_servers(processes):
 if __name__ == "__main__":
     cfg = PipelineConfig.from_yaml()
     parser = argparse.ArgumentParser(description="Start VLLM servers with specified GPUs.")
-    # /home/admin/data/huggingface_model/LLaMA/Meta-Llama-3-8B-Instruct
-    # /home/admin/data/huggingface_model/mistral/Mistral-7B-Instruct-v0.3
-    # /volume/pt-train/models/gpt-oss-20b
-    # /volume/pt-train/models/Llama-3.1-8B-Instruct
+    # Example model paths:
+    # /path/to/your/model/LLaMA/Meta-Llama-3-8B-Instruct
+    # /path/to/your/model/mistral/Mistral-7B-Instruct-v0.3
     
-    parser.add_argument("--model_path", type=str, help="Path to the model.", default=cfg.inference.strong_model_path) # /home/admin/data/huggingface_model/lukeminglkm/instagger_llama2
+    parser.add_argument("--model_path", type=str, help="Path to the model.", default=cfg.inference.strong_model_path)
     parser.add_argument("--base_port", type=int, help="Starting port number.", default=cfg.inference.base_port)
     parser.add_argument("--gpu_list", type=str, help="Comma-separated list of GPU IDs.", default=",".join(str(g) for g in cfg.inference.strong_gpu_ids))
 

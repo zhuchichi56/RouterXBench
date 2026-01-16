@@ -9,9 +9,9 @@ import yaml
 class InferenceConfig:
     """Inference-related configuration parameters"""
 
-    # Model paths
-    strong_model_path: str = "/HOME/sustc_ghchen/sustc_ghchen_4/HDD_POOL/models/Qwen2.5-14B-Instruct"
-    weak_model_path: str = "/HOME/sustc_ghchen/sustc_ghchen_4/HDD_POOL/models/Qwen2.5-7B-Instruct"
+    # Model paths (should be configured in config.yaml)
+    strong_model_path: str = "your_strong_model_path"
+    weak_model_path: str = "your_weak_model_path"
 
     # Generation parameters
     max_tokens: int = 2048
@@ -176,9 +176,9 @@ class PipelineConfig:
 
     @classmethod
     def from_yaml(cls):
-        """Load configuration from config_B.yaml"""
-        # Use relative path: config_B.yaml is located in the project root directory
-        config_file = Path(__file__).parent.parent / "config_B.yaml"
+        """Load configuration from config.yaml"""
+        # Use relative path: config.yaml is located in the project root directory
+        config_file = Path(__file__).parent.parent / "config.yaml"
 
         if not config_file.exists():
             print(f"Config file {config_file} does not exist, using default configuration")

@@ -12,7 +12,6 @@ def load_jsonl(filepath):
                 continue  # Skip the line with error
         return data
 
-# /home/zhe/eval/fastchat/llm_judge/data/mt_bench/model_judgment/gpt-4_single.jsonl
-
-data = load_jsonl("/home/zhe/eval/fastchat/llm_judge/data/mt_bench/model_judgment/gpt-4_single.jsonl")
-print(data[:2])
+# Example: Replace with your actual data file path
+# data = load_jsonl("/path/to/your/data/gpt-4_single.jsonl")
+# print(data[:2])

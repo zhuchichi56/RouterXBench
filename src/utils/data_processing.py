@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from pathlib import Path
 
 def extract_method_from_dirname(dirname):
     """Extract method name from a directory name.
@@ -457,17 +458,18 @@ def load_probe_results_from_train_set(train_set_name):
     Returns:
         (individual_results, mmlu_pro_averages): same result format as other loaders
     """
-    metric_results_base = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results"
-    train_dir = os.path.join(metric_results_base, train_set_name)
+    # Use relative path: metric_results is located in src directory
+    metric_results_base = Path(__file__).parent.parent / "metric_results"
+    train_dir = metric_results_base / train_set_name
 
-    if not os.path.exists(train_dir):
+    if not train_dir.exists():
         print(f"Error: Train directory does not exist: {train_dir}")
         return {}, {}
 
     # Use "probe" method name when loading data
     print(f"Loading probe results from: {train_dir}")
-    individual_results = load_individual_datasets(train_dir, "probe")
-    mmlu_pro_averages = load_mmlu_pro_categories(train_dir, "probe")
+    individual_results = load_individual_datasets(str(train_dir), "probe")
+    mmlu_pro_averages = load_mmlu_pro_categories(str(train_dir), "probe")
 
     return individual_results, mmlu_pro_averages
 
@@ -480,7 +482,8 @@ def main():
     if len(sys.argv) > 1:
         mode = sys.argv[1].lower()
 
-    metric_results_base = "/volume/pt-train/users/wzhang/ghchen/zh/CoBench/src/metric_results"
+    # Use relative path: metric_results is located in src directory
+    metric_results_base = Path(__file__).parent.parent / "metric_results"
 
     print(f"Running in mode: {mode}")
     print("="*80)
@@ -490,7 +493,7 @@ def main():
 
     if mode == "base":
         # Original base mode
-        base_path = os.path.join(metric_results_base, "base")
+        base_path = str(metric_results_base / "base")
 
         print(f"Scanning methods in: {base_path}")
         methods = scan_methods(base_path)
