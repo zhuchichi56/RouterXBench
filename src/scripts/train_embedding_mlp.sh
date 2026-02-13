@@ -16,11 +16,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 SRC_DIR="${ROOT_DIR}/src"
 
-MACHINE_ID="${MACHINE_ID:-B}"
-CONFIG_PATH="${ROOT_DIR}/config_${MACHINE_ID}.yaml"
+CONFIG_PATH="${ROOT_DIR}/config.yaml"
 
 EMBEDDING_DIR="${EMBEDDING_DIR:-${ROOT_DIR}/src/query_embeddings_output}"
 CHECKPOINT_PATH="${CHECKPOINT_PATH:-}"  # optional: override router.checkpoint_path
+EMBEDDING_MLP_SAVE_PATH="${EMBEDDING_MLP_SAVE_PATH:-}"  # optional: override training.embedding_mlp_save_path
 
 if [ "$#" -gt 0 ]; then
   DATASETS=("$@")
@@ -42,6 +42,7 @@ export MACHINE_ID
 export CONFIG_PATH
 export EMBEDDING_DIR
 export CHECKPOINT_PATH
+export EMBEDDING_MLP_SAVE_PATH
 
 python - <<'PY' "${DATASETS[@]}"
 import json
@@ -52,6 +53,7 @@ from pathlib import Path
 config_path = os.environ["CONFIG_PATH"]
 embedding_dir = Path(os.environ["EMBEDDING_DIR"])
 checkpoint_path = os.environ.get("CHECKPOINT_PATH") or ""
+embedding_mlp_save_path = os.environ.get("EMBEDDING_MLP_SAVE_PATH") or ""
 datasets = sys.argv[1:]
 
 lines = open(config_path, "r", encoding="utf-8").read().splitlines(True)
@@ -81,17 +83,34 @@ def set_in_block(block: str, key: str, value_yaml: str):
             return
     lines.insert(start + 1, f"  {key}: {value_yaml}\n")
 
+def get_in_block(block: str, key: str):
+    start, end = find_block(block)
+    prefix = f"  {key}:"
+    for i in range(start + 1, end):
+        if lines[i].startswith(prefix):
+            raw = lines[i].split(":", 1)[1].strip()
+            return raw.strip("\"'")
+    return None
+
 set_in_block("router", "router_type", "\"embedding_mlp\"")
 
 files = [str(embedding_dir / f"{d}_query_embeddings.pt") for d in datasets]
 set_in_block("router", "embedding_files", json.dumps(files))
 
+if not embedding_mlp_save_path:
+    weak_model_path = get_in_block("inference", "weak_model_path") or ""
+    weak_model_name = Path(weak_model_path).name if weak_model_path else ""
+    embedding_mlp_save_path = f"embedding_mlp/{weak_model_name}" if weak_model_name else "embedding_mlp"
+set_in_block("training", "embedding_mlp_save_path", f"\"{embedding_mlp_save_path}\"")
+
 if checkpoint_path:
     set_in_block("router", "checkpoint_path", f"\"{checkpoint_path}\"")
+else:
+    # Clear stale probe checkpoint so main.py falls back to training.embedding_mlp_save_path.
+    set_in_block("router", "checkpoint_path", "\"\"")
 
 open(config_path, "w", encoding="utf-8").writelines(lines)
 PY
 
 cd "${SRC_DIR}"
 python main.py --mode train --datasets "${DATASETS[@]}"
-

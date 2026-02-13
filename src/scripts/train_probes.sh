@@ -4,13 +4,19 @@ set -euo pipefail
 # Part 2/3: probe training
 # - patches config_${MACHINE_ID}.yaml temporarily (restored on exit)
 # - forces router.router_type="probe"
+# - prints per-dataset validation accuracy during training
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 SRC_DIR="${ROOT_DIR}/src"
 
 MACHINE_ID="${MACHINE_ID:-B}"
-CONFIG_PATH="${ROOT_DIR}/config_${MACHINE_ID}.yaml"
+CONFIG_CANDIDATE="${ROOT_DIR}/config_${MACHINE_ID}.yaml"
+if [ -f "${CONFIG_CANDIDATE}" ]; then
+  CONFIG_PATH="${CONFIG_CANDIDATE}"
+else
+  CONFIG_PATH="${ROOT_DIR}/config.yaml"
+fi
 
 # Training knobs
 MAX_SAMPLES="${MAX_SAMPLES:-12000}"
@@ -34,8 +40,8 @@ for arg in "$@"; do
 done
 
 if [ ${#DATASETS[@]} -eq 0 ]; then
-  # Default: 3-dataset mix for training
-  DATASETS=("alpaca_5k_train" "big_math_5k_train" "mmlu_train")
+  # Default: 3-dataset mix for training "big_math_10k" ""
+  DATASETS=("alpaca_5k_train big_math_5k_train mmlu_train" )
 fi
 
 if [ ${#PROBES[@]} -eq 0 ]; then
@@ -114,5 +120,7 @@ open(config_path, "w", encoding="utf-8").writelines(lines)
 PY
 
 cd "${SRC_DIR}"
+echo "Using config: ${CONFIG_PATH}"
 python main.py --mode train --datasets "${DATASETS[@]}"
 
+echo "Training finished. Per-dataset validation acc is printed in train logs."

@@ -1,4 +1,4 @@
-# CoBench：Towards Fair and Comprehensive Evaluation of Routers in Collaborative LLM Systems
+# RouterXBench：Towards Fair and Comprehensive Evaluation of Routers in Collaborative LLM Systems
 
 <p align="center">
   <a href="#-overview">🗺️ Overview</a> |
@@ -8,7 +8,7 @@
   <a href="#-datasets">📚 Datasets</a>
 </p>
 
-CoBench is an **LLM routing / selective prediction** framework. Given a **weak model** (cheap) and a **strong model** (expensive), it trains/evaluates different **routers** (confidence/difficulty predictors) to decide when to escalate to the strong model, and reports metrics such as **recovery rate**, **call rate**, and **AUROC**.
+RouterXBench is an **LLM routing / selective prediction** framework. Given a **weak model** (cheap) and a **strong model** (expensive), it trains/evaluates different **routers** (confidence/difficulty predictors) to decide when to escalate to the strong model, and reports metrics such as **recovery rate**, **call rate**, and **AUROC**.
 
 The main entrypoint is `src/main.py` with three modes:
 
@@ -20,7 +20,7 @@ The main entrypoint is `src/main.py` with three modes:
 
 
 <p align="center">
-  <img src="./assets/CoBench.png" alt="CoBench overview: collaboration architecture & evaluation protocol" width="95%">
+  <img src="./assets/CoBench.png" alt="RouterXBench overview: collaboration architecture & evaluation protocol" width="95%">
 </p>
 
 The figure summarizes two things:
@@ -63,7 +63,7 @@ Batch modes (convenience):
 
 ### Probe-based (ours): Mean / DynamicDirichlet
 
-CoBench supports two probe types used in our setup:
+RouterXBench supports two probe types used in our setup:
 
 - `probe_type=mean`: uniform (deterministic) fusion, $\hat{z}(x)=\frac{1}{L}\sum_{l=1}^{L} z^{(l)}(x)$.
 - `probe_type=dynamic_dirichlet`: **DynamicDirichlet** with a Dirichlet distribution over layer weights.
@@ -76,14 +76,14 @@ $$
 
 Then a probe head maps $\hat{z}(x)$ to a **probe score** (sigmoid) used for routing.
 
-Notes (matching current CoBench code):
+Notes (matching current RouterXBench code):
 
 - **Training**: sample $\alpha$ from Dirichlet for regularization (stochastic fusion).
 - **Inference**: use the Dirichlet **expected weights** (deterministic fusion). The concentration mass (e.g. $\beta_0=\sum_l \beta_l$) can serve as an uncertainty proxy.
 
 ## 🚀 Quickstart
 
-### TL;DR: run CoBench end-to-end
+### TL;DR: run RouterXBench end-to-end
 
 At a high level you will:
 
@@ -99,7 +99,7 @@ At a high level you will:
 Clone the repo:
 
 ```bash
-git clone https://github.com/zhuchichi56/CoBench.git && cd CoBench
+git clone https://github.com/zhuchichi56/RouterXBench.git && cd RouterXBench
 ```
 
 If you need xVerify (for `math / mmlu / qa` scoring), clone it into `external/xverify`:
@@ -131,7 +131,7 @@ Default config is `config.yaml` (see `src/config.py:PipelineConfig.from_yaml`). 
 
 ### Step 2: Start services (vLLM + optional xVerify)
 
-CoBench queries models via HTTP (`src/inference/vllm_client.py`).
+RouterXBench queries models via HTTP (`src/inference/vllm_client.py`).
 
 - **When do I need vLLM?**
   - If your `prepare_steps` includes `scores` (default), you need inference access for **weak** and **strong**.
@@ -218,3 +218,4 @@ python src/utils/download_med_qa.py -n 1000
 - **Guanhua Chen** (Southern University of Science and Technology): Supervised and guided the project, and provided resources.
 - **Hongru Wang** (University of Edinburgh): Contributed to manuscript revision.
 - **Lei Yang**, **Zhao Jiehui** (Deepxi Co.), **Jian Yang** (Beihang University), **Benyou Wang**, **Bingyi Jing** (Chinese University of Hong Kong, Shenzhen): Contributed through discussions.
+
