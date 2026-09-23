@@ -10,6 +10,8 @@ branches.
   `d1e4a10db08c87075c78972e48ecc182be03e2d5`.
 - Unit of routing: one environment step.
 - Candidate set: the exact actions returned by `env.get_available_actions()`.
+- Free-form search keywords are always delegated to the strong agent; Jev only
+  receives exact bounded `clickables` from the native environment.
 - Router: Jev choice probability from `typesafe-sdk`.
 - Decision: execute Jev's action when confidence is at least `tau`; otherwise
   call the strong agent for that step.

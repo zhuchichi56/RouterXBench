@@ -2,6 +2,7 @@ import unittest
 from types import SimpleNamespace
 
 from src.agentbench.jev_router import AgentStep, JevRouter, SelectiveAgentPolicy
+from src.agentbench.webshop_actions import action_to_tool_call, bounded_click_actions
 
 
 class FakeClient:
@@ -31,6 +32,18 @@ def make_step():
 
 
 class JevRouterTest(unittest.TestCase):
+    def test_webshop_search_is_delegated_but_clicks_are_bounded(self):
+        available = {"has_search_bar": True, "clickables": ["search", "B0123", "Next >"]}
+        self.assertEqual(
+            bounded_click_actions(available),
+            ["click[B0123]", "click[Next >]"],
+        )
+
+    def test_jev_action_can_be_inserted_as_valid_tool_history(self):
+        call = action_to_tool_call("click[buy now]", "jev-step-4")
+        self.assertEqual(call["function"]["name"], "click_action")
+        self.assertIn("buy now", call["function"]["arguments"])
+
     def test_confident_choice_executes_jev_action(self):
         decision = JevRouter(client=FakeClient(), confidence_threshold=0.5).route(make_step())
         self.assertEqual(decision.route, "jev")
