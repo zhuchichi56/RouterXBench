@@ -203,6 +203,16 @@ python src/utils/download_hotpotqa.py -n 500
 python src/utils/download_med_qa.py -n 1000
 ```
 
+### AgentBench selective-control branch
+
+`src/agentbench/` adds a Jev router for AgentBench environments with bounded
+action sets. At each WebShop or ALFWorld step, Jev selects among the exact
+environment-provided actions; choices below a configured confidence threshold
+are delegated to a strong agent. This produces a task-success versus
+strong-agent-call-rate curve without changing the existing request-level
+Knowledge and Math branches. See `experiment/agentbench_jev/README.md` for the
+frozen first-slice protocol and replay command.
+
 ## Notes
 
 - This repo may reference `external/xverify` for certain correctness evaluation workflows.
@@ -218,4 +228,3 @@ python src/utils/download_med_qa.py -n 1000
 - **Guanhua Chen** (Southern University of Science and Technology): Supervised and guided the project, and provided resources.
 - **Hongru Wang** (University of Edinburgh): Contributed to manuscript revision.
 - **Lei Yang**, **Zhao Jiehui** (Deepxi Co.), **Jian Yang** (Beihang University), **Benyou Wang**, **Bingyi Jing** (Chinese University of Hong Kong, Shenzhen): Contributed through discussions.
-

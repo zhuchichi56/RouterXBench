@@ -336,6 +336,7 @@ xgrammar==0.1.25
 xxhash==3.6.0
 yarl==1.20.1
 zipp==3.23.0
+typesafe-sdk==0.7.1
 
 # VCS dependency from the original environment:
 llm_blender @ git+https://github.com/yuchenlin/LLM-Blender.git@33204d2712944b6b17996f7c079e74cd963ccc7c

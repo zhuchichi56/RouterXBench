@@ -4,6 +4,23 @@ Newest entries first. Format: date · stage · goal → outcome.
 
 ---
 
+## 2026-09-23 · AgentBench branch · Jev selective routing implementation
+
+**Goal**: Add an Agent branch without changing the existing Knowledge/Math
+results, using Jev for bounded step-level routing and a strong agent fallback.
+
+**Implementation**: Added a confidence-preserving `typesafe-sdk` adapter,
+AgentBench step schema, selective policy, replay CLI, frozen WebShop-first
+protocol, and unit tests. AgentBench is pinned to upstream commit
+`d1e4a10db08c87075c78972e48ecc182be03e2d5`; seed 42 is frozen for the first
+formal slice.
+
+**Verification**: Four unit tests pass; Python compilation and `git diff
+--check` pass. No Jev API request or AgentBench workload was run because
+`TYPESAFE_API_KEY` and official strong-only alignment are not yet available.
+
+---
+
 ## 2026-05-17 · Literature recon · 2025-10 to 2026-05 routing landscape
 
 **Goal**: 系统调研 routing/LLM cascade 最新文献，验证 RouterXBench v2 的 niche 是否仍 defensible (跨 query 分布 / 模型 swap / cost regime 三轴 + training-free adaptation)。
