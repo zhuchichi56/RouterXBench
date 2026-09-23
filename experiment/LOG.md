@@ -4,6 +4,29 @@ Newest entries first. Format: date · stage · goal → outcome.
 
 ---
 
+## 2026-09-23 · Existing-node calibration · AgentBench WebShop + Jev
+
+**Scope**: Reused existing Explore node A100-11 without allocating or stopping
+GPU services. The resident models remained Qwen3.5-27B (six endpoints) and
+Qwen3-4B (two endpoints); concurrency was one.
+
+**Environment**: Prepared official WebShop commit
+`64fa2a5c15c7daa698b9ac93f5bb5437b634c9bd`, full released data, and Lucene
+index on node-local storage. Root disk remained at 27% used.
+
+**Checks**:
+- Live Jev `jev-1.13.0` bounded-choice call selected the expected product with
+  confidence 0.96.
+- Existing development case `web-2518` completed strong-only with native score
+  1.0 in four actions using Qwen3.5-27B, seed 42 and thinking enabled.
+
+**Boundary**: These are interface/environment calibrations on a previously
+inspected development case, not a formal Jev comparison or a reproduction of
+the published Qwen2.5-72B AgentBench score. Formal method evaluation remains
+blocked on a frozen matched baseline protocol.
+
+---
+
 ## 2026-09-23 · AgentBench branch · Jev selective routing implementation
 
 **Goal**: Add an Agent branch without changing the existing Knowledge/Math
