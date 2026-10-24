@@ -1,0 +1,516 @@
+{
+  "scores": "/tmp/startlux-eval-20261025/replay_check/jev-query.jsonl",
+  "scores_sha256": "34a618c163980925c0438f661fde8c3ad8a9ff43b2e85a2d29f3d71880a2b5f2",
+  "n_records": 5955,
+  "expected_n": 5955,
+  "complete": true,
+  "metadata": {
+    "router_model": "jev-1.13.0",
+    "signal": "query"
+  },
+  "config_sha256": [],
+  "metrics_out": "/tmp/startlux-eval-20261025/replay_check/replayed.metrics.csv",
+  "summary_out": "/tmp/startlux-eval-20261025/replay_check/replayed.summary.json",
+  "summary_sha256": "3e781fabb2f78cbc265c992127517a53fd2621074eca636d9555a138ef1f40ce",
+  "metrics_sha256": "489dd0500bc46b2da5d0f43e9f7dcccec14968e7886ab8e82bd4ebab406b6c81",
+  "input_files": {
+    "split_file": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/clean-multiseed-20261013/SHARED_SPLIT.json",
+      "sha256": "b3a62b617188ce0f31c3897aee0769d49195be85c3cdfd8a599766fa715e7501",
+      "bytes": 387650,
+      "line_count_total": null,
+      "line_count_test": 5955,
+      "split_counts": {
+        "train": 4793,
+        "val": 1199,
+        "test": 5955
+      }
+    },
+    "input_file": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/20261011-jev-gpt54-5958-prepared/input.jsonl",
+      "sha256": "5e2004799c89623fec3c860fa71c0d2563e5a5727b24fbba58938c0cc7a6d736",
+      "bytes": 6062437,
+      "line_count_total": 5958,
+      "line_count_test": 5955
+    },
+    "small_file": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/20261011-jev-gpt54-5958-prepared/small.jsonl",
+      "sha256": "fe8ccd72c45dd913dcb6eacf077ca9499b22cbc8cb7b511ec1e1712d6abd6df2",
+      "bytes": 17598931,
+      "line_count_total": 5958,
+      "line_count_test": 5955
+    },
+    "labels_file": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/20261011-jev-gpt54-5958-prepared/all_labels.jsonl",
+      "sha256": "772adbbe2870cd5f09bb54cc5b3a7ea18e88206e30918d2db355bf5c1b594001",
+      "bytes": 4261957,
+      "line_count_total": 5958,
+      "line_count_test": 5955
+    },
+    "pairs_file": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/startlux-eval-20261025/eval_bundle/JOINED_USAGE_QUALITY_SCORES.jsonl",
+      "sha256": "c65f6bcdffd8f22c24691cc83ab928551947b5d182d4718361479ce24da1f8cb",
+      "bytes": 3881680,
+      "line_count_total": 5958,
+      "line_count_test": 5955
+    },
+    "manifest_file": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/startlux-eval-20261025/eval_bundle/MANIFEST.json",
+      "sha256": "eb6b5c0f874568efccb6ed2bf47292e55168955ee6c1945e50d20b2f9c55cd31",
+      "bytes": 15237,
+      "line_count_total": null,
+      "line_count_test": null
+    },
+    "budget_band": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/startlux-eval-20261025/eval_bundle/budget_band.py",
+      "sha256": "966536d89add4f21fbc9a22330af25197ea9c06bf30ebd9e64dded033a135801",
+      "bytes": 1198
+    },
+    "target_band": {
+      "path": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/startlux-eval-20261025/eval_bundle/target_band.py",
+      "sha256": "a6cf5b052a7214f32a2a383f800afa02e0a1b6b6e6351c794146eadd72fe3bed",
+      "bytes": 3269
+    }
+  },
+  "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+  "comparison": {
+    "passed": true,
+    "n_cells": 54,
+    "max_abs_diff": 0.0,
+    "tolerance": 1e-09,
+    "cells": [
+      {
+        "task": "alpaca_5k_test",
+        "level": 1,
+        "column": "AUROC_pct",
+        "produced": 59.35404369887129,
+        "reference": 59.35404369887129,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 1,
+        "column": "BQ_pct",
+        "produced": 90.85689360527199,
+        "reference": 90.85689360527199,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 1,
+        "column": "TC_pct",
+        "produced": 36.49376558256815,
+        "reference": 36.49376558256815,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 2,
+        "column": "AUROC_pct",
+        "produced": 59.35404369887129,
+        "reference": 59.35404369887129,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 2,
+        "column": "BQ_pct",
+        "produced": 92.49230672187436,
+        "reference": 92.49230672187436,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 2,
+        "column": "TC_pct",
+        "produced": 67.68330104772645,
+        "reference": 67.68330104772645,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 3,
+        "column": "AUROC_pct",
+        "produced": 59.35404369887129,
+        "reference": 59.35404369887129,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 3,
+        "column": "BQ_pct",
+        "produced": 94.38795527488409,
+        "reference": 94.38795527488409,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "alpaca_5k_test",
+        "level": 3,
+        "column": "TC_pct",
+        "produced": 89.19036072669842,
+        "reference": 89.19036072669842,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 1,
+        "column": "AUROC_pct",
+        "produced": 72.1609821467168,
+        "reference": 72.1609821467168,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 1,
+        "column": "BQ_pct",
+        "produced": 76.73912737886606,
+        "reference": 76.73912737886606,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 1,
+        "column": "TC_pct",
+        "produced": 47.45612272225802,
+        "reference": 47.45612272225802,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 2,
+        "column": "AUROC_pct",
+        "produced": 72.1609821467168,
+        "reference": 72.1609821467168,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 2,
+        "column": "BQ_pct",
+        "produced": 79.54956636262871,
+        "reference": 79.54956636262871,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 2,
+        "column": "TC_pct",
+        "produced": 67.47477988634628,
+        "reference": 67.47477988634628,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 3,
+        "column": "AUROC_pct",
+        "produced": 72.1609821467168,
+        "reference": 72.1609821467168,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 3,
+        "column": "BQ_pct",
+        "produced": 82.62148691308899,
+        "reference": 82.62148691308899,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "big_math_5k_test",
+        "level": 3,
+        "column": "TC_pct",
+        "produced": 85.42965252461082,
+        "reference": 85.42965252461082,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 1,
+        "column": "AUROC_pct",
+        "produced": 70.81084881027303,
+        "reference": 70.81084881027303,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 1,
+        "column": "BQ_pct",
+        "produced": 78.28264982773985,
+        "reference": 78.28264982773985,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 1,
+        "column": "TC_pct",
+        "produced": 38.74502524296989,
+        "reference": 38.74502524296989,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 2,
+        "column": "AUROC_pct",
+        "produced": 70.81084881027303,
+        "reference": 70.81084881027303,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 2,
+        "column": "BQ_pct",
+        "produced": 81.89029363277022,
+        "reference": 81.89029363277022,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 2,
+        "column": "TC_pct",
+        "produced": 64.93285214909537,
+        "reference": 64.93285214909537,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 3,
+        "column": "AUROC_pct",
+        "produced": 70.81084881027303,
+        "reference": 70.81084881027303,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 3,
+        "column": "BQ_pct",
+        "produced": 85.07966772538163,
+        "reference": 85.07966772538163,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "magpie_5k_test",
+        "level": 3,
+        "column": "TC_pct",
+        "produced": 84.57932390522551,
+        "reference": 84.57932390522551,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 1,
+        "column": "AUROC_pct",
+        "produced": 80.65005853087503,
+        "reference": 80.65005853087503,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 1,
+        "column": "BQ_pct",
+        "produced": 59.196016928947984,
+        "reference": 59.196016928947984,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 1,
+        "column": "TC_pct",
+        "produced": 53.69722464622015,
+        "reference": 53.69722464622015,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 2,
+        "column": "AUROC_pct",
+        "produced": 80.65005853087503,
+        "reference": 80.65005853087503,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 2,
+        "column": "BQ_pct",
+        "produced": 62.607506395819065,
+        "reference": 62.607506395819065,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 2,
+        "column": "TC_pct",
+        "produced": 74.19094690665462,
+        "reference": 74.19094690665462,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 3,
+        "column": "AUROC_pct",
+        "produced": 80.65005853087503,
+        "reference": 80.65005853087503,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 3,
+        "column": "BQ_pct",
+        "produced": 66.30271869527768,
+        "reference": 66.30271869527768,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "math",
+        "level": 3,
+        "column": "TC_pct",
+        "produced": 90.65724928844574,
+        "reference": 90.65724928844574,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 1,
+        "column": "AUROC_pct",
+        "produced": 70.57884711779448,
+        "reference": 70.57884711779448,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 1,
+        "column": "BQ_pct",
+        "produced": 60.177549454559205,
+        "reference": 60.177549454559205,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 1,
+        "column": "TC_pct",
+        "produced": 60.127157708471174,
+        "reference": 60.127157708471174,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 2,
+        "column": "AUROC_pct",
+        "produced": 70.57884711779448,
+        "reference": 70.57884711779448,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 2,
+        "column": "BQ_pct",
+        "produced": 61.694932150442,
+        "reference": 61.694932150442,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 2,
+        "column": "TC_pct",
+        "produced": 80.95350115245775,
+        "reference": 80.95350115245775,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 3,
+        "column": "AUROC_pct",
+        "produced": 70.57884711779448,
+        "reference": 70.57884711779448,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 3,
+        "column": "BQ_pct",
+        "produced": 65.34951000902059,
+        "reference": 65.34951000902059,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_pro",
+        "level": 3,
+        "column": "TC_pct",
+        "produced": 94.39040060009116,
+        "reference": 94.39040060009116,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 1,
+        "column": "AUROC_pct",
+        "produced": 69.05080151640757,
+        "reference": 69.05080151640757,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 1,
+        "column": "BQ_pct",
+        "produced": 79.51002227171493,
+        "reference": 79.51002227171493,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 1,
+        "column": "TC_pct",
+        "produced": 41.796164887597456,
+        "reference": 41.796164887597456,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 2,
+        "column": "AUROC_pct",
+        "produced": 69.05080151640757,
+        "reference": 69.05080151640757,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 2,
+        "column": "BQ_pct",
+        "produced": 81.61593366718084,
+        "reference": 81.61593366718084,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 2,
+        "column": "TC_pct",
+        "produced": 68.98544135384618,
+        "reference": 68.98544135384618,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 3,
+        "column": "AUROC_pct",
+        "produced": 69.05080151640757,
+        "reference": 69.05080151640757,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 3,
+        "column": "BQ_pct",
+        "produced": 83.88866346692527,
+        "reference": 83.88866346692527,
+        "abs_diff": 0.0
+      },
+      {
+        "task": "mmlu_test",
+        "level": 3,
+        "column": "TC_pct",
+        "produced": 85.0808799085737,
+        "reference": 85.0808799085737,
+        "abs_diff": 0.0
+      }
+    ]
+  }
+}

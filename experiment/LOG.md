@@ -4,6 +4,16 @@ Newest entries first. Format: date · stage · goal → outcome.
 
 ---
 
+## 2026-10-25 · A1–A5 / B1–B2 · StartLux recovery and initial evaluation
+
+Plan: evaluate five Instant sizes on query/query_answer and 9B/27B AutoThink on query (gate=0.9, budget=1024), once per condition as exploration. Reuse the 5,955 clean test split, frozen local answers/labels, historical absolute BQ/TC bands and original scorer. Entry/config/queue: `experiment/STARTLUX_PLAN.md`; published HDFS runtime: `eval_bundle/recovery_v2/` below `runs/startlux-eval-20261025`. GPU launches use shepherd. Actual launch scripts and commands are recorded in each executor's NOTES.
+
+At recovery, no formal score files or StartLux services existed; only synthetic GPU shepherd load. Three DSH workers are active. Prioritize A5 on host1 while A1 downloads, A2 on host2, A3 then A4 on host3. Existing 0.8B smoke is reused. Planner baseline check: 54/54 original-Jev metric cells agree within 1.57e-13; do not confuse that execution with the paper's three-execution aggregate. No new Judge calls. Full scores and selected throughput remain pending execution.
+
+Commit: pending integration.
+
+---
+
 ## 2026-09-23 · Existing-node calibration · AgentBench WebShop + Jev
 
 **Scope**: Reused existing Explore node A100-11 without allocating or stopping

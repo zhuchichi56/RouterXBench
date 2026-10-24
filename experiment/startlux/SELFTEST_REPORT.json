@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "n_checks": 8,
+  "checks": [
+    {
+      "name": "per_question_failures_continue",
+      "passed": true,
+      "detail": {
+        "done": 2,
+        "failed": 4,
+        "error_types": [
+          "HttpError",
+          "PermanentError",
+          "ResponseFormatError",
+          "TimeoutError"
+        ]
+      }
+    },
+    {
+      "name": "successful_resume_no_duplicate",
+      "passed": true,
+      "detail": {
+        "completed_first": 3,
+        "requests_second_run": 0
+      }
+    },
+    {
+      "name": "different_config_refused",
+      "passed": true,
+      "detail": {
+        "refused": "Resume refused: config hash mismatch for toy_task.jsonl:1 (8f59a79f8404872cc8f577149a4c00203f7faf7f2d9d60d7ce47c26dabe36"
+      }
+    },
+    {
+      "name": "truncated_tail_recovered",
+      "passed": true,
+      "detail": {
+        "done": 6,
+        "truncated_bytes": 42
+      }
+    },
+    {
+      "name": "limit_probe_no_metrics",
+      "passed": true,
+      "detail": {
+        "records": 2,
+        "summary_written": false
+      }
+    },
+    {
+      "name": "incomplete_no_summary",
+      "passed": true,
+      "detail": {
+        "refused": "Incomplete run: 2/5955 completed; no metrics/summary written"
+      }
+    },
+    {
+      "name": "complete_toy_metrics",
+      "passed": true,
+      "detail": {
+        "n_requests": 6,
+        "summary": true
+      }
+    },
+    {
+      "name": "missing_ids_no_summary",
+      "passed": true,
+      "detail": {
+        "refused": "Expected 6 unique sample_ids, got 5"
+      }
+    }
+  ],
+  "model": "toy-model-27b"
+}

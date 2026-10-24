@@ -1,0 +1,122 @@
+{
+  "schema": "startlux-recovery-v2/1",
+  "status": "READY",
+  "published_at": "2026-10-25T04:31:10+0800",
+  "publisher": "host1 (8h20-1)",
+  "eval_bundle_dir": "/mnt/hdfs/user/hadoop-aipnlp/zhuhe18/routerxbench/runs/startlux-eval-20261025/eval_bundle/recovery_v2",
+  "protocol": {
+    "split": "clean-multiseed-20261013/SHARED_SPLIT.json (5955 unique test ids)",
+    "local_model": "meta-llama/Llama-3.1-8B-Instruct",
+    "bands": "MANIFEST.json absolute historical bands; historical_absolute; NOT recomputed",
+    "metrics_algorithm": "evaluate_scores copied verbatim from original sha256 33ccc76992ed24cf13c58ecc940bc9b31d790e13793dd2bee6e11f76d83c91e1",
+    "scoring_algorithm_source_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+    "frozen_controls": {
+      "none_check": true,
+      "allow_none": false
+    },
+    "score_direction": "higher_prefers_small"
+  },
+  "files": {
+    "run_startlux_routerxbench.py": {
+      "sha256": "589cc3d556f9792d8fde4723d7be66243f81eac30c52cc19794e0fe7f9e49335",
+      "bytes": 43818
+    },
+    "replay_startlux_metrics.py": {
+      "sha256": "00db41d13ac650e049ba59bfc73db691ad93421a490e5c1cb7042c6d28fa49f5",
+      "bytes": 11013
+    },
+    "INPUT_SHA256.json": {
+      "sha256": "6343575620f133c27e6ce35fc5c25107e3ef0f18d5c46bf3508b52cc0f07d014",
+      "bytes": 2615
+    },
+    "SELFTEST_REPORT.json": {
+      "sha256": "21703da2989e7cb51852927e0608926f8d9340d5021215def014bdbeb54b1b99",
+      "bytes": 1590
+    },
+    "BASELINE_REPLAY_CHECK.json": {
+      "sha256": "4523422c56d8fd619c595f0c7748779e7d778a23962a626226b7ae5143190f63",
+      "bytes": 14230
+    },
+    "README_RECOVERY_V2.md": {
+      "sha256": "748a29346c5b8c4b23aa6e98a5549b04099acf5374c46b58ca69ba4712ee4dda",
+      "bytes": 4113
+    }
+  },
+  "baseline": {
+    "authoritative_check": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/planner-audit/AUTHORITATIVE_BASELINE_CHECK.json",
+    "authoritative_passed": true,
+    "authoritative_metrics_compared": 54,
+    "authoritative_max_absolute_difference": 1.5631940186722204e-13,
+    "freeze_source": "/Users/zhuhe/wwx/output/routerxbench-clean-multiseed-20261013/LATEST_MAIN_TABLE_FREEZE.json",
+    "reference": "/Users/zhuhe/wwx/output/routerxbench-free-real-repeats-20261013/JEV_MAIN_TABLE.csv",
+    "protocol": "historical_absolute",
+    "independent_replay": {
+      "scores_sha256": "34a618c163980925c0438f661fde8c3ad8a9ff43b2e85a2d29f3d71880a2b5f2",
+      "n_records": 5955,
+      "metrics_cells_compared": 54,
+      "max_abs_diff": 0.0,
+      "passed": true,
+      "report": "BASELINE_REPLAY_CHECK.json",
+      "note": "replay of the frozen Jev score file; no model calls, no labels or denominators changed"
+    }
+  },
+  "regression": {
+    "passed": true,
+    "n_checks": 8,
+    "checks": [
+      {
+        "name": "per_question_failures_continue",
+        "passed": true
+      },
+      {
+        "name": "successful_resume_no_duplicate",
+        "passed": true
+      },
+      {
+        "name": "different_config_refused",
+        "passed": true
+      },
+      {
+        "name": "truncated_tail_recovered",
+        "passed": true
+      },
+      {
+        "name": "limit_probe_no_metrics",
+        "passed": true
+      },
+      {
+        "name": "incomplete_no_summary",
+        "passed": true
+      },
+      {
+        "name": "complete_toy_metrics",
+        "passed": true
+      },
+      {
+        "name": "missing_ids_no_summary",
+        "passed": true
+      }
+    ],
+    "report": "SELFTEST_REPORT.json",
+    "environment": "8h20-1 task venv, CPU-only + loopback fake HTTP server"
+  },
+  "input_sha256": {
+    "split_file": "b3a62b617188ce0f31c3897aee0769d49195be85c3cdfd8a599766fa715e7501",
+    "input_file": "5e2004799c89623fec3c860fa71c0d2563e5a5727b24fbba58938c0cc7a6d736",
+    "small_file": "fe8ccd72c45dd913dcb6eacf077ca9499b22cbc8cb7b511ec1e1712d6abd6df2",
+    "labels_file": "772adbbe2870cd5f09bb54cc5b3a7ea18e88206e30918d2db355bf5c1b594001",
+    "pairs_file": "c65f6bcdffd8f22c24691cc83ab928551947b5d182d4718361479ce24da1f8cb",
+    "manifest_file": "eb6b5c0f874568efccb6ed2bf47292e55168955ee6c1945e50d20b2f9c55cd31",
+    "budget_band": "966536d89add4f21fbc9a22330af25197ea9c06bf30ebd9e64dded033a135801",
+    "target_band": "a6cf5b052a7214f32a2a383f800afa02e0a1b6b6e6351c794146eadd72fe3bed"
+  },
+  "input_manifest": "INPUT_SHA256.json",
+  "contract": {
+    "run_dir": "execute run_startlux_routerxbench.py and replay_startlux_metrics.py from this directory (replay imports evaluate_scores from the run script)",
+    "verify_first": "sha256sum -c SHA256SUMS && python -c 'import json;d=json.load(open(\"READY.json\"));assert d[\"status\"]==\"READY\"'",
+    "full_set_required": "metrics/summary are only written for exactly 5955 unique frozen ids",
+    "probe": "--limit / --probe-ids are probe modes; they never write metrics or summary",
+    "resume": "records are validated against model/signal/config/instruction hash; mixed conditions are refused",
+    "do_not_modify": "do not edit PROMPT_INSTRUCTIONS/CRITERIA/score_direction/bands or this bundle in place"
+  }
+}
