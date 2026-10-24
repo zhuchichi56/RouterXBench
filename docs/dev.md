@@ -18,4 +18,9 @@ Planner independently replayed all 54 original-Jev metric cells against the auth
 `AGENTS.md`; `experiment/run_startlux_routerxbench.py`; `experiment/replay_startlux_metrics.py`; `experiment/INPUT_SHA256.json`; `experiment/startlux/`; `experiment/STARTLUX_PLAN.md`; `docs/data.md`; `docs/dev.md`; `experiment/LOG.md`.
 
 ### Commit Hash
-Pending repository integration; record the implementation commit after verification.
+Implementation: `7fcdb2c` — Add resumable StartLux evaluation and frozen metric replay. Integrated replay also reproduces all 54 reference cells with zero difference.
+
+
+## Startup update
+
+At 04:35–04:36 CST on 2026-10-25, actual StartLux parents and eight per-GPU vLLM backends were observed for 0.8B (host1), 9B (host2), and 4B (host3). They were loading/initializing at the last observation; this does not establish scored-item completion. Runtime entry scripts: host1 `/tmp/startlux-eval-20261025/run_0p8b_instant.sh`; host2 `.../bin/wave_instant.sh` (then `wave_autothink.sh`); host3 `.../run/start_4b_probe.sh`. The executor notes remain the current source for exact PIDs and probe/full-run transition.

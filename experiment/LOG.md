@@ -10,7 +10,7 @@ Plan: evaluate five Instant sizes on query/query_answer and 9B/27B AutoThink on 
 
 At recovery, no formal score files or StartLux services existed; only synthetic GPU shepherd load. Three DSH workers are active. Prioritize A5 on host1 while A1 downloads, A2 on host2, A3 then A4 on host3. Existing 0.8B smoke is reused. Planner baseline check: 54/54 original-Jev metric cells agree within 1.57e-13; do not confuse that execution with the paper's three-execution aggregate. No new Judge calls. Full scores and selected throughput remain pending execution.
 
-Commit: pending integration.
+Implementation commit: `7fcdb2c`. At 04:35–04:36 CST, 0.8B/9B/4B services started on hosts1/2/3 with eight backends each; model initialization is in progress and is not yet counted as score completion.
 
 ---
 
