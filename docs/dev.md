@@ -24,3 +24,10 @@ Implementation: `7fcdb2c` — Add resumable StartLux evaluation and frozen metri
 ## Startup update
 
 At 04:35–04:36 CST on 2026-10-25, actual StartLux parents and eight per-GPU vLLM backends were observed for 0.8B (host1), 9B (host2), and 4B (host3). They were loading/initializing at the last observation; this does not establish scored-item completion. Runtime entry scripts: host1 `/tmp/startlux-eval-20261025/run_0p8b_instant.sh`; host2 `.../bin/wave_instant.sh` (then `wave_autothink.sh`); host3 `.../run/start_4b_probe.sh`. The executor notes remain the current source for exact PIDs and probe/full-run transition.
+
+
+## First scoring evidence (04:38 CST)
+
+Host1 0.8B-Instant produced 128 unique query records and 128 unique query_answer records during incremental concurrency probes. Planner read the actual JSONL records and verified model identity, finite normalized local/cloud probabilities and explicit `none_check=true`, `allow_none=false`, `think_mode=never`. Failure files were empty. Incremental copies are visible under persistent `results/host1/`; a later final independent readback is still required. Probe records are retained for full-run continuation, not counted as completed full conditions.
+
+Host2 startup exposed stale shared FlashInfer build metadata pointing to an old Python3.10 environment, while current service is Python3.12. Current environment contains the required header. The worker was instructed to use a task-specific `FLASHINFER_WORKSPACE_BASE` without deleting another project's cache; this is an environment repair and does not change model/evaluation settings. Host3 continued initializing independently.
