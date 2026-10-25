@@ -1,0 +1,56 @@
+{
+  "method": "StartLux-2B-Instant-qa",
+  "router_model": "StartLux-2B-Instant",
+  "signal": "query_answer",
+  "n_requests": 5955,
+  "scores_sha256": "8f8d7851079d0de509d7a46ea2984e6f756c013b4498f954d87455400a32bd81",
+  "input_tokens_total": 4391018,
+  "output_tokens_total": 0,
+  "latency_median_ms": 2355.29,
+  "latency_p95_ms": 4019.11,
+  "level2_main_table": {
+    "alpaca_5k_test": {
+      "AUROC_pct": 62.49,
+      "AUROC_rel_pct": 62.49,
+      "BQ_pct": 94.03,
+      "TC_pct": 56.38
+    },
+    "big_math_5k_test": {
+      "AUROC_pct": 87.62,
+      "AUROC_rel_pct": 85.41,
+      "BQ_pct": 84.72,
+      "TC_pct": 46.23
+    },
+    "magpie_5k_test": {
+      "AUROC_pct": 73.34,
+      "AUROC_rel_pct": 73.34,
+      "BQ_pct": 85.8,
+      "TC_pct": 52.44
+    },
+    "math": {
+      "AUROC_pct": 91.36,
+      "AUROC_rel_pct": 86.92,
+      "BQ_pct": 66.48,
+      "TC_pct": 62.34
+    },
+    "mmlu_pro": {
+      "AUROC_pct": 79.5,
+      "AUROC_rel_pct": 74.48,
+      "BQ_pct": 67.23,
+      "TC_pct": 67.68
+    },
+    "mmlu_test": {
+      "AUROC_pct": 74.93,
+      "AUROC_rel_pct": 74.78,
+      "BQ_pct": 83.68,
+      "TC_pct": 59.21
+    }
+  },
+  "config_sha256": "a10e1aa630b2ab9fce27f856b2d57173194703a9cf59d5e323fa685438b529be",
+  "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+  "script_version": "recovery_v2.0",
+  "frozen_test_n": 5955,
+  "acceptance": {
+    "full_frozen_id_set": true
+  }
+}

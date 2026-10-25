@@ -1,0 +1,14 @@
+% Standalone wrapper for the generated strict 5,955 main tables.
+% Compile from this directory: pdflatex main_tables_standalone.tex
+\documentclass[10pt]{article}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\pagestyle{empty}
+\begin{document}
+\input{table_auroc.tex}
+\clearpage
+\input{table_bq.tex}
+\clearpage
+\input{table_tc.tex}
+\end{document}

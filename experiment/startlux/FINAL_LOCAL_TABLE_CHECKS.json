@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "conditions": 12,
+  "records": 71460,
+  "baseline_cells_checked": 162,
+  "startlux_cells_checked": 216,
+  "checks": [
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/0.8b/0.8b_instant_qa.jsonl",
+      "n": 5955,
+      "scores_sha256": "55b3768852227d76c352eb4401112069a70dff94059c6a4c8d6fdd6f485b6b6f",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/0.8b/0.8b_instant_query.jsonl",
+      "n": 5955,
+      "scores_sha256": "a23887660f04ca3c9d7fa115464b88d07586b12e8ca6d6e56b3398d0137852a9",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_autothink_query.jsonl",
+      "n": 5955,
+      "scores_sha256": "65b358d81a5d46302d2e267cabd05d544b04a83333ba80507d841c6b6744f90d",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_instant_qa.jsonl",
+      "n": 5955,
+      "scores_sha256": "20d4d20087226b7d5b15bd7108a4fa0047bbc379cb4e61e2584b59090c77fe39",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_instant_query.jsonl",
+      "n": 5955,
+      "scores_sha256": "68bf48e735e97cef2c0cbb467d4e9b2ee183ae80875635968185641a2c880ac3",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_autothink_query.jsonl",
+      "n": 5955,
+      "scores_sha256": "8f67e4f92aecd3c98e9a4d53071ba7ae89325846eae83937725ef628ec203510",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_instant_qa.jsonl",
+      "n": 5955,
+      "scores_sha256": "d5f71cf919dc0ae97e06a5d18358975c855e418101a6de44312b66687681b2bc",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_instant_query.jsonl",
+      "n": 5955,
+      "scores_sha256": "f42fa38ee2424607e74be081f7d89ba488e31f69d901742b93ff91040c8eb9ad",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/2b_instant_qa.jsonl",
+      "n": 5955,
+      "scores_sha256": "8f8d7851079d0de509d7a46ea2984e6f756c013b4498f954d87455400a32bd81",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/2b_instant_query.jsonl",
+      "n": 5955,
+      "scores_sha256": "f85859a87e8e347850b8902bbb1815b0621801c97bf3e0f95d21339906156a0f",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/4b_instant_qa.jsonl",
+      "n": 5955,
+      "scores_sha256": "4d68dd7ea5c7d9063fd85462f972984b91146a60d389d67fef44bc113bd186d7",
+      "passed": true
+    },
+    {
+      "file": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/4b_instant_query.jsonl",
+      "n": 5955,
+      "scores_sha256": "a8cec15a9b4b0125cd380903721adae304e7639f917521fc74e453837e982e7f",
+      "passed": true
+    }
+  ]
+}

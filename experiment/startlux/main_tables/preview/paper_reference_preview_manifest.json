@@ -1,0 +1,79 @@
+{
+  "schema": "routerxbench-startlux-preview/2",
+  "scope": "paper_reference",
+  "generated_at_utc": "2026-10-24T21:12:29Z",
+  "font": "STIXGeneral",
+  "page_size_in": [
+    8.5,
+    11.0
+  ],
+  "table_width_in": 7.2,
+  "layout_checks": "passed (all fitted text inside declared boxes; no overflow)",
+  "source": {
+    "paper_reference.csv": {
+      "path": "paper_reference.csv",
+      "sha256": "b6492f56dd5ea87f6c7fac89921276a5f46315d0c08bc596b4f7abb2ea965614"
+    },
+    "provenance.json": {
+      "path": "provenance.json",
+      "sha256": "2b411bcc2dbdec9caa216dee7746a6db55d80d029dc8810bc6d656037c6397f1"
+    }
+  },
+  "status": {
+    "complete_conditions": 10,
+    "expected_conditions": 12,
+    "pending_conditions": 2
+  },
+  "pdf": {
+    "path": "preview/paper_reference_preview.pdf",
+    "pages": 3,
+    "sha256": "c35f11573491beac96a071e83e31bf800ef0ee4777463c5a12b2f95bdfddada9"
+  },
+  "artifacts": {
+    "auroc": {
+      "pdf_page": 1,
+      "svg": {
+        "path": "preview/paper_reference_auroc.svg",
+        "sha256": "3bb7baa49ec25b40a0e4031a8230255a897e073e2a7160c31886c69c9f013ad1",
+        "text_elements": 88
+      },
+      "png": {
+        "path": "preview/paper_reference_auroc.png",
+        "sha256": "2ff1304176c8c962bea01cba4cc88da916c938db60837ecbc28220da9971f680",
+        "width_px": 2550,
+        "height_px": 3300,
+        "dpi": 300
+      }
+    },
+    "bq": {
+      "pdf_page": 2,
+      "svg": {
+        "path": "preview/paper_reference_bq.svg",
+        "sha256": "6bd1cd50fe1441d630a2704b89bacfa4e9b08fa5583c5d0057fa326520d3a84a",
+        "text_elements": 87
+      },
+      "png": {
+        "path": "preview/paper_reference_bq.png",
+        "sha256": "0cc7eedff275184d34465cb6ee345a511171a00bec84c6fb2aeedb13ec5f2940",
+        "width_px": 2550,
+        "height_px": 3300,
+        "dpi": 300
+      }
+    },
+    "tc": {
+      "pdf_page": 3,
+      "svg": {
+        "path": "preview/paper_reference_tc.svg",
+        "sha256": "f12b4b673ac78308de56a4e37197f5a9fcd52c6136403d2fc5e7f10b1b5489b6",
+        "text_elements": 87
+      },
+      "png": {
+        "path": "preview/paper_reference_tc.png",
+        "sha256": "3e33c044a9fe403208a47e72e99502fd3700dede2826fbedbb8fef3dda9fd711",
+        "width_px": 2550,
+        "height_px": 3300,
+        "dpi": 300
+      }
+    }
+  }
+}

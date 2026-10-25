@@ -15,3 +15,9 @@ This evaluation reuses the existing RouterXBench clean split and scored local/cl
 Requests and local responses come from `routerxbench-jev-gpt54-5958-20261011/input.jsonl` and `small.jsonl`. Only IDs in the clean 5,955-item test split are evaluated. Historical 5,958-row score files are filtered to that split during replay. Preserve historical labels and model/Judge metadata as provenance; their presence does not authorize fresh calls to those models.
 
 Use the existing split/prefix audits in `routerxbench-clean-multiseed-20261013/` as prior evidence; do not describe complete semantic disjointness as established. Runtime admission must verify file hashes, schema, unique IDs, and query/answer alignment. No test labels are used for StartLux training or prompt selection.
+
+## Accepted StartLux output and comparison scopes
+
+All 12 conditions contain the identical 5,955-ID set. Planner checks cover original instruction text/hash, frozen local-answer hash for query_answer, explicit controls, returned model, raw probabilities, summary hashes and separate HDFS readback. Each raw JSONL remains outside Git under persistent `runs/startlux-eval-20261025/results/host{1,2,3}/`. Git retains summaries/metrics/manifests and final verification JSON in `experiment/startlux/`.
+
+The strict comparison uses the historical 5,955-answer protocol: learned baseline seeds from `routerxbench-clean-main-3seed-reviewed-20261013`, Jev API repetitions from `routerxbench-free-real-repeats-20261013`, and fixed-method executions from `router-fixed-repeat-tables-20261013`. Clean denominators are independently recomputed from joined quality/cost rows; historical absolute bands are unchanged. Current paper tables instead aggregate historical greedy plus sampled42/43 answers on 5,954 common IDs. Those unchanged numbers are supplied separately in `PAPER_REFERENCE.md`; they are not presented as matched StartLux comparisons.

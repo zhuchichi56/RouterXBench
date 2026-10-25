@@ -1,6 +1,6 @@
 # StartLux RouterXBench evaluation — 2026-10-25
 
-Status: recovery and preparation; formal scoring completion is established only by unique persisted sample IDs.
+Status: complete on 2026-10-25. All 12 conditions contain exactly 5,955 unique frozen IDs (71,460 records); no failed records. Planner checked raw request/answer hashes, all 648 replay cells, table cells and independent HDFS readback. Results: `MAIN_RESULTS.md`; tables: `startlux/main_tables/MAIN_TABLES.md`.
 
 ## Frozen protocol
 

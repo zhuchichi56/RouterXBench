@@ -1,0 +1,40 @@
+StartLux + RouterXBench preview audit
+Date: 2026-10-25 (snapshot 2026-10-24T21:12Z)
+
+Artifacts
+- preview/main_tables_preview.pdf            strict 5,955 main tables, 3 pages
+- preview/paper_reference_preview.pdf        protocol-mismatched paper reference, 3 pages
+- preview/main_tables_{auroc,bq,tc}.svg       editable-text SVG, one per metric
+- preview/paper_reference_{auroc,bq,tc}.svg   editable-text SVG, one per metric
+- preview/*_{auroc,bq,tc}.png                300 dpi PNG previews
+
+Hard gates (measured with poppler)
+- PDF pages: 3 and 3; page size 612 x 792 pt (8.5 x 11 in letter).
+- PDF fonts: all embedded (emb=yes, sub=yes, uni=yes):
+  STIXGeneral-Regular, STIXGeneral-Bold, STIXGeneral-Italic.
+  No LastResort or other fallback font remains after the STIXGeneral switch.
+- PDF image objects: 0 for both PDFs (`pdfimages -list` empty).
+- SVG: 172-173 editable <text> elements for strict pages, 87-88 for paper pages;
+  0 <image> elements; no base64 payload.
+- PNG: 2550 x 3300 px each = 8.5 x 11 in at 300 dpi.
+- Layout: render_preview.py FitChecker passed for every page; manifests record
+  "all fitted text inside declared boxes; no overflow".
+- Text extraction confirms the BQ ↑ / TC ↓ panel labels, the
+  "PROTOCOL-MISMATCHED REFERENCE — NOT THE STRICT MAIN TABLE" banner, and
+  explicit "pending" cells.
+
+Tooling note
+- `selected-skills/make-research-figures/scripts/audit_artifacts.py` reports
+  "could not parse PDF metadata" because poppler's `pdfinfo` prints
+  "Page size: 612 x 792 pts (letter)" while that helper's regex requires the
+  line to end in "pts". Splitting with `pdfseparate` keeps the `(letter)`
+  suffix, so the helper still fails on single-page files. This is a helper
+  format mismatch, not an artifact failure; the direct poppler checks above
+  cover the same hard gates (pages, embedded fonts, zero images, editable SVG
+  text). The planner handles image viewing.
+
+Reproduction
+- `/Users/zhuhe/wwx/neural-interfaces26/.venv/bin/python render_preview.py --scope strict`
+- `/Users/zhuhe/wwx/neural-interfaces26/.venv/bin/python render_preview.py --scope paper_reference`
+
+Final planner audit (2026-10-25): strict preview regenerated with12/12 complete conditions, no pending data cells. All3 final pages visually inspected. PDF has3 pages, embedded fonts, zero raster image objects. All378 displayed metric values match independent checks; see FINAL_LOCAL_TABLE_CHECKS.json.

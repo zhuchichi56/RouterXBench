@@ -1,0 +1,79 @@
+{
+  "schema": "routerxbench-startlux-preview/2",
+  "scope": "strict",
+  "generated_at_utc": "2026-10-24T21:59:26Z",
+  "font": "STIXGeneral",
+  "page_size_in": [
+    8.5,
+    11.0
+  ],
+  "table_width_in": 7.2,
+  "layout_checks": "passed (all fitted text inside declared boxes; no overflow)",
+  "source": {
+    "main_tables.csv": {
+      "path": "main_tables.csv",
+      "sha256": "1517a62f8d103daafe7be0bc9d972d36a6797f0c4e8b0afb7a07a0736cb775b6"
+    },
+    "provenance.json": {
+      "path": "provenance.json",
+      "sha256": "44e33c525921a5f30486a325a423290bdadf062fb81c1a56074eb58040d76fe2"
+    }
+  },
+  "status": {
+    "complete_conditions": 12,
+    "expected_conditions": 12,
+    "pending_conditions": 0
+  },
+  "pdf": {
+    "path": "preview/main_tables_preview.pdf",
+    "pages": 3,
+    "sha256": "972af3a87a33a7c542ee0d2806fe2351b3cd76176b4a54cb993bf491ebeacf23"
+  },
+  "artifacts": {
+    "auroc": {
+      "pdf_page": 1,
+      "svg": {
+        "path": "preview/main_tables_auroc.svg",
+        "sha256": "37cd313dabc4b125c1fffc9225cfce42286b46eb1530448c5dd1339617b5bc66",
+        "text_elements": 173
+      },
+      "png": {
+        "path": "preview/main_tables_auroc.png",
+        "sha256": "ffa8aeb35b7a00accdf4bc696f25f603f0c40dda3dea67144ec549352667b675",
+        "width_px": 2550,
+        "height_px": 3300,
+        "dpi": 300
+      }
+    },
+    "bq": {
+      "pdf_page": 2,
+      "svg": {
+        "path": "preview/main_tables_bq.svg",
+        "sha256": "bbce8121fa6b92f99df25753e36a9aad164e3cf8cae27a4f49a549edb05c0704",
+        "text_elements": 172
+      },
+      "png": {
+        "path": "preview/main_tables_bq.png",
+        "sha256": "a43c70768f76dad5d8286b80ec4974e697762ff336674e04b0f6400c150909a7",
+        "width_px": 2550,
+        "height_px": 3300,
+        "dpi": 300
+      }
+    },
+    "tc": {
+      "pdf_page": 3,
+      "svg": {
+        "path": "preview/main_tables_tc.svg",
+        "sha256": "dc0ed0fc7b4c9ff576bdd89cb8c56a65a84fd8d720184cb9bf137d6c2f6c9427",
+        "text_elements": 172
+      },
+      "png": {
+        "path": "preview/main_tables_tc.png",
+        "sha256": "ffd6ab12ec80f803ac5810a151d65e9ad2be965bc30c2eaa38dcdea1ec707e91",
+        "width_px": 2550,
+        "height_px": 3300,
+        "dpi": 300
+      }
+    }
+  }
+}

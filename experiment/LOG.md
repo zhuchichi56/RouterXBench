@@ -4,6 +4,12 @@ Newest entries first. Format: date · stage · goal → outcome.
 
 ---
 
+## 2026-10-25 · A1–A5 / B1–B2 · All StartLux conditions accepted
+
+12/12 complete, each5,955 unique frozen IDs,71,460 records and0 failed records. All648 replay cells match exactly; raw controls/question/answer hashes and independent HDFS readback passed. Full config, per-condition throughput and repeat identity: `MAIN_RESULTS.md`; all9 old methods plus12 StartLux conditions: `startlux/main_tables/MAIN_TABLES.md`. Current paper uses a different5,954-ID/three-answer-round protocol and is kept separately. No frozen scientific settings or published runtime changed. Final report/source/artifact commit: see Git history and `docs/dev.md`.
+
+---
+
 ## 2026-10-25 · A1–A5 / B1–B2 · StartLux recovery and initial evaluation
 
 Plan: evaluate five Instant sizes on query/query_answer and 9B/27B AutoThink on query (gate=0.9, budget=1024), once per condition as exploration. Reuse the 5,955 clean test split, frozen local answers/labels, historical absolute BQ/TC bands and original scorer. Entry/config/queue: `experiment/STARTLUX_PLAN.md`; published HDFS runtime: `eval_bundle/recovery_v2/` below `runs/startlux-eval-20261025`. GPU launches use shepherd. Actual launch scripts and commands are recorded in each executor's NOTES.

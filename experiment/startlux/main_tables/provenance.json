@@ -1,0 +1,2476 @@
+{
+  "schema": "routerxbench-startlux-main-tables/2",
+  "build": {
+    "generated_at_utc": "2026-10-24T21:59:14Z",
+    "results_root": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025",
+    "output_dir": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-table",
+    "baseline_dir": "/Users/zhuhe/overleaf/router",
+    "require_complete": true,
+    "status": "complete",
+    "expected_conditions": 12,
+    "complete_conditions": 12,
+    "pending_conditions": 0,
+    "strict_baseline_methods": 9,
+    "strict_baseline_cells": 162,
+    "strict_value_cells": 216,
+    "strict_pending_cells": 0,
+    "paper_reference_methods": 9,
+    "paper_reference_cells": 162
+  },
+  "strict_main": {
+    "scope": "strict_5955",
+    "protocol": "Clean 5,955 shared split. AUROC: native task labels, mean ×100, sample SD across the actual repeats in the source. BQ/TC: level 2 historical absolute bands; BQ normalized by actual 5,955 Qcloud; TC by actual 5,955 full_cloud_cost. StartLux summaries use the same actual 5,955 endpoints.",
+    "baseline_method_mapping": [
+      {
+        "method": "SelfAsk",
+        "source_method": "SelfAsk",
+        "source_kind": "fixed",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions"
+      },
+      {
+        "method": "Entropy",
+        "source_method": "Entropy",
+        "source_kind": "fixed",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions"
+      },
+      {
+        "method": "MaxLogits",
+        "source_method": "MaxLogits",
+        "source_kind": "fixed",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions"
+      },
+      {
+        "method": "Conf. Margin",
+        "source_method": "ConfidenceMargin",
+        "source_kind": "fixed",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions"
+      },
+      {
+        "method": "Emb. MLP",
+        "source_method": "EmbeddingMLP",
+        "source_kind": "mean",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds"
+      },
+      {
+        "method": "HybridLLM",
+        "source_method": "HybridLLM",
+        "source_kind": "mean",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds"
+      },
+      {
+        "method": "RouteLLM",
+        "source_method": "RouteLLM",
+        "source_kind": "mean",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds"
+      },
+      {
+        "method": "Jev",
+        "source_method": "Jev",
+        "source_kind": "jev",
+        "repeat_identity": "3 actual API executions (original/43/44); sample SD across executions"
+      },
+      {
+        "method": "MeanProbe",
+        "source_method": "MeanProbe",
+        "source_kind": "mean",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds"
+      }
+    ],
+    "excluded_source_rows": [
+      {
+        "method": "Random",
+        "reason": "not one of the nine paper methods"
+      }
+    ],
+    "sources": {
+      "mean_table": {
+        "key": "MEAN_TABLE.csv",
+        "path": "/Users/zhuhe/wwx/output/routerxbench-clean-main-3seed-reviewed-20261013/MEAN_TABLE.csv",
+        "sha256": "5abe83320ae121da3e4a66cc109191d3782f320f6aaff772bc63e37fdebcef24",
+        "bytes": 38690
+      },
+      "strict_main_table": {
+        "key": "MAIN_TABLE.csv",
+        "path": "/Users/zhuhe/wwx/output/routerxbench-clean-main-3seed-reviewed-20261013/MAIN_TABLE.csv",
+        "sha256": "89dcbe676278765b0914ba73e5a5a76bf99604e3d40fa279ed15ffafd0e7e625",
+        "bytes": 75245
+      },
+      "jev_mean_table": {
+        "key": "JEV_MEAN_TABLE.csv",
+        "path": "/Users/zhuhe/wwx/output/routerxbench-free-real-repeats-20261013/JEV_MEAN_TABLE.csv",
+        "sha256": "942be01ff0c126e5613789aaacb4a872924301538a14a858d377f78adff2aa24",
+        "bytes": 2745
+      },
+      "fixed_mean_table": {
+        "key": "FIXED_MEAN_TABLE.csv",
+        "path": "/Users/zhuhe/wwx/output/router-fixed-repeat-tables-20261013/FIXED_MEAN_TABLE.csv",
+        "sha256": "dd53f94ce04317d73c542744db27db31d99a35c7d5866fb0c380ac3c8a3a31e0",
+        "bytes": 7924
+      },
+      "denominator_manifest": {
+        "key": "MANIFEST.json",
+        "path": "/Users/zhuhe/wwx/output/routerxbench-clean-multiseed-20261013/main_summary/MANIFEST.json",
+        "sha256": "5c3f57c5457329df40331bf9534959b5c08317463e1c6eee0f514e76f87d54c1",
+        "bytes": 6581
+      }
+    },
+    "denominators": {
+      "alpaca_5k_test": {
+        "n": 990,
+        "Qcloud": 8.545454545454545,
+        "full_cloud_cost": 2.86923,
+        "Q_small": 7.646464646464646
+      },
+      "mmlu_test": {
+        "n": 999,
+        "Qcloud": 0.8988988988988988,
+        "full_cloud_cost": 0.79284,
+        "Q_small": 0.6866866866866866
+      },
+      "big_math_5k_test": {
+        "n": 998,
+        "Qcloud": 0.9348697394789579,
+        "full_cloud_cost": 3.5670025,
+        "Q_small": 0.7024048096192385
+      },
+      "magpie_5k_test": {
+        "n": 973,
+        "Qcloud": 8.792394655704008,
+        "full_cloud_cost": 7.5390125,
+        "Q_small": 6.523124357656732
+      },
+      "mmlu_pro": {
+        "n": 1000,
+        "Qcloud": 0.812,
+        "full_cloud_cost": 2.30869,
+        "Q_small": 0.475
+      },
+      "math": {
+        "n": 995,
+        "Qcloud": 0.9537688442211055,
+        "full_cloud_cost": 4.919695,
+        "Q_small": 0.5386934673366834
+      }
+    },
+    "independent_denominator_check": {
+      "available": true,
+      "verified": true,
+      "max_abs_qcloud": 0.0,
+      "max_abs_cost": 9.769962616701378e-15,
+      "test_ids": 5955,
+      "joined_scores": {
+        "key": "JOINED_USAGE_QUALITY_SCORES.jsonl",
+        "path": "/Users/zhuhe/wwx/output/routerxbench-actual-cost-replay-20261012/JOINED_USAGE_QUALITY_SCORES.jsonl",
+        "sha256": "c65f6bcdffd8f22c24691cc83ab928551947b5d182d4718361479ce24da1f8cb",
+        "bytes": 3881680
+      },
+      "shared_split": {
+        "key": "SHARED_SPLIT.json",
+        "path": "/Users/zhuhe/wwx/output/routerxbench-clean-multiseed-20261013/SHARED_SPLIT.json",
+        "sha256": "b3a62b617188ce0f31c3897aee0769d49195be85c3cdfd8a599766fa715e7501",
+        "bytes": 387650
+      }
+    },
+    "cross_checks": {
+      "fixed_vs_mean_nonlearned": {
+        "max_abs_auroc": 5.551115123125783e-17,
+        "max_abs_bq": 8.881784197001252e-16,
+        "max_abs_tc": 4.440892098500626e-16,
+        "rows": 24
+      },
+      "jev_vs_mean_jev": {
+        "max_abs_auroc": 0.007181512495459175,
+        "max_abs_bq": 0.008362375122945132,
+        "max_abs_tc": 0.029497725005172892,
+        "rows": 6,
+        "note": "MEAN_TABLE Jev is the original single execution; JEV_MEAN_TABLE averages three actual API executions. Differences are a repeat-set difference, not a conflict."
+      }
+    },
+    "methods": [
+      {
+        "method": "SelfAsk",
+        "source_method": "SelfAsk",
+        "source_kind": "fixed",
+        "source_key": "FIXED_MEAN_TABLE.csv",
+        "source_sha256": "dd53f94ce04317d73c542744db27db31d99a35c7d5866fb0c380ac3c8a3a31e0",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "54.87",
+              "sd": "0.00",
+              "raw": "54.87$\\pm$0.00",
+              "mean_value": 54.866314590452525,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "54.14",
+              "sd": "0.00",
+              "raw": "54.14$\\pm$0.00",
+              "mean_value": 54.14497154407175,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "47.87",
+              "sd": "0.00",
+              "raw": "47.87$\\pm$0.00",
+              "mean_value": 47.87076662968246,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "44.08",
+              "sd": "0.00",
+              "raw": "44.08$\\pm$0.00",
+              "mean_value": 44.08182804193838,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "56.37",
+              "sd": "0.00",
+              "raw": "56.37$\\pm$0.00",
+              "mean_value": 56.36972431077694,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "44.14",
+              "sd": "0.00",
+              "raw": "44.14$\\pm$0.00",
+              "mean_value": 44.13776704711736,
+              "sd_value": 0.0
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "92.21",
+              "sd": "0.00",
+              "raw": "92.21$\\pm$0.00",
+              "mean_value": 92.21183542769882,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "80.44",
+              "sd": "0.00",
+              "raw": "80.44$\\pm$0.00",
+              "mean_value": 80.43582387594721,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "81.11",
+              "sd": "0.00",
+              "raw": "81.11$\\pm$0.00",
+              "mean_value": 81.10939610974994,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "83.43",
+              "sd": "0.00",
+              "raw": "83.43$\\pm$0.00",
+              "mean_value": 83.43497966307694,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "67.25",
+              "sd": "0.00",
+              "raw": "67.25$\\pm$0.00",
+              "mean_value": 67.25024920301655,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "64.30",
+              "sd": "0.00",
+              "raw": "64.30$\\pm$0.00",
+              "mean_value": 64.29875824965181,
+              "sd_value": 0.0
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "80.61",
+              "sd": "0.00",
+              "raw": "80.61$\\pm$0.00",
+              "mean_value": 80.6085653798906,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "76.25",
+              "sd": "0.00",
+              "raw": "76.25$\\pm$0.00",
+              "mean_value": 76.24989312445533,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "73.93",
+              "sd": "0.00",
+              "raw": "73.93$\\pm$0.00",
+              "mean_value": 73.92582195875183,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "75.54",
+              "sd": "0.00",
+              "raw": "75.54$\\pm$0.00",
+              "mean_value": 75.54101603833713,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "82.81",
+              "sd": "0.00",
+              "raw": "82.81$\\pm$0.00",
+              "mean_value": 82.81365755314911,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "80.30",
+              "sd": "0.00",
+              "raw": "80.30$\\pm$0.00",
+              "mean_value": 80.29736698304455,
+              "sd_value": 0.0
+            }
+          }
+        }
+      },
+      {
+        "method": "Entropy",
+        "source_method": "Entropy",
+        "source_kind": "fixed",
+        "source_key": "FIXED_MEAN_TABLE.csv",
+        "source_sha256": "dd53f94ce04317d73c542744db27db31d99a35c7d5866fb0c380ac3c8a3a31e0",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "49.78",
+              "sd": "0.00",
+              "raw": "49.78$\\pm$0.00",
+              "mean_value": 49.78316247281765,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "57.68",
+              "sd": "0.00",
+              "raw": "57.68$\\pm$0.00",
+              "mean_value": 57.67984053502734,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "48.61",
+              "sd": "0.00",
+              "raw": "48.61$\\pm$0.00",
+              "mean_value": 48.60732863585931,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "47.64",
+              "sd": "0.00",
+              "raw": "47.64$\\pm$0.00",
+              "mean_value": 47.643309543257324,
+              "sd_value": 6.798699777552591e-15
+            },
+            "mmlu_pro": {
+              "mean": "57.11",
+              "sd": "0.00",
+              "raw": "57.11$\\pm$0.00",
+              "mean_value": 57.10556390977444,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "45.55",
+              "sd": "0.00",
+              "raw": "45.55$\\pm$0.00",
+              "mean_value": 45.55205996162976,
+              "sd_value": 6.798699777552591e-15
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "91.65",
+              "sd": "0.00",
+              "raw": "91.65$\\pm$0.00",
+              "mean_value": 91.64958811972288,
+              "sd_value": 1.2729480434566555e-14
+            },
+            "mmlu_test": {
+              "mean": "79.37",
+              "sd": "0.00",
+              "raw": "79.37$\\pm$0.00",
+              "mean_value": 79.37353830877503,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "79.20",
+              "sd": "0.00",
+              "raw": "79.20$\\pm$0.00",
+              "mean_value": 79.20294725335532,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "81.03",
+              "sd": "0.00",
+              "raw": "81.03$\\pm$0.00",
+              "mean_value": 81.02776055598139,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "64.96",
+              "sd": "0.00",
+              "raw": "64.96$\\pm$0.00",
+              "mean_value": 64.9631448704826,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "65.54",
+              "sd": "0.00",
+              "raw": "65.54$\\pm$0.00",
+              "mean_value": 65.53972538695807,
+              "sd_value": 0.0
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "76.83",
+              "sd": "0.00",
+              "raw": "76.83$\\pm$0.00",
+              "mean_value": 76.8273763070051,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "78.33",
+              "sd": "0.00",
+              "raw": "78.33$\\pm$0.00",
+              "mean_value": 78.32554886082842,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "79.47",
+              "sd": "0.00",
+              "raw": "79.47$\\pm$0.00",
+              "mean_value": 79.467450454535,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "68.09",
+              "sd": "0.00",
+              "raw": "68.09$\\pm$0.00",
+              "mean_value": 68.08598045759516,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "80.59",
+              "sd": "0.00",
+              "raw": "80.59$\\pm$0.00",
+              "mean_value": 80.59342245457242,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "73.03",
+              "sd": "0.00",
+              "raw": "73.03$\\pm$0.00",
+              "mean_value": 73.02759283280191,
+              "sd_value": 1.1055481736250058e-14
+            }
+          }
+        }
+      },
+      {
+        "method": "MaxLogits",
+        "source_method": "MaxLogits",
+        "source_kind": "fixed",
+        "source_key": "FIXED_MEAN_TABLE.csv",
+        "source_sha256": "dd53f94ce04317d73c542744db27db31d99a35c7d5866fb0c380ac3c8a3a31e0",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "46.67",
+              "sd": "0.00",
+              "raw": "46.67$\\pm$0.00",
+              "mean_value": 46.674536605571085,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "56.07",
+              "sd": "0.00",
+              "raw": "56.07$\\pm$0.00",
+              "mean_value": 56.0702875399361,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "47.68",
+              "sd": "0.00",
+              "raw": "47.68$\\pm$0.00",
+              "mean_value": 47.678400745447824,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "40.54",
+              "sd": "0.00",
+              "raw": "40.54$\\pm$0.00",
+              "mean_value": 40.53842342764559,
+              "sd_value": 6.798699777552591e-15
+            },
+            "mmlu_pro": {
+              "mean": "56.41",
+              "sd": "0.00",
+              "raw": "56.41$\\pm$0.00",
+              "mean_value": 56.41082706766917,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "43.04",
+              "sd": "0.00",
+              "raw": "43.04$\\pm$0.00",
+              "mean_value": 43.04437778428121,
+              "sd_value": 0.0
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "92.56",
+              "sd": "0.00",
+              "raw": "92.56$\\pm$0.00",
+              "mean_value": 92.56017445543085,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "78.87",
+              "sd": "0.00",
+              "raw": "78.87$\\pm$0.00",
+              "mean_value": 78.87277791083834,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "78.74",
+              "sd": "0.00",
+              "raw": "78.74$\\pm$0.00",
+              "mean_value": 78.7414992255086,
+              "sd_value": 1.4544699631291502e-14
+            },
+            "magpie_5k_test": {
+              "mean": "83.10",
+              "sd": "0.00",
+              "raw": "83.10$\\pm$0.00",
+              "mean_value": 83.10007467866122,
+              "sd_value": 1.2371964715013295e-14
+            },
+            "mmlu_pro": {
+              "mean": "64.29",
+              "sd": "0.00",
+              "raw": "64.29$\\pm$0.00",
+              "mean_value": 64.28800857296358,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "65.48",
+              "sd": "0.00",
+              "raw": "65.48$\\pm$0.00",
+              "mean_value": 65.48186613804863,
+              "sd_value": 0.0
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "74.64",
+              "sd": "0.00",
+              "raw": "74.64$\\pm$0.00",
+              "mean_value": 74.63854766343569,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "78.46",
+              "sd": "0.00",
+              "raw": "78.46$\\pm$0.00",
+              "mean_value": 78.45662984140553,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "79.02",
+              "sd": "0.00",
+              "raw": "79.02$\\pm$0.00",
+              "mean_value": 79.02060001595345,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "67.88",
+              "sd": "0.00",
+              "raw": "67.88$\\pm$0.00",
+              "mean_value": 67.88298750660485,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "83.76",
+              "sd": "0.00",
+              "raw": "83.76$\\pm$0.00",
+              "mean_value": 83.76078798807029,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "73.69",
+              "sd": "0.00",
+              "raw": "73.69$\\pm$0.00",
+              "mean_value": 73.6864409180826,
+              "sd_value": 0.0
+            }
+          }
+        }
+      },
+      {
+        "method": "Conf. Margin",
+        "source_method": "ConfidenceMargin",
+        "source_kind": "fixed",
+        "source_key": "FIXED_MEAN_TABLE.csv",
+        "source_sha256": "dd53f94ce04317d73c542744db27db31d99a35c7d5866fb0c380ac3c8a3a31e0",
+        "repeat_identity": "3 fixed executions 42/43/44; sample SD across executions",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "49.16",
+              "sd": "0.00",
+              "raw": "49.16$\\pm$0.00",
+              "mean_value": 49.1647509578544,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "53.75",
+              "sd": "0.00",
+              "raw": "53.75$\\pm$0.00",
+              "mean_value": 53.7495692023957,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "48.46",
+              "sd": "0.00",
+              "raw": "48.46$\\pm$0.00",
+              "mean_value": 48.459391826010936,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "47.00",
+              "sd": "0.00",
+              "raw": "47.00$\\pm$0.00",
+              "mean_value": 46.99923675365889,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "56.42",
+              "sd": "0.00",
+              "raw": "56.42$\\pm$0.00",
+              "mean_value": 56.41624060150375,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "41.97",
+              "sd": "0.00",
+              "raw": "41.97$\\pm$0.00",
+              "mean_value": 41.96988911650896,
+              "sd_value": 0.0
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "91.61",
+              "sd": "0.00",
+              "raw": "91.61$\\pm$0.00",
+              "mean_value": 91.60675584476574,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "78.57",
+              "sd": "0.00",
+              "raw": "78.57$\\pm$0.00",
+              "mean_value": 78.56542918394516,
+              "sd_value": 1.51267284582963e-14
+            },
+            "big_math_5k_test": {
+              "mean": "80.06",
+              "sd": "0.00",
+              "raw": "80.06$\\pm$0.00",
+              "mean_value": 80.0556816333215,
+              "sd_value": 0.0
+            },
+            "magpie_5k_test": {
+              "mean": "81.01",
+              "sd": "0.00",
+              "raw": "81.01$\\pm$0.00",
+              "mean_value": 81.00701738355183,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "65.18",
+              "sd": "0.00",
+              "raw": "65.18$\\pm$0.00",
+              "mean_value": 65.18376424717175,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "64.49",
+              "sd": "0.00",
+              "raw": "64.49$\\pm$0.00",
+              "mean_value": 64.48568985961356,
+              "sd_value": 0.0
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "76.51",
+              "sd": "0.00",
+              "raw": "76.51$\\pm$0.00",
+              "mean_value": 76.50933596207746,
+              "sd_value": 0.0
+            },
+            "mmlu_test": {
+              "mean": "78.90",
+              "sd": "0.00",
+              "raw": "78.90$\\pm$0.00",
+              "mean_value": 78.89945159492868,
+              "sd_value": 0.0
+            },
+            "big_math_5k_test": {
+              "mean": "76.86",
+              "sd": "0.00",
+              "raw": "76.86$\\pm$0.00",
+              "mean_value": 76.8613568067769,
+              "sd_value": 1.5247984328696357e-14
+            },
+            "magpie_5k_test": {
+              "mean": "68.37",
+              "sd": "0.00",
+              "raw": "68.37$\\pm$0.00",
+              "mean_value": 68.3712556994295,
+              "sd_value": 0.0
+            },
+            "mmlu_pro": {
+              "mean": "80.40",
+              "sd": "0.00",
+              "raw": "80.40$\\pm$0.00",
+              "mean_value": 80.40385582004298,
+              "sd_value": 0.0
+            },
+            "math": {
+              "mean": "72.93",
+              "sd": "0.00",
+              "raw": "72.93$\\pm$0.00",
+              "mean_value": 72.92865587910077,
+              "sd_value": 0.0
+            }
+          }
+        }
+      },
+      {
+        "method": "Emb. MLP",
+        "source_method": "EmbeddingMLP",
+        "source_kind": "mean",
+        "source_key": "MEAN_TABLE.csv",
+        "source_sha256": "5abe83320ae121da3e4a66cc109191d3782f320f6aaff772bc63e37fdebcef24",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "58.49",
+              "sd": "0.66",
+              "raw": "58.49$\\pm$0.66",
+              "mean_value": 58.492147319733526,
+              "sd_value": 0.6552866130884244
+            },
+            "mmlu_test": {
+              "mean": "63.69",
+              "sd": "0.12",
+              "raw": "63.69$\\pm$0.12",
+              "mean_value": 63.687875880612395,
+              "sd_value": 0.12197813750195728
+            },
+            "big_math_5k_test": {
+              "mean": "63.16",
+              "sd": "0.60",
+              "raw": "63.16$\\pm$0.60",
+              "mean_value": 63.159411518897954,
+              "sd_value": 0.5966031684027397
+            },
+            "magpie_5k_test": {
+              "mean": "72.19",
+              "sd": "0.42",
+              "raw": "72.19$\\pm$0.42",
+              "mean_value": 72.18525015287244,
+              "sd_value": 0.4184343182359572
+            },
+            "mmlu_pro": {
+              "mean": "61.55",
+              "sd": "0.30",
+              "raw": "61.55$\\pm$0.30",
+              "mean_value": 61.54653299916458,
+              "sd_value": 0.3018119551964124
+            },
+            "math": {
+              "mean": "65.82",
+              "sd": "0.71",
+              "raw": "65.82$\\pm$0.71",
+              "mean_value": 65.81634312099634,
+              "sd_value": 0.7146235040490518
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "91.27",
+              "sd": "0.20",
+              "raw": "91.27$\\pm$0.20",
+              "mean_value": 91.26511438775945,
+              "sd_value": 0.19844861156034876
+            },
+            "mmlu_test": {
+              "mean": "79.79",
+              "sd": "0.16",
+              "raw": "79.79$\\pm$0.16",
+              "mean_value": 79.79300641232557,
+              "sd_value": 0.16137445720467775
+            },
+            "big_math_5k_test": {
+              "mean": "78.92",
+              "sd": "0.35",
+              "raw": "78.92$\\pm$0.35",
+              "mean_value": 78.92224688416536,
+              "sd_value": 0.34535239018607206
+            },
+            "magpie_5k_test": {
+              "mean": "78.03",
+              "sd": "0.14",
+              "raw": "78.03$\\pm$0.14",
+              "mean_value": 78.02969076795124,
+              "sd_value": 0.14206235067022685
+            },
+            "mmlu_pro": {
+              "mean": "65.37",
+              "sd": "0.17",
+              "raw": "65.37$\\pm$0.17",
+              "mean_value": 65.36929932563424,
+              "sd_value": 0.16574777497326895
+            },
+            "math": {
+              "mean": "65.56",
+              "sd": "0.13",
+              "raw": "65.56$\\pm$0.13",
+              "mean_value": 65.55677297744403,
+              "sd_value": 0.13074565219482553
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "81.65",
+              "sd": "0.24",
+              "raw": "81.65$\\pm$0.24",
+              "mean_value": 81.64921734929958,
+              "sd_value": 0.24000326108271705
+            },
+            "mmlu_test": {
+              "mean": "77.73",
+              "sd": "1.17",
+              "raw": "77.73$\\pm$1.17",
+              "mean_value": 77.73494394465041,
+              "sd_value": 1.1695485237771017
+            },
+            "big_math_5k_test": {
+              "mean": "67.09",
+              "sd": "1.29",
+              "raw": "67.09$\\pm$1.29",
+              "mean_value": 67.09024484763609,
+              "sd_value": 1.2875135669897533
+            },
+            "magpie_5k_test": {
+              "mean": "87.88",
+              "sd": "0.39",
+              "raw": "87.88$\\pm$0.39",
+              "mean_value": 87.87912581044715,
+              "sd_value": 0.3885784661989468
+            },
+            "mmlu_pro": {
+              "mean": "85.44",
+              "sd": "1.14",
+              "raw": "85.44$\\pm$1.14",
+              "mean_value": 85.44249227810023,
+              "sd_value": 1.14191030938909
+            },
+            "math": {
+              "mean": "76.51",
+              "sd": "0.33",
+              "raw": "76.51$\\pm$0.33",
+              "mean_value": 76.50937092204288,
+              "sd_value": 0.3320785647736493
+            }
+          }
+        }
+      },
+      {
+        "method": "HybridLLM",
+        "source_method": "HybridLLM",
+        "source_kind": "mean",
+        "source_key": "MEAN_TABLE.csv",
+        "source_sha256": "5abe83320ae121da3e4a66cc109191d3782f320f6aaff772bc63e37fdebcef24",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "63.70",
+              "sd": "1.92",
+              "raw": "63.70$\\pm$1.92",
+              "mean_value": 63.700390045217624,
+              "sd_value": 1.9182387916625836
+            },
+            "mmlu_test": {
+              "mean": "65.13",
+              "sd": "1.29",
+              "raw": "65.13$\\pm$1.29",
+              "mean_value": 65.13085380204112,
+              "sd_value": 1.2895968802553546
+            },
+            "big_math_5k_test": {
+              "mean": "64.21",
+              "sd": "0.84",
+              "raw": "64.21$\\pm$0.84",
+              "mean_value": 64.2149822844069,
+              "sd_value": 0.8446227694182897
+            },
+            "magpie_5k_test": {
+              "mean": "66.23",
+              "sd": "8.05",
+              "raw": "66.23$\\pm$8.05",
+              "mean_value": 66.23014332070183,
+              "sd_value": 8.05482788142732
+            },
+            "mmlu_pro": {
+              "mean": "60.56",
+              "sd": "3.01",
+              "raw": "60.56$\\pm$3.01",
+              "mean_value": 60.56126984126983,
+              "sd_value": 3.0142196584821566
+            },
+            "math": {
+              "mean": "67.26",
+              "sd": "2.39",
+              "raw": "67.26$\\pm$2.39",
+              "mean_value": 67.26118861032529,
+              "sd_value": 2.393437276317774
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "91.01",
+              "sd": "0.07",
+              "raw": "91.01$\\pm$0.07",
+              "mean_value": 91.0111625316671,
+              "sd_value": 0.07363451640845253
+            },
+            "mmlu_test": {
+              "mean": "80.19",
+              "sd": "0.10",
+              "raw": "80.19$\\pm$0.10",
+              "mean_value": 80.18504242806378,
+              "sd_value": 0.10060995564946283
+            },
+            "big_math_5k_test": {
+              "mean": "79.68",
+              "sd": "0.46",
+              "raw": "79.68$\\pm$0.46",
+              "mean_value": 79.68466918727013,
+              "sd_value": 0.4646809333153529
+            },
+            "magpie_5k_test": {
+              "mean": "78.09",
+              "sd": "0.89",
+              "raw": "78.09$\\pm$0.89",
+              "mean_value": 78.08966251192297,
+              "sd_value": 0.8852575617542752
+            },
+            "mmlu_pro": {
+              "mean": "64.65",
+              "sd": "1.11",
+              "raw": "64.65$\\pm$1.11",
+              "mean_value": 64.64748078156137,
+              "sd_value": 1.106502053923116
+            },
+            "math": {
+              "mean": "64.95",
+              "sd": "0.74",
+              "raw": "64.95$\\pm$0.74",
+              "mean_value": 64.95212636516843,
+              "sd_value": 0.7379828921678487
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "85.07",
+              "sd": "2.29",
+              "raw": "85.07$\\pm$2.29",
+              "mean_value": 85.07231925004182,
+              "sd_value": 2.289840558393901
+            },
+            "mmlu_test": {
+              "mean": "76.69",
+              "sd": "1.13",
+              "raw": "76.69$\\pm$1.13",
+              "mean_value": 76.6870967400524,
+              "sd_value": 1.1295696394676789
+            },
+            "big_math_5k_test": {
+              "mean": "66.60",
+              "sd": "1.37",
+              "raw": "66.60$\\pm$1.37",
+              "mean_value": 66.60108537683732,
+              "sd_value": 1.3685341300626732
+            },
+            "magpie_5k_test": {
+              "mean": "83.04",
+              "sd": "9.94",
+              "raw": "83.04$\\pm$9.94",
+              "mean_value": 83.03882669188553,
+              "sd_value": 9.938725919439037
+            },
+            "mmlu_pro": {
+              "mean": "87.33",
+              "sd": "2.02",
+              "raw": "87.33$\\pm$2.02",
+              "mean_value": 87.32697383646502,
+              "sd_value": 2.020349566108561
+            },
+            "math": {
+              "mean": "75.99",
+              "sd": "3.31",
+              "raw": "75.99$\\pm$3.31",
+              "mean_value": 75.99253795295556,
+              "sd_value": 3.312805189540812
+            }
+          }
+        }
+      },
+      {
+        "method": "RouteLLM",
+        "source_method": "RouteLLM",
+        "source_kind": "mean",
+        "source_key": "MEAN_TABLE.csv",
+        "source_sha256": "5abe83320ae121da3e4a66cc109191d3782f320f6aaff772bc63e37fdebcef24",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "57.69",
+              "sd": "0.43",
+              "raw": "57.69$\\pm$0.43",
+              "mean_value": 57.692313002657826,
+              "sd_value": 0.4287316460006711
+            },
+            "mmlu_test": {
+              "mean": "58.47",
+              "sd": "0.32",
+              "raw": "58.47$\\pm$0.32",
+              "mean_value": 58.46792847673071,
+              "sd_value": 0.3168019935095754
+            },
+            "big_math_5k_test": {
+              "mean": "60.74",
+              "sd": "0.06",
+              "raw": "60.74$\\pm$0.06",
+              "mean_value": 60.73686620524471,
+              "sd_value": 0.06491414389184526
+            },
+            "magpie_5k_test": {
+              "mean": "74.40",
+              "sd": "0.15",
+              "raw": "74.40$\\pm$0.15",
+              "mean_value": 74.39554014184777,
+              "sd_value": 0.14727844378486832
+            },
+            "mmlu_pro": {
+              "mean": "52.62",
+              "sd": "0.44",
+              "raw": "52.62$\\pm$0.44",
+              "mean_value": 52.62489557226399,
+              "sd_value": 0.4350502661464738
+            },
+            "math": {
+              "mean": "61.74",
+              "sd": "0.09",
+              "raw": "61.74$\\pm$0.09",
+              "mean_value": 61.74140192284763,
+              "sd_value": 0.08543716886768664
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "90.96",
+              "sd": "0.01",
+              "raw": "90.96$\\pm$0.01",
+              "mean_value": 90.95839460829487,
+              "sd_value": 0.009802772789732593
+            },
+            "mmlu_test": {
+              "mean": "81.22",
+              "sd": "0.05",
+              "raw": "81.22$\\pm$0.05",
+              "mean_value": 81.22060239983736,
+              "sd_value": 0.04871613283242215
+            },
+            "big_math_5k_test": {
+              "mean": "79.73",
+              "sd": "0.05",
+              "raw": "79.73$\\pm$0.05",
+              "mean_value": 79.72513213819381,
+              "sd_value": 0.050209414145907676
+            },
+            "magpie_5k_test": {
+              "mean": "77.80",
+              "sd": "0.07",
+              "raw": "77.80$\\pm$0.07",
+              "mean_value": 77.79783610959335,
+              "sd_value": 0.07252428009143148
+            },
+            "mmlu_pro": {
+              "mean": "69.30",
+              "sd": "0.24",
+              "raw": "69.30$\\pm$0.24",
+              "mean_value": 69.29904762772476,
+              "sd_value": 0.24479426588262332
+            },
+            "math": {
+              "mean": "64.02",
+              "sd": "0.12",
+              "raw": "64.02$\\pm$0.12",
+              "mean_value": 64.01917119433122,
+              "sd_value": 0.1221827319391028
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "88.43",
+              "sd": "0.28",
+              "raw": "88.43$\\pm$0.28",
+              "mean_value": 88.42945061367335,
+              "sd_value": 0.2848239344447151
+            },
+            "mmlu_test": {
+              "mean": "67.11",
+              "sd": "0.30",
+              "raw": "67.11$\\pm$0.30",
+              "mean_value": 67.11154808468633,
+              "sd_value": 0.2961773204423072
+            },
+            "big_math_5k_test": {
+              "mean": "68.96",
+              "sd": "0.24",
+              "raw": "68.96$\\pm$0.24",
+              "mean_value": 68.95609700897128,
+              "sd_value": 0.24403462061130995
+            },
+            "magpie_5k_test": {
+              "mean": "91.28",
+              "sd": "0.16",
+              "raw": "91.28$\\pm$0.16",
+              "mean_value": 91.28287879431221,
+              "sd_value": 0.15691068145971898
+            },
+            "mmlu_pro": {
+              "mean": "70.21",
+              "sd": "0.62",
+              "raw": "70.21$\\pm$0.62",
+              "mean_value": 70.20678213432616,
+              "sd_value": 0.6209584403010644
+            },
+            "math": {
+              "mean": "76.96",
+              "sd": "0.18",
+              "raw": "76.96$\\pm$0.18",
+              "mean_value": 76.95985964635717,
+              "sd_value": 0.18002451317301282
+            }
+          }
+        }
+      },
+      {
+        "method": "Jev",
+        "source_method": "Jev",
+        "source_kind": "jev",
+        "source_key": "JEV_MEAN_TABLE.csv",
+        "source_sha256": "942be01ff0c126e5613789aaacb4a872924301538a14a858d377f78adff2aa24",
+        "repeat_identity": "3 actual API executions (original/43/44); sample SD across executions",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "59.27",
+              "sd": "0.08",
+              "raw": "59.27$\\pm$0.08",
+              "mean_value": 59.27265196230713,
+              "sd_value": 0.0766582927103924
+            },
+            "mmlu_test": {
+              "mean": "69.77",
+              "sd": "0.71",
+              "raw": "69.77$\\pm$0.71",
+              "mean_value": 69.76895276595349,
+              "sd_value": 0.7094680030402101
+            },
+            "big_math_5k_test": {
+              "mean": "71.92",
+              "sd": "0.57",
+              "raw": "71.92$\\pm$0.57",
+              "mean_value": 71.92258614037024,
+              "sd_value": 0.5701600708320627
+            },
+            "magpie_5k_test": {
+              "mean": "70.59",
+              "sd": "0.19",
+              "raw": "70.59$\\pm$0.19",
+              "mean_value": 70.59191762295632,
+              "sd_value": 0.19187485376723623
+            },
+            "mmlu_pro": {
+              "mean": "70.33",
+              "sd": "0.22",
+              "raw": "70.33$\\pm$0.22",
+              "mean_value": 70.32962406015037,
+              "sd_value": 0.2168481072402537
+            },
+            "math": {
+              "mean": "80.47",
+              "sd": "0.17",
+              "raw": "80.47$\\pm$0.17",
+              "mean_value": 80.4683011955473,
+              "sd_value": 0.17194625618460135
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "92.59",
+              "sd": "0.09",
+              "raw": "92.59$\\pm$0.09",
+              "mean_value": 92.59016430310032,
+              "sd_value": 0.08520015180403359
+            },
+            "mmlu_test": {
+              "mean": "81.66",
+              "sd": "0.05",
+              "raw": "81.66$\\pm$0.05",
+              "mean_value": 81.66223887817311,
+              "sd_value": 0.05301683949579997
+            },
+            "big_math_5k_test": {
+              "mean": "79.62",
+              "sd": "0.07",
+              "raw": "79.62$\\pm$0.07",
+              "mean_value": 79.62473157542385,
+              "sd_value": 0.06522323574073477
+            },
+            "magpie_5k_test": {
+              "mean": "81.92",
+              "sd": "0.06",
+              "raw": "81.92$\\pm$0.06",
+              "mean_value": 81.91995785008298,
+              "sd_value": 0.0599527884227238
+            },
+            "mmlu_pro": {
+              "mean": "61.62",
+              "sd": "0.14",
+              "raw": "61.62$\\pm$0.14",
+              "mean_value": 61.61637526071356,
+              "sd_value": 0.13610725828360629
+            },
+            "math": {
+              "mean": "62.55",
+              "sd": "0.08",
+              "raw": "62.55$\\pm$0.08",
+              "mean_value": 62.548469226856824,
+              "sd_value": 0.08056779947014683
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "68.30",
+              "sd": "0.58",
+              "raw": "68.30$\\pm$0.58",
+              "mean_value": 68.3047459482956,
+              "sd_value": 0.5848865949282319
+            },
+            "mmlu_test": {
+              "mean": "68.20",
+              "sd": "1.26",
+              "raw": "68.20$\\pm$1.26",
+              "mean_value": 68.20322192330227,
+              "sd_value": 1.2589112261838449
+            },
+            "big_math_5k_test": {
+              "mean": "67.42",
+              "sd": "0.44",
+              "raw": "67.42$\\pm$0.44",
+              "mean_value": 67.42319921375683,
+              "sd_value": 0.43934385303322665
+            },
+            "magpie_5k_test": {
+              "mean": "64.84",
+              "sd": "0.10",
+              "raw": "64.84$\\pm$0.10",
+              "mean_value": 64.83815792141178,
+              "sd_value": 0.09829118549820562
+            },
+            "mmlu_pro": {
+              "mean": "81.14",
+              "sd": "0.28",
+              "raw": "81.14$\\pm$0.28",
+              "mean_value": 81.13567056467717,
+              "sd_value": 0.2768450601935717
+            },
+            "math": {
+              "mean": "74.79",
+              "sd": "0.52",
+              "raw": "74.79$\\pm$0.52",
+              "mean_value": 74.79053133221711,
+              "sd_value": 0.520557878261291
+            }
+          }
+        }
+      },
+      {
+        "method": "MeanProbe",
+        "source_method": "MeanProbe",
+        "source_kind": "mean",
+        "source_key": "MEAN_TABLE.csv",
+        "source_sha256": "5abe83320ae121da3e4a66cc109191d3782f320f6aaff772bc63e37fdebcef24",
+        "repeat_identity": "3 training seeds 42/43/44; sample SD across seeds",
+        "cells": {
+          "auroc": {
+            "alpaca_5k_test": {
+              "mean": "65.71",
+              "sd": "0.13",
+              "raw": "65.71$\\pm$0.13",
+              "mean_value": 65.7058437748093,
+              "sd_value": 0.12781254617141466
+            },
+            "mmlu_test": {
+              "mean": "67.62",
+              "sd": "0.11",
+              "raw": "67.62$\\pm$0.11",
+              "mean_value": 67.62264924226194,
+              "sd_value": 0.10838141993618547
+            },
+            "big_math_5k_test": {
+              "mean": "67.76",
+              "sd": "0.04",
+              "raw": "67.76$\\pm$0.04",
+              "mean_value": 67.76034236804564,
+              "sd_value": 0.03787789284600502
+            },
+            "magpie_5k_test": {
+              "mean": "76.43",
+              "sd": "0.11",
+              "raw": "76.43$\\pm$0.11",
+              "mean_value": 76.43443446124182,
+              "sd_value": 0.11468645704909003
+            },
+            "mmlu_pro": {
+              "mean": "64.66",
+              "sd": "0.08",
+              "raw": "64.66$\\pm$0.08",
+              "mean_value": 64.65670843776107,
+              "sd_value": 0.07743018162843102
+            },
+            "math": {
+              "mean": "72.46",
+              "sd": "0.18",
+              "raw": "72.46$\\pm$0.18",
+              "mean_value": 72.46027487833166,
+              "sd_value": 0.18306984355354916
+            }
+          },
+          "bq": {
+            "alpaca_5k_test": {
+              "mean": "91.27",
+              "sd": "0.03",
+              "raw": "91.27$\\pm$0.03",
+              "mean_value": 91.27124562632423,
+              "sd_value": 0.026104423225147732
+            },
+            "mmlu_test": {
+              "mean": "80.75",
+              "sd": "0.08",
+              "raw": "80.75$\\pm$0.08",
+              "mean_value": 80.75331378812552,
+              "sd_value": 0.07848922303227344
+            },
+            "big_math_5k_test": {
+              "mean": "79.90",
+              "sd": "0.04",
+              "raw": "79.90$\\pm$0.04",
+              "mean_value": 79.90495412224632,
+              "sd_value": 0.04250245699802375
+            },
+            "magpie_5k_test": {
+              "mean": "78.01",
+              "sd": "0.07",
+              "raw": "78.01$\\pm$0.07",
+              "mean_value": 78.01418083889929,
+              "sd_value": 0.06647312967984485
+            },
+            "mmlu_pro": {
+              "mean": "64.85",
+              "sd": "0.14",
+              "raw": "64.85$\\pm$0.14",
+              "mean_value": 64.84534238635646,
+              "sd_value": 0.136165327512352
+            },
+            "math": {
+              "mean": "65.81",
+              "sd": "0.10",
+              "raw": "65.81$\\pm$0.10",
+              "mean_value": 65.81302766906592,
+              "sd_value": 0.09763129355355463
+            }
+          },
+          "tc": {
+            "alpaca_5k_test": {
+              "mean": "81.12",
+              "sd": "0.25",
+              "raw": "81.12$\\pm$0.25",
+              "mean_value": 81.12031088062474,
+              "sd_value": 0.24947068667921082
+            },
+            "mmlu_test": {
+              "mean": "72.57",
+              "sd": "0.15",
+              "raw": "72.57$\\pm$0.15",
+              "mean_value": 72.5675946502809,
+              "sd_value": 0.145932877120866
+            },
+            "big_math_5k_test": {
+              "mean": "68.34",
+              "sd": "0.23",
+              "raw": "68.34$\\pm$0.23",
+              "mean_value": 68.33535720887934,
+              "sd_value": 0.2260101089213005
+            },
+            "magpie_5k_test": {
+              "mean": "84.91",
+              "sd": "0.35",
+              "raw": "84.91$\\pm$0.35",
+              "mean_value": 84.91410892449007,
+              "sd_value": 0.35183724204040356
+            },
+            "mmlu_pro": {
+              "mean": "85.67",
+              "sd": "0.02",
+              "raw": "85.67$\\pm$0.02",
+              "mean_value": 85.67483969171845,
+              "sd_value": 0.023319328381144824
+            },
+            "math": {
+              "mean": "73.41",
+              "sd": "0.16",
+              "raw": "73.41$\\pm$0.16",
+              "mean_value": 73.40948747088972,
+              "sd_value": 0.16229256863832867
+            }
+          }
+        }
+      }
+    ]
+  },
+  "paper_reference": {
+    "scope": "paper_reference",
+    "protocol": "Current paper tables: 5,954 subset, historical greedy + sampled 42/43 with changed local answers. NOT identical to the clean 5,955 frozen-answer protocol. Shown only as an unchanged reference; no combined rank.",
+    "sources": [
+      {
+        "key": "table1_auroc.tex",
+        "path": "/Users/zhuhe/overleaf/router/table1_auroc.tex",
+        "sha256": "cae5d6ce90b697a9f3c7ea69d0416d06d9eb41599018fb9f577913db4752b3c1",
+        "bytes": 1712,
+        "relative_path": "table1_auroc.tex",
+        "metric": "auroc",
+        "caption": "Clean-test router ability (AUROC $\\times100$). Entries report mean $\\pm$ sample SD across three evaluation rounds.",
+        "methods": [
+          "SelfAsk",
+          "Entropy",
+          "MaxLogits",
+          "Conf. Margin",
+          "Emb. MLP",
+          "HybridLLM",
+          "RouteLLM",
+          "Jev",
+          "MeanProbe"
+        ],
+        "datasets": [
+          "Alpaca",
+          "MMLU",
+          "Big-Math",
+          "Magpie",
+          "MMLU-Pro",
+          "MATH"
+        ],
+        "cells": 54
+      },
+      {
+        "key": "table2_bq.tex",
+        "path": "/Users/zhuhe/overleaf/router/table2_bq.tex",
+        "sha256": "8de4a4fc92911ef2db3f1ccec3702d6dee2ccd7579eb3d5ce92644920ea132d8",
+        "bytes": 1581,
+        "relative_path": "table2_bq.tex",
+        "metric": "bq",
+        "caption": "BQ at the middle budget range, as percentages of all-cloud quality; higher is better. Entries report mean $\\pm$ sample SD across three evaluation rounds.",
+        "methods": [
+          "SelfAsk",
+          "Entropy",
+          "MaxLogits",
+          "Conf. Margin",
+          "Emb. MLP",
+          "HybridLLM",
+          "RouteLLM",
+          "Jev",
+          "MeanProbe"
+        ],
+        "datasets": [
+          "Alpaca",
+          "MMLU",
+          "Big-Math",
+          "Magpie",
+          "MMLU-Pro",
+          "MATH"
+        ],
+        "cells": 54
+      },
+      {
+        "key": "table3_tc.tex",
+        "path": "/Users/zhuhe/overleaf/router/table3_tc.tex",
+        "sha256": "95a64104d5463a7aa189082f1d377f4ffafff60d7fd047eadb2bfd10cbfae39d",
+        "bytes": 1601,
+        "relative_path": "table3_tc.tex",
+        "metric": "tc",
+        "caption": "TC at the middle quality-target range, as percentages of all-cloud generation cost; lower is better. Entries report mean $\\pm$ sample SD across three evaluation rounds.",
+        "methods": [
+          "SelfAsk",
+          "Entropy",
+          "MaxLogits",
+          "Conf. Margin",
+          "Emb. MLP",
+          "HybridLLM",
+          "RouteLLM",
+          "Jev",
+          "MeanProbe"
+        ],
+        "datasets": [
+          "Alpaca",
+          "MMLU",
+          "Big-Math",
+          "Magpie",
+          "MMLU-Pro",
+          "MATH"
+        ],
+        "cells": 54
+      }
+    ],
+    "data_sources": [
+      {
+        "key": "results.csv",
+        "path": "/Users/zhuhe/overleaf/router/data/main_three_round/results.csv",
+        "sha256": "2bdc4802374462e1f2a4861f4c04ffd41b01174215c3bfebb75e02e76566d3e0",
+        "bytes": 64164
+      },
+      {
+        "key": "verification.json",
+        "path": "/Users/zhuhe/overleaf/router/data/main_three_round/verification.json",
+        "sha256": "7d2af4806c17c50d672ac922abf42b7af8b27f3383cf43f63479ed1a6f00d001",
+        "bytes": 927
+      }
+    ]
+  },
+  "startlux": {
+    "expected_conditions": 12,
+    "complete_conditions": 12,
+    "pending_conditions": 0,
+    "conditions": [
+      {
+        "condition_key": "instant_0.8b_query",
+        "display": "StartLux 0.8B Instant (Q)",
+        "method": "StartLux-0.8B-Instant-query",
+        "router_model": "StartLux-Decision-v1.1-0.8B-Instant",
+        "mode": "Instant",
+        "size_label": "0.8B",
+        "signal": "query",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host1/0.8b/0.8b_instant_query.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/0.8b/0.8b_instant_query.summary.json",
+        "source_sha256": "46e8a42ff3731f72f28ec52b1cfea7dcb0ffd70baf0e979d869853c18948e66f",
+        "source_keys": [
+          "dsh-host1/0.8b/0.8b_instant_query.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/0.8b/0.8b_instant_query.summary.json"
+        ],
+        "source_sha256s": [
+          "46e8a42ff3731f72f28ec52b1cfea7dcb0ffd70baf0e979d869853c18948e66f"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "a23887660f04ca3c9d7fa115464b88d07586b12e8ca6d6e56b3398d0137852a9",
+        "config_sha256": "602a7c1172bb870da73269a93b494d2cb343efb6a2fe418b9082d611b18b20a7",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 58.34,
+            "bq": 92.34,
+            "tc": 74.14
+          },
+          "mmlu_test": {
+            "auroc": 57.17,
+            "bq": 81.06,
+            "tc": 75.59
+          },
+          "big_math_5k_test": {
+            "auroc": 62.51,
+            "bq": 79.87,
+            "tc": 72.25
+          },
+          "magpie_5k_test": {
+            "auroc": 65.05,
+            "bq": 78.87,
+            "tc": 74.02
+          },
+          "mmlu_pro": {
+            "auroc": 58.71,
+            "bq": 63.39,
+            "tc": 81.49
+          },
+          "math": {
+            "auroc": 72.37,
+            "bq": 64.78,
+            "tc": 73.03
+          }
+        }
+      },
+      {
+        "condition_key": "instant_0.8b_query_answer",
+        "display": "StartLux 0.8B Instant (Q+A)",
+        "method": "StartLux-0.8B-Instant-qa",
+        "router_model": "StartLux-Decision-v1.1-0.8B-Instant",
+        "mode": "Instant",
+        "size_label": "0.8B",
+        "signal": "query_answer",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host1/0.8b/0.8b_instant_qa.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/0.8b/0.8b_instant_qa.summary.json",
+        "source_sha256": "fe483e8c578c732e5df981d93db1e134d18512798b44b61a0be2117730bc37fb",
+        "source_keys": [
+          "dsh-host1/0.8b/0.8b_instant_qa.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/0.8b/0.8b_instant_qa.summary.json"
+        ],
+        "source_sha256s": [
+          "fe483e8c578c732e5df981d93db1e134d18512798b44b61a0be2117730bc37fb"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "55b3768852227d76c352eb4401112069a70dff94059c6a4c8d6fdd6f485b6b6f",
+        "config_sha256": "fcb0c76e2a25029a8523adb83805ca74b1b7943200a9db496a6824a3cff7f33d",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 55.19,
+            "bq": 94.26,
+            "tc": 52.29
+          },
+          "mmlu_test": {
+            "auroc": 66.82,
+            "bq": 82.08,
+            "tc": 63.8
+          },
+          "big_math_5k_test": {
+            "auroc": 81.77,
+            "bq": 84.91,
+            "tc": 56.98
+          },
+          "magpie_5k_test": {
+            "auroc": 58.66,
+            "bq": 85.19,
+            "tc": 53.35
+          },
+          "mmlu_pro": {
+            "auroc": 71.32,
+            "bq": 66.24,
+            "tc": 75.93
+          },
+          "math": {
+            "auroc": 87.25,
+            "bq": 66.68,
+            "tc": 64.37
+          }
+        }
+      },
+      {
+        "condition_key": "instant_2b_query",
+        "display": "StartLux 2B Instant (Q)",
+        "method": "StartLux-2B-Instant-query",
+        "router_model": "StartLux-2B-Instant",
+        "mode": "Instant",
+        "size_label": "2B",
+        "signal": "query",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host3/2b_instant_query.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/2b_instant_query.summary.json",
+        "source_sha256": "315a511df21b107dc9afff9aa606bde206734c854833abc403d4f27e33393779",
+        "source_keys": [
+          "dsh-host3/2b_instant_query.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/2b_instant_query.summary.json"
+        ],
+        "source_sha256s": [
+          "315a511df21b107dc9afff9aa606bde206734c854833abc403d4f27e33393779"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "f85859a87e8e347850b8902bbb1815b0621801c97bf3e0f95d21339906156a0f",
+        "config_sha256": "c4b907c1e318fb33c4923c98b60ea249a404081548e43fe3fc4575d0a19fbc52",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 57.43,
+            "bq": 92.46,
+            "tc": 78.1
+          },
+          "mmlu_test": {
+            "auroc": 49.26,
+            "bq": 82.61,
+            "tc": 73.7
+          },
+          "big_math_5k_test": {
+            "auroc": 59.74,
+            "bq": 79.62,
+            "tc": 70.55
+          },
+          "magpie_5k_test": {
+            "auroc": 64.22,
+            "bq": 79.61,
+            "tc": 75.04
+          },
+          "mmlu_pro": {
+            "auroc": 53.76,
+            "bq": 65.61,
+            "tc": 77.61
+          },
+          "math": {
+            "auroc": 72.53,
+            "bq": 66.15,
+            "tc": 73.29
+          }
+        }
+      },
+      {
+        "condition_key": "instant_2b_query_answer",
+        "display": "StartLux 2B Instant (Q+A)",
+        "method": "StartLux-2B-Instant-qa",
+        "router_model": "StartLux-2B-Instant",
+        "mode": "Instant",
+        "size_label": "2B",
+        "signal": "query_answer",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host3/2b_instant_qa.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/2b_instant_qa.summary.json",
+        "source_sha256": "c8bc7b5ca236d01aaf1b02620f9a8f28ca16befebddedee7844b37d296f6679d",
+        "source_keys": [
+          "dsh-host3/2b_instant_qa.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/2b_instant_qa.summary.json"
+        ],
+        "source_sha256s": [
+          "c8bc7b5ca236d01aaf1b02620f9a8f28ca16befebddedee7844b37d296f6679d"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "8f8d7851079d0de509d7a46ea2984e6f756c013b4498f954d87455400a32bd81",
+        "config_sha256": "a10e1aa630b2ab9fce27f856b2d57173194703a9cf59d5e323fa685438b529be",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 62.49,
+            "bq": 94.03,
+            "tc": 56.38
+          },
+          "mmlu_test": {
+            "auroc": 74.93,
+            "bq": 83.68,
+            "tc": 59.21
+          },
+          "big_math_5k_test": {
+            "auroc": 87.62,
+            "bq": 84.72,
+            "tc": 46.23
+          },
+          "magpie_5k_test": {
+            "auroc": 73.34,
+            "bq": 85.8,
+            "tc": 52.44
+          },
+          "mmlu_pro": {
+            "auroc": 79.5,
+            "bq": 67.23,
+            "tc": 67.68
+          },
+          "math": {
+            "auroc": 91.36,
+            "bq": 66.48,
+            "tc": 62.34
+          }
+        }
+      },
+      {
+        "condition_key": "instant_4b_query",
+        "display": "StartLux 4B Instant (Q)",
+        "method": "StartLux-4B-Instant-query",
+        "router_model": "StartLux-4B-Instant",
+        "mode": "Instant",
+        "size_label": "4B",
+        "signal": "query",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host3/4b_instant_query.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/4b_instant_query.summary.json",
+        "source_sha256": "5a2cefd51af4fc5d5c3b6134fc8bd962cdccefa1388e747f1af8c60c465144fe",
+        "source_keys": [
+          "dsh-host3/4b_instant_query.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/4b_instant_query.summary.json"
+        ],
+        "source_sha256s": [
+          "5a2cefd51af4fc5d5c3b6134fc8bd962cdccefa1388e747f1af8c60c465144fe"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "a8cec15a9b4b0125cd380903721adae304e7639f917521fc74e453837e982e7f",
+        "config_sha256": "e286cdf7cbaad9d3b17764a74d100c1bc8de363b173223fdd42de20d3a3041ac",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 66.59,
+            "bq": 92.3,
+            "tc": 74.33
+          },
+          "mmlu_test": {
+            "auroc": 67.3,
+            "bq": 80.92,
+            "tc": 66.63
+          },
+          "big_math_5k_test": {
+            "auroc": 70.7,
+            "bq": 79.65,
+            "tc": 70.69
+          },
+          "magpie_5k_test": {
+            "auroc": 76.02,
+            "bq": 81.84,
+            "tc": 68.2
+          },
+          "mmlu_pro": {
+            "auroc": 67.44,
+            "bq": 61.61,
+            "tc": 81.59
+          },
+          "math": {
+            "auroc": 80.91,
+            "bq": 63.05,
+            "tc": 73.13
+          }
+        }
+      },
+      {
+        "condition_key": "instant_4b_query_answer",
+        "display": "StartLux 4B Instant (Q+A)",
+        "method": "StartLux-4B-Instant-qa",
+        "router_model": "StartLux-4B-Instant",
+        "mode": "Instant",
+        "size_label": "4B",
+        "signal": "query_answer",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host3/4b_instant_qa.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/4b_instant_qa.summary.json",
+        "source_sha256": "a474b1a0c630bc6dcdfb7490847b8ec6e2a99680e44f7f86b39eee0fc667f60d",
+        "source_keys": [
+          "dsh-host3/4b_instant_qa.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host3/4b_instant_qa.summary.json"
+        ],
+        "source_sha256s": [
+          "a474b1a0c630bc6dcdfb7490847b8ec6e2a99680e44f7f86b39eee0fc667f60d"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "4d68dd7ea5c7d9063fd85462f972984b91146a60d389d67fef44bc113bd186d7",
+        "config_sha256": "6f26154f7ef6e3cfec6bc8cb60d9c85078ed8294cb6a3cebdcca9d14040ce203",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 68.92,
+            "bq": 95.01,
+            "tc": 50.05
+          },
+          "mmlu_test": {
+            "auroc": 88.17,
+            "bq": 84.75,
+            "tc": 40.02
+          },
+          "big_math_5k_test": {
+            "auroc": 92.51,
+            "bq": 85.96,
+            "tc": 37.13
+          },
+          "magpie_5k_test": {
+            "auroc": 78.09,
+            "bq": 86.79,
+            "tc": 48.07
+          },
+          "mmlu_pro": {
+            "auroc": 87.47,
+            "bq": 67.32,
+            "tc": 56.9
+          },
+          "math": {
+            "auroc": 94.72,
+            "bq": 66.32,
+            "tc": 57.35
+          }
+        }
+      },
+      {
+        "condition_key": "instant_9b_query",
+        "display": "StartLux 9B Instant (Q)",
+        "method": "StartLux-9B-Instant-query",
+        "router_model": "StartLux-Decision-v1.1-9B-Instant",
+        "mode": "Instant",
+        "size_label": "9B",
+        "signal": "query",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host2/9b_instant_query.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_instant_query.summary.json",
+        "source_sha256": "74b443d1556ef951707e951c52788470b2558ff0d8a95e2090ed0bca83550e7a",
+        "source_keys": [
+          "dsh-host2/9b_instant_query.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_instant_query.summary.json"
+        ],
+        "source_sha256s": [
+          "74b443d1556ef951707e951c52788470b2558ff0d8a95e2090ed0bca83550e7a"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "f42fa38ee2424607e74be081f7d89ba488e31f69d901742b93ff91040c8eb9ad",
+        "config_sha256": "f70f44c1f4cf21c7067ae5008eb8b942f8a48532be6d5c2ceec7e0fd3e47f5c6",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 68.06,
+            "bq": 91.96,
+            "tc": 77.64
+          },
+          "mmlu_test": {
+            "auroc": 67.8,
+            "bq": 82.03,
+            "tc": 66.12
+          },
+          "big_math_5k_test": {
+            "auroc": 72.94,
+            "bq": 78.92,
+            "tc": 67.88
+          },
+          "magpie_5k_test": {
+            "auroc": 76.56,
+            "bq": 82.33,
+            "tc": 69.46
+          },
+          "mmlu_pro": {
+            "auroc": 65.19,
+            "bq": 61.93,
+            "tc": 82.04
+          },
+          "math": {
+            "auroc": 79.33,
+            "bq": 63.59,
+            "tc": 76.67
+          }
+        }
+      },
+      {
+        "condition_key": "instant_9b_query_answer",
+        "display": "StartLux 9B Instant (Q+A)",
+        "method": "StartLux-9B-Instant-qa",
+        "router_model": "StartLux-Decision-v1.1-9B-Instant",
+        "mode": "Instant",
+        "size_label": "9B",
+        "signal": "query_answer",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host2/9b_instant_qa.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_instant_qa.summary.json",
+        "source_sha256": "a0c46b17f446ab81a27b7e6fbd45de36eb62997e4488aa7fada743b35f62fbd4",
+        "source_keys": [
+          "dsh-host2/9b_instant_qa.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_instant_qa.summary.json"
+        ],
+        "source_sha256s": [
+          "a0c46b17f446ab81a27b7e6fbd45de36eb62997e4488aa7fada743b35f62fbd4"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "d5f71cf919dc0ae97e06a5d18358975c855e418101a6de44312b66687681b2bc",
+        "config_sha256": "ebad25cde6cf035609ce665f74849542bc866b579a381d8010a4e0de575901f7",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 74.09,
+            "bq": 94.53,
+            "tc": 56.68
+          },
+          "mmlu_test": {
+            "auroc": 90.71,
+            "bq": 85.3,
+            "tc": 39.23
+          },
+          "big_math_5k_test": {
+            "auroc": 93.29,
+            "bq": 86.28,
+            "tc": 34.09
+          },
+          "magpie_5k_test": {
+            "auroc": 79.28,
+            "bq": 86.9,
+            "tc": 51.06
+          },
+          "mmlu_pro": {
+            "auroc": 89.39,
+            "bq": 67.28,
+            "tc": 58.47
+          },
+          "math": {
+            "auroc": 95.64,
+            "bq": 66.25,
+            "tc": 57.46
+          }
+        }
+      },
+      {
+        "condition_key": "instant_27b_query",
+        "display": "StartLux 27B Instant (Q)",
+        "method": "StartLux-27B-Instant-query",
+        "router_model": "StartLux-Decision-v1.1-27B-Instant",
+        "mode": "Instant",
+        "size_label": "27B",
+        "signal": "query",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host1/27b_instant_query.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_instant_query.summary.json",
+        "source_sha256": "64349ae39859a890409aff738d523815377cbee10f24d76f1cfc57a9085a38a2",
+        "source_keys": [
+          "dsh-host1/27b_instant_query.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_instant_query.summary.json"
+        ],
+        "source_sha256s": [
+          "64349ae39859a890409aff738d523815377cbee10f24d76f1cfc57a9085a38a2"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "68bf48e735e97cef2c0cbb467d4e9b2ee183ae80875635968185641a2c880ac3",
+        "config_sha256": "b997394571d5664dc9691a2ae93e6b6bc518b0bee4b969ca30bb4ace7b62fe90",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 66.83,
+            "bq": 92.68,
+            "tc": 69.82
+          },
+          "mmlu_test": {
+            "auroc": 74.9,
+            "bq": 80.79,
+            "tc": 62.67
+          },
+          "big_math_5k_test": {
+            "auroc": 76.43,
+            "bq": 79.33,
+            "tc": 69.04
+          },
+          "magpie_5k_test": {
+            "auroc": 73.91,
+            "bq": 83.49,
+            "tc": 62.83
+          },
+          "mmlu_pro": {
+            "auroc": 71.72,
+            "bq": 62.41,
+            "tc": 82.49
+          },
+          "math": {
+            "auroc": 82.92,
+            "bq": 62.49,
+            "tc": 73.11
+          }
+        }
+      },
+      {
+        "condition_key": "instant_27b_query_answer",
+        "display": "StartLux 27B Instant (Q+A)",
+        "method": "StartLux-27B-Instant-qa",
+        "router_model": "StartLux-Decision-v1.1-27B-Instant",
+        "mode": "Instant",
+        "size_label": "27B",
+        "signal": "query_answer",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host1/27b_instant_qa.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_instant_qa.summary.json",
+        "source_sha256": "c31a8ba34a9c9526ba967e201136a29b3dadadb777bdd4586fb6191ff1ee6af0",
+        "source_keys": [
+          "dsh-host1/27b_instant_qa.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_instant_qa.summary.json"
+        ],
+        "source_sha256s": [
+          "c31a8ba34a9c9526ba967e201136a29b3dadadb777bdd4586fb6191ff1ee6af0"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "20d4d20087226b7d5b15bd7108a4fa0047bbc379cb4e61e2584b59090c77fe39",
+        "config_sha256": "f6357563fb7638997b438734c52a9351b1db7fe138b896a63f1569c2486d255a",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 73.9,
+            "bq": 95.21,
+            "tc": 47.15
+          },
+          "mmlu_test": {
+            "auroc": 95.15,
+            "bq": 87.38,
+            "tc": 31.52
+          },
+          "big_math_5k_test": {
+            "auroc": 96.49,
+            "bq": 86.98,
+            "tc": 31.47
+          },
+          "magpie_5k_test": {
+            "auroc": 81.92,
+            "bq": 86.97,
+            "tc": 46.49
+          },
+          "mmlu_pro": {
+            "auroc": 93.51,
+            "bq": 68.33,
+            "tc": 47.58
+          },
+          "math": {
+            "auroc": 98.11,
+            "bq": 65.58,
+            "tc": 54.35
+          }
+        }
+      },
+      {
+        "condition_key": "autothink_9b_query",
+        "display": "StartLux 9B AutoThink (Q)",
+        "method": "StartLux-9B-AutoThink-query",
+        "router_model": "StartLux-Decision-v1.1-9B-AutoThink",
+        "mode": "AutoThink",
+        "size_label": "9B",
+        "signal": "query",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host2/9b_autothink_query.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_autothink_query.summary.json",
+        "source_sha256": "a4c5163af79200c9a70d728db3529a9b0f786fea958342033abc283985d307c8",
+        "source_keys": [
+          "dsh-host2/9b_autothink_query.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host2/9b_autothink_query.summary.json"
+        ],
+        "source_sha256s": [
+          "a4c5163af79200c9a70d728db3529a9b0f786fea958342033abc283985d307c8"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "8f67e4f92aecd3c98e9a4d53071ba7ae89325846eae83937725ef628ec203510",
+        "config_sha256": "514c0fe9d44db04478e0981ddd3c078a336843fa162b3b55fbc6d750d0766805",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 65.31,
+            "bq": 92.12,
+            "tc": 73.06
+          },
+          "mmlu_test": {
+            "auroc": 64.48,
+            "bq": 80.64,
+            "tc": 69.25
+          },
+          "big_math_5k_test": {
+            "auroc": 72.56,
+            "bq": 78.87,
+            "tc": 70.54
+          },
+          "magpie_5k_test": {
+            "auroc": 76.24,
+            "bq": 82.1,
+            "tc": 67.73
+          },
+          "mmlu_pro": {
+            "auroc": 61.51,
+            "bq": 63.96,
+            "tc": 79.39
+          },
+          "math": {
+            "auroc": 79.18,
+            "bq": 62.94,
+            "tc": 75.35
+          }
+        }
+      },
+      {
+        "condition_key": "autothink_27b_query",
+        "display": "StartLux 27B AutoThink (Q)",
+        "method": "StartLux-27B-AutoThink-query",
+        "router_model": "StartLux-Decision-v1.1-27B-AutoThink",
+        "mode": "AutoThink",
+        "size_label": "27B",
+        "signal": "query",
+        "n_requests": 5955,
+        "acceptance": {
+          "full_frozen_id_set": true
+        },
+        "frozen_test_n": 5955,
+        "source_key": "dsh-host1/27b_autothink_query.summary.json",
+        "source_path": "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_autothink_query.summary.json",
+        "source_sha256": "a947a9942fec89311bff73c137481d3b49269a32fdf6ee45d79f06ee16eff17b",
+        "source_keys": [
+          "dsh-host1/27b_autothink_query.summary.json"
+        ],
+        "source_paths": [
+          "/Users/zhuhe/wwx/output/routerxbench-startlux-20261025/dsh-host1/27b_autothink_query.summary.json"
+        ],
+        "source_sha256s": [
+          "a947a9942fec89311bff73c137481d3b49269a32fdf6ee45d79f06ee16eff17b"
+        ],
+        "duplicate_group_size": 1,
+        "scores_sha256": "65b358d81a5d46302d2e267cabd05d544b04a83333ba80507d841c6b6744f90d",
+        "config_sha256": "f17df6075bfcc10f4586a9bcc1fd9702cca3f941a366be23cfa6319fc73bc9cb",
+        "scoring_algorithm_sha256": "e6a38af0ab3646cd5d59e0286465aed8978fe87e3f40d21cf63199c06ac03e10",
+        "script_version": "recovery_v2.0",
+        "metrics": {
+          "alpaca_5k_test": {
+            "auroc": 68.1,
+            "bq": 91.88,
+            "tc": 78.87
+          },
+          "mmlu_test": {
+            "auroc": 74.49,
+            "bq": 81.45,
+            "tc": 60.51
+          },
+          "big_math_5k_test": {
+            "auroc": 75.37,
+            "bq": 79.79,
+            "tc": 71.51
+          },
+          "magpie_5k_test": {
+            "auroc": 80.53,
+            "bq": 82.28,
+            "tc": 72.89
+          },
+          "mmlu_pro": {
+            "auroc": 71.93,
+            "bq": 61.65,
+            "tc": 81.46
+          },
+          "math": {
+            "auroc": 82.85,
+            "bq": 62.54,
+            "tc": 73.11
+          }
+        }
+      }
+    ],
+    "pending": [],
+    "ignored_summaries": []
+  },
+  "protocol_context": {
+    "freeze": {
+      "key": "LATEST_MAIN_TABLE_FREEZE.json",
+      "path": "/Users/zhuhe/wwx/output/routerxbench-clean-multiseed-20261013/LATEST_MAIN_TABLE_FREEZE.json",
+      "sha256": "4d84a2785a72c6f7352740bb2e50529111518f9d566edf4e6d471114ee04f3c7",
+      "bytes": 1076,
+      "protocol": "historical_absolute",
+      "source": "output/routerxbench-clean-replay-first9-reviewed-20261013/MAIN_TABLE.csv",
+      "source_sha256": "be51ac894cca6ab7a85ec7dfe6b7c880ea313665b42f4a7512d6e2ab8580ed33",
+      "normalization_only": {
+        "BQ_percent": "100*existing BQ/Qcloud_clean",
+        "TC_percent": "100*existing TC/fullcloud_cost_clean",
+        "AUROC_percent": "100*AUROC"
+      },
+      "budgets_and_targets_recomputed": false,
+      "learned_methods": [
+        "MeanProbe",
+        "EmbeddingMLP",
+        "RouteLLM"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "source_verification": {
+        "available": true,
+        "verified": true,
+        "path": "/Users/zhuhe/wwx/output/routerxbench-clean-replay-first9-reviewed-20261013/MAIN_TABLE.csv",
+        "reason": null,
+        "actual_sha256": "be51ac894cca6ab7a85ec7dfe6b7c880ea313665b42f4a7512d6e2ab8580ed33"
+      }
+    },
+    "note": "The freeze remains the historical-absolute protocol context. Strict display normalization uses the actual 5,955 main_summary denominators, not the 5,958-era per-task n in the run manifest."
+  },
+  "display": {
+    "strict": {
+      "scope": "strict_5955",
+      "table_titles": [
+        "AUROC ×100 (higher is better)",
+        "BQ, % (higher is better)",
+        "TC, % (lower is better)"
+      ],
+      "captions": [
+        "Strict clean 5,955 comparison: AUROC ×100 (higher is better). Baseline: 9 previous methods from the 5,955 clean sources; SD is across the actual repeats named in the table notes (training seeds, API executions or fixed executions). StartLux: one exploratory execution per condition (no SD). pending = condition not complete at this snapshot, not zero. The current paper tables are a separate, protocol-mismatched reference; do not combine them with this table.",
+        "Strict clean 5,955 comparison: BQ at the middle budget range, as a percentage of all-cloud quality (higher is better). BQ is normalized only by the actual 5,955 clean Qcloud. Baseline: 9 previous methods, SD across the actual repeats named in the table notes. StartLux: one exploratory execution per condition (no SD). pending = condition not complete at this snapshot, not zero. The current paper tables are a separate, protocol-mismatched reference; do not combine them with this table.",
+        "Strict clean 5,955 comparison: TC at the middle quality-target range, as a percentage of all-cloud generation cost (lower is better). TC is normalized only by the actual 5,955 clean full_cloud_cost. Baseline: 9 previous methods, SD across the actual repeats named in the table notes. StartLux: one exploratory execution per condition (no SD). pending = condition not complete at this snapshot, not zero. The current paper tables are a separate, protocol-mismatched reference; do not combine them with this table."
+      ],
+      "baseline_group_label": "Strict 5,955 baseline — mean ± sample SD; repeat identity in notes",
+      "startlux_group_label": "StartLux — one exploratory run, no SD"
+    },
+    "paper_reference": {
+      "scope": "paper_reference",
+      "table_titles": [
+        "Paper reference: AUROC ×100",
+        "Paper reference: BQ, %",
+        "Paper reference: TC, %"
+      ],
+      "captions": [
+        "Paper reference, unchanged: clean-test router ability (AUROC ×100). Entries report mean ± sample SD across three evaluation rounds. Protocol differs from the strict 5,955 tables: 5,954 subset, historical greedy + sampled 42/43, changed local answers. Not strictly matched to StartLux 5,955; do not compare directly or combine ranks.",
+        "Paper reference, unchanged: BQ at the middle budget range, as percentages of all-cloud quality; higher is better. Entries report mean ± sample SD across three evaluation rounds. Protocol differs from the strict 5,955 tables: 5,954 subset, historical greedy + sampled 42/43, changed local answers. Not strictly matched to StartLux 5,955; do not compare directly or combine ranks.",
+        "Paper reference, unchanged: TC at the middle quality-target range, as percentages of all-cloud generation cost; lower is better. Entries report mean ± sample SD across three evaluation rounds. Protocol differs from the strict 5,955 tables: 5,954 subset, historical greedy + sampled 42/43, changed local answers. Not strictly matched to StartLux 5,955; do not compare directly or combine ranks."
+      ],
+      "baseline_group_label": "Paper reference — mean ± sample SD, 3 rounds (protocol differs)"
+    },
+    "dataset_labels": [
+      "Alpaca",
+      "MMLU",
+      "Big-Math",
+      "Magpie",
+      "MMLU-Pro",
+      "MATH"
+    ]
+  },
+  "outputs": {
+    "strict_5955": {
+      "markdown": {
+        "path": "MAIN_TABLES.md",
+        "sha256": "42d032899ce0ed79d639ae371730cd95e7bf5db97be9da2bc4fea3ecbe80c94d"
+      },
+      "csv": {
+        "path": "main_tables.csv",
+        "sha256": "1517a62f8d103daafe7be0bc9d972d36a6797f0c4e8b0afb7a07a0736cb775b6",
+        "rows": 378
+      },
+      "latex": {
+        "auroc": {
+          "path": "tables/table_auroc.tex",
+          "sha256": "fe1d0ab23e936432100e7696f2de05080a1eb08bd53a0b9f92e55ccc40889b48"
+        },
+        "bq": {
+          "path": "tables/table_bq.tex",
+          "sha256": "0c7dfe2be81c7880f207c567223c882753606f793ed5a59b3d6e74eab7fd1785"
+        },
+        "tc": {
+          "path": "tables/table_tc.tex",
+          "sha256": "57f8fb7997b569029ebd05d8810e6a9a80a07e19960f32d6608d063cd8f32d59"
+        }
+      },
+      "standalone": {
+        "path": "tables/main_tables_standalone.tex",
+        "sha256": "03cd5ef8a0c6bc75c6ad662acfbde0d173f230aad19cc5f5fb8b2e4ade55fe2f"
+      }
+    },
+    "paper_reference": {
+      "markdown": {
+        "path": "PAPER_REFERENCE.md",
+        "sha256": "b4c6a761cc84da0845854354b54a83d6f778c1c30afef3776a9c94c76114eeaa"
+      },
+      "csv": {
+        "path": "paper_reference.csv",
+        "sha256": "b6492f56dd5ea87f6c7fac89921276a5f46315d0c08bc596b4f7abb2ea965614",
+        "rows": 162
+      },
+      "latex": {
+        "auroc": {
+          "path": "tables/paper_reference/table_auroc.tex",
+          "sha256": "9a702e54fe4c4f0ce2d00f4392b1e7a3af53c5a63e1ba2c73ab9c0f76f131830"
+        },
+        "bq": {
+          "path": "tables/paper_reference/table_bq.tex",
+          "sha256": "530ebfcff81a8d473aeaa58268b1eac300282b1b95a8722c4b8b0c645c2097c0"
+        },
+        "tc": {
+          "path": "tables/paper_reference/table_tc.tex",
+          "sha256": "bcd6ac6f87d86544ffacaa7dda3e8c1a21de30d4a987d1d446f5f34215abeaf1"
+        }
+      },
+      "standalone": {
+        "path": "tables/paper_reference/main_tables_standalone.tex",
+        "sha256": "35b9a045b1b580e0d630242865e39d341133a5ffbeafa70177a67c434116240d"
+      }
+    }
+  }
+}

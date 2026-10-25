@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="612pt" height="792pt" viewBox="0 0 612 792" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-25T05:59:26.543476</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 792 
+L 612 792 
+L 612 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="line2d_1">
+   <path d="M 46.8 73.44 
+L 565.2 73.44 
+" style="fill: none; stroke: #111111; stroke-width: 1.1"/>
+  </g>
+  <g id="line2d_2">
+   <path d="M 46.8 111.6 
+L 565.2 111.6 
+" style="fill: none; stroke: #111111; stroke-width: 0.6"/>
+  </g>
+  <g id="line2d_3">
+   <path d="M 46.8 280.44 
+L 565.2 280.44 
+" style="fill: none; stroke: #111111; stroke-width: 0.5"/>
+  </g>
+  <g id="line2d_4">
+   <path d="M 46.8 538.92 
+L 565.2 538.92 
+" style="fill: none; stroke: #111111; stroke-width: 1.1"/>
+  </g>
+  <g id="text_1">
+   <text style="font-size: 6.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="31.02" transform="rotate(-0 46.8 31.02)">RouterXBench strict 5,955 main table  |  12/12 StartLux conditions complete  |  2026-10-24</text>
+  </g>
+  <g id="text_2">
+   <text style="font-weight: 700; font-size: 10.5px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="48.195" transform="rotate(-0 46.8 48.195)">Table 3. TC, % (lower is better)</text>
+  </g>
+  <g id="text_3">
+   <text style="font-size: 7.4px; font-family: 'STIXGeneral'; text-anchor: middle; fill: #111111" x="379.8" y="83.93" transform="rotate(-0 379.8 83.93)">Quality-first expenditure: TC ↓</text>
+  </g>
+  <g id="text_4">
+   <text style="font-weight: 700; font-size: 7.5px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="102.675" transform="rotate(-0 46.8 102.675)">Method</text>
+  </g>
+  <g id="text_5">
+   <text style="font-weight: 700; font-size: 7.5px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="102.675" transform="rotate(-0 253.68 102.675)">Alpaca</text>
+  </g>
+  <g id="text_6">
+   <text style="font-weight: 700; font-size: 7.5px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="102.675" transform="rotate(-0 315.48 102.675)">MMLU</text>
+  </g>
+  <g id="text_7">
+   <text style="font-weight: 700; font-size: 7.5px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="102.675" transform="rotate(-0 377.28 102.675)">Big-Math</text>
+  </g>
+  <g id="text_8">
+   <text style="font-weight: 700; font-size: 7.5px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="102.675" transform="rotate(-0 439.08 102.675)">Magpie</text>
+  </g>
+  <g id="text_9">
+   <text style="font-weight: 700; font-size: 7.5px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="102.675" transform="rotate(-0 500.88 102.675)">MMLU-Pro</text>
+  </g>
+  <g id="text_10">
+   <text style="font-weight: 700; font-size: 7.5px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="102.675" transform="rotate(-0 562.68 102.675)">MATH</text>
+  </g>
+  <g id="text_11">
+   <text style="font-style: italic; font-size: 6.9px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="48.24" y="126.285" transform="rotate(-0 48.24 126.285)">Strict 5,955 baseline — mean ± sample SD; repeat identity in notes</text>
+  </g>
+  <g id="text_12">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="148.86" transform="rotate(-0 46.8 148.86)">SelfAsk</text>
+  </g>
+  <g id="text_13">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="148.86" transform="rotate(-0 253.68 148.86)">80.61 ± 0.00</text>
+  </g>
+  <g id="text_14">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="148.86" transform="rotate(-0 315.48 148.86)">76.25 ± 0.00</text>
+  </g>
+  <g id="text_15">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="148.86" transform="rotate(-0 377.28 148.86)">73.93 ± 0.00</text>
+  </g>
+  <g id="text_16">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="148.86" transform="rotate(-0 439.08 148.86)">75.54 ± 0.00</text>
+  </g>
+  <g id="text_17">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="148.86" transform="rotate(-0 500.88 148.86)">82.81 ± 0.00</text>
+  </g>
+  <g id="text_18">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="148.86" transform="rotate(-0 562.68 148.86)">80.30 ± 0.00</text>
+  </g>
+  <g id="text_19">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="166.5" transform="rotate(-0 46.8 166.5)">Entropy</text>
+  </g>
+  <g id="text_20">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="166.5" transform="rotate(-0 253.68 166.5)">76.83 ± 0.00</text>
+  </g>
+  <g id="text_21">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="166.5" transform="rotate(-0 315.48 166.5)">78.33 ± 0.00</text>
+  </g>
+  <g id="text_22">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="166.5" transform="rotate(-0 377.28 166.5)">79.47 ± 0.00</text>
+  </g>
+  <g id="text_23">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="166.5" transform="rotate(-0 439.08 166.5)">68.09 ± 0.00</text>
+  </g>
+  <g id="text_24">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="166.5" transform="rotate(-0 500.88 166.5)">80.59 ± 0.00</text>
+  </g>
+  <g id="text_25">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="166.5" transform="rotate(-0 562.68 166.5)">73.03 ± 0.00</text>
+  </g>
+  <g id="text_26">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="184.14" transform="rotate(-0 46.8 184.14)">MaxLogits</text>
+  </g>
+  <g id="text_27">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="184.14" transform="rotate(-0 253.68 184.14)">74.64 ± 0.00</text>
+  </g>
+  <g id="text_28">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="184.14" transform="rotate(-0 315.48 184.14)">78.46 ± 0.00</text>
+  </g>
+  <g id="text_29">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="184.14" transform="rotate(-0 377.28 184.14)">79.02 ± 0.00</text>
+  </g>
+  <g id="text_30">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="184.14" transform="rotate(-0 439.08 184.14)">67.88 ± 0.00</text>
+  </g>
+  <g id="text_31">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="184.14" transform="rotate(-0 500.88 184.14)">83.76 ± 0.00</text>
+  </g>
+  <g id="text_32">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="184.14" transform="rotate(-0 562.68 184.14)">73.69 ± 0.00</text>
+  </g>
+  <g id="text_33">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="201.78" transform="rotate(-0 46.8 201.78)">Conf. Margin</text>
+  </g>
+  <g id="text_34">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="201.78" transform="rotate(-0 253.68 201.78)">76.51 ± 0.00</text>
+  </g>
+  <g id="text_35">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="201.78" transform="rotate(-0 315.48 201.78)">78.90 ± 0.00</text>
+  </g>
+  <g id="text_36">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="201.78" transform="rotate(-0 377.28 201.78)">76.86 ± 0.00</text>
+  </g>
+  <g id="text_37">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="201.78" transform="rotate(-0 439.08 201.78)">68.37 ± 0.00</text>
+  </g>
+  <g id="text_38">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="201.78" transform="rotate(-0 500.88 201.78)">80.40 ± 0.00</text>
+  </g>
+  <g id="text_39">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="201.78" transform="rotate(-0 562.68 201.78)">72.93 ± 0.00</text>
+  </g>
+  <g id="text_40">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="219.42" transform="rotate(-0 46.8 219.42)">Emb. MLP</text>
+  </g>
+  <g id="text_41">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="219.42" transform="rotate(-0 253.68 219.42)">81.65 ± 0.24</text>
+  </g>
+  <g id="text_42">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="219.42" transform="rotate(-0 315.48 219.42)">77.73 ± 1.17</text>
+  </g>
+  <g id="text_43">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="219.42" transform="rotate(-0 377.28 219.42)">67.09 ± 1.29</text>
+  </g>
+  <g id="text_44">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="219.42" transform="rotate(-0 439.08 219.42)">87.88 ± 0.39</text>
+  </g>
+  <g id="text_45">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="219.42" transform="rotate(-0 500.88 219.42)">85.44 ± 1.14</text>
+  </g>
+  <g id="text_46">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="219.42" transform="rotate(-0 562.68 219.42)">76.51 ± 0.33</text>
+  </g>
+  <g id="text_47">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="237.06" transform="rotate(-0 46.8 237.06)">HybridLLM</text>
+  </g>
+  <g id="text_48">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="237.06" transform="rotate(-0 253.68 237.06)">85.07 ± 2.29</text>
+  </g>
+  <g id="text_49">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="237.06" transform="rotate(-0 315.48 237.06)">76.69 ± 1.13</text>
+  </g>
+  <g id="text_50">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="237.06" transform="rotate(-0 377.28 237.06)">66.60 ± 1.37</text>
+  </g>
+  <g id="text_51">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="237.06" transform="rotate(-0 439.08 237.06)">83.04 ± 9.94</text>
+  </g>
+  <g id="text_52">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="237.06" transform="rotate(-0 500.88 237.06)">87.33 ± 2.02</text>
+  </g>
+  <g id="text_53">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="237.06" transform="rotate(-0 562.68 237.06)">75.99 ± 3.31</text>
+  </g>
+  <g id="text_54">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="254.7" transform="rotate(-0 46.8 254.7)">RouteLLM</text>
+  </g>
+  <g id="text_55">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="254.7" transform="rotate(-0 253.68 254.7)">88.43 ± 0.28</text>
+  </g>
+  <g id="text_56">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="254.7" transform="rotate(-0 315.48 254.7)">67.11 ± 0.30</text>
+  </g>
+  <g id="text_57">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="254.7" transform="rotate(-0 377.28 254.7)">68.96 ± 0.24</text>
+  </g>
+  <g id="text_58">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="254.7" transform="rotate(-0 439.08 254.7)">91.28 ± 0.16</text>
+  </g>
+  <g id="text_59">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="254.7" transform="rotate(-0 500.88 254.7)">70.21 ± 0.62</text>
+  </g>
+  <g id="text_60">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="254.7" transform="rotate(-0 562.68 254.7)">76.96 ± 0.18</text>
+  </g>
+  <g id="text_61">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="272.34" transform="rotate(-0 46.8 272.34)">Jev</text>
+  </g>
+  <g id="text_62">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="272.34" transform="rotate(-0 253.68 272.34)">68.30 ± 0.58</text>
+  </g>
+  <g id="text_63">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="272.34" transform="rotate(-0 315.48 272.34)">68.20 ± 1.26</text>
+  </g>
+  <g id="text_64">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="272.34" transform="rotate(-0 377.28 272.34)">67.42 ± 0.44</text>
+  </g>
+  <g id="text_65">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="272.34" transform="rotate(-0 439.08 272.34)">64.84 ± 0.10</text>
+  </g>
+  <g id="text_66">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="272.34" transform="rotate(-0 500.88 272.34)">81.14 ± 0.28</text>
+  </g>
+  <g id="text_67">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="272.34" transform="rotate(-0 562.68 272.34)">74.79 ± 0.52</text>
+  </g>
+  <g id="text_68">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="296.46" transform="rotate(-0 46.8 296.46)">MeanProbe</text>
+  </g>
+  <g id="text_69">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="296.46" transform="rotate(-0 253.68 296.46)">81.12 ± 0.25</text>
+  </g>
+  <g id="text_70">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="296.46" transform="rotate(-0 315.48 296.46)">72.57 ± 0.15</text>
+  </g>
+  <g id="text_71">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="296.46" transform="rotate(-0 377.28 296.46)">68.34 ± 0.23</text>
+  </g>
+  <g id="text_72">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="296.46" transform="rotate(-0 439.08 296.46)">84.91 ± 0.35</text>
+  </g>
+  <g id="text_73">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="296.46" transform="rotate(-0 500.88 296.46)">85.67 ± 0.02</text>
+  </g>
+  <g id="text_74">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="296.46" transform="rotate(-0 562.68 296.46)">73.41 ± 0.16</text>
+  </g>
+  <g id="text_75">
+   <text style="font-style: italic; font-size: 6.9px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="48.24" y="313.845" transform="rotate(-0 48.24 313.845)">StartLux — one exploratory run, no SD</text>
+  </g>
+  <g id="text_76">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="336.42" transform="rotate(-0 46.8 336.42)">StartLux 0.8B Instant (Q)</text>
+  </g>
+  <g id="text_77">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="336.42" transform="rotate(-0 253.68 336.42)">74.14</text>
+  </g>
+  <g id="text_78">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="336.42" transform="rotate(-0 315.48 336.42)">75.59</text>
+  </g>
+  <g id="text_79">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="336.42" transform="rotate(-0 377.28 336.42)">72.25</text>
+  </g>
+  <g id="text_80">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="336.42" transform="rotate(-0 439.08 336.42)">74.02</text>
+  </g>
+  <g id="text_81">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="336.42" transform="rotate(-0 500.88 336.42)">81.49</text>
+  </g>
+  <g id="text_82">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="336.42" transform="rotate(-0 562.68 336.42)">73.03</text>
+  </g>
+  <g id="text_83">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="354.06" transform="rotate(-0 46.8 354.06)">StartLux 0.8B Instant (Q+A)</text>
+  </g>
+  <g id="text_84">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="354.06" transform="rotate(-0 253.68 354.06)">52.29</text>
+  </g>
+  <g id="text_85">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="354.06" transform="rotate(-0 315.48 354.06)">63.80</text>
+  </g>
+  <g id="text_86">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="354.06" transform="rotate(-0 377.28 354.06)">56.98</text>
+  </g>
+  <g id="text_87">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="354.06" transform="rotate(-0 439.08 354.06)">53.35</text>
+  </g>
+  <g id="text_88">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="354.06" transform="rotate(-0 500.88 354.06)">75.93</text>
+  </g>
+  <g id="text_89">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="354.06" transform="rotate(-0 562.68 354.06)">64.37</text>
+  </g>
+  <g id="text_90">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="371.7" transform="rotate(-0 46.8 371.7)">StartLux 2B Instant (Q)</text>
+  </g>
+  <g id="text_91">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="371.7" transform="rotate(-0 253.68 371.7)">78.10</text>
+  </g>
+  <g id="text_92">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="371.7" transform="rotate(-0 315.48 371.7)">73.70</text>
+  </g>
+  <g id="text_93">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="371.7" transform="rotate(-0 377.28 371.7)">70.55</text>
+  </g>
+  <g id="text_94">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="371.7" transform="rotate(-0 439.08 371.7)">75.04</text>
+  </g>
+  <g id="text_95">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="371.7" transform="rotate(-0 500.88 371.7)">77.61</text>
+  </g>
+  <g id="text_96">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="371.7" transform="rotate(-0 562.68 371.7)">73.29</text>
+  </g>
+  <g id="text_97">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="389.34" transform="rotate(-0 46.8 389.34)">StartLux 2B Instant (Q+A)</text>
+  </g>
+  <g id="text_98">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="389.34" transform="rotate(-0 253.68 389.34)">56.38</text>
+  </g>
+  <g id="text_99">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="389.34" transform="rotate(-0 315.48 389.34)">59.21</text>
+  </g>
+  <g id="text_100">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="389.34" transform="rotate(-0 377.28 389.34)">46.23</text>
+  </g>
+  <g id="text_101">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="389.34" transform="rotate(-0 439.08 389.34)">52.44</text>
+  </g>
+  <g id="text_102">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="389.34" transform="rotate(-0 500.88 389.34)">67.68</text>
+  </g>
+  <g id="text_103">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="389.34" transform="rotate(-0 562.68 389.34)">62.34</text>
+  </g>
+  <g id="text_104">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="406.98" transform="rotate(-0 46.8 406.98)">StartLux 4B Instant (Q)</text>
+  </g>
+  <g id="text_105">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="406.98" transform="rotate(-0 253.68 406.98)">74.33</text>
+  </g>
+  <g id="text_106">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="406.98" transform="rotate(-0 315.48 406.98)">66.63</text>
+  </g>
+  <g id="text_107">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="406.98" transform="rotate(-0 377.28 406.98)">70.69</text>
+  </g>
+  <g id="text_108">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="406.98" transform="rotate(-0 439.08 406.98)">68.20</text>
+  </g>
+  <g id="text_109">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="406.98" transform="rotate(-0 500.88 406.98)">81.59</text>
+  </g>
+  <g id="text_110">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="406.98" transform="rotate(-0 562.68 406.98)">73.13</text>
+  </g>
+  <g id="text_111">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="424.62" transform="rotate(-0 46.8 424.62)">StartLux 4B Instant (Q+A)</text>
+  </g>
+  <g id="text_112">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="424.62" transform="rotate(-0 253.68 424.62)">50.05</text>
+  </g>
+  <g id="text_113">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="424.62" transform="rotate(-0 315.48 424.62)">40.02</text>
+  </g>
+  <g id="text_114">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="424.62" transform="rotate(-0 377.28 424.62)">37.13</text>
+  </g>
+  <g id="text_115">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="424.62" transform="rotate(-0 439.08 424.62)">48.07</text>
+  </g>
+  <g id="text_116">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="424.62" transform="rotate(-0 500.88 424.62)">56.90</text>
+  </g>
+  <g id="text_117">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="424.62" transform="rotate(-0 562.68 424.62)">57.35</text>
+  </g>
+  <g id="text_118">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="442.26" transform="rotate(-0 46.8 442.26)">StartLux 9B Instant (Q)</text>
+  </g>
+  <g id="text_119">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="442.26" transform="rotate(-0 253.68 442.26)">77.64</text>
+  </g>
+  <g id="text_120">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="442.26" transform="rotate(-0 315.48 442.26)">66.12</text>
+  </g>
+  <g id="text_121">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="442.26" transform="rotate(-0 377.28 442.26)">67.88</text>
+  </g>
+  <g id="text_122">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="442.26" transform="rotate(-0 439.08 442.26)">69.46</text>
+  </g>
+  <g id="text_123">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="442.26" transform="rotate(-0 500.88 442.26)">82.04</text>
+  </g>
+  <g id="text_124">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="442.26" transform="rotate(-0 562.68 442.26)">76.67</text>
+  </g>
+  <g id="text_125">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="459.9" transform="rotate(-0 46.8 459.9)">StartLux 9B Instant (Q+A)</text>
+  </g>
+  <g id="text_126">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="459.9" transform="rotate(-0 253.68 459.9)">56.68</text>
+  </g>
+  <g id="text_127">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="459.9" transform="rotate(-0 315.48 459.9)">39.23</text>
+  </g>
+  <g id="text_128">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="459.9" transform="rotate(-0 377.28 459.9)">34.09</text>
+  </g>
+  <g id="text_129">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="459.9" transform="rotate(-0 439.08 459.9)">51.06</text>
+  </g>
+  <g id="text_130">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="459.9" transform="rotate(-0 500.88 459.9)">58.47</text>
+  </g>
+  <g id="text_131">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="459.9" transform="rotate(-0 562.68 459.9)">57.46</text>
+  </g>
+  <g id="text_132">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="477.54" transform="rotate(-0 46.8 477.54)">StartLux 27B Instant (Q)</text>
+  </g>
+  <g id="text_133">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="477.54" transform="rotate(-0 253.68 477.54)">69.82</text>
+  </g>
+  <g id="text_134">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="477.54" transform="rotate(-0 315.48 477.54)">62.67</text>
+  </g>
+  <g id="text_135">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="477.54" transform="rotate(-0 377.28 477.54)">69.04</text>
+  </g>
+  <g id="text_136">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="477.54" transform="rotate(-0 439.08 477.54)">62.83</text>
+  </g>
+  <g id="text_137">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="477.54" transform="rotate(-0 500.88 477.54)">82.49</text>
+  </g>
+  <g id="text_138">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="477.54" transform="rotate(-0 562.68 477.54)">73.11</text>
+  </g>
+  <g id="text_139">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="495.18" transform="rotate(-0 46.8 495.18)">StartLux 27B Instant (Q+A)</text>
+  </g>
+  <g id="text_140">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="495.18" transform="rotate(-0 253.68 495.18)">47.15</text>
+  </g>
+  <g id="text_141">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="495.18" transform="rotate(-0 315.48 495.18)">31.52</text>
+  </g>
+  <g id="text_142">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="495.18" transform="rotate(-0 377.28 495.18)">31.47</text>
+  </g>
+  <g id="text_143">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="495.18" transform="rotate(-0 439.08 495.18)">46.49</text>
+  </g>
+  <g id="text_144">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="495.18" transform="rotate(-0 500.88 495.18)">47.58</text>
+  </g>
+  <g id="text_145">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="495.18" transform="rotate(-0 562.68 495.18)">54.35</text>
+  </g>
+  <g id="text_146">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="512.82" transform="rotate(-0 46.8 512.82)">StartLux 9B AutoThink (Q)</text>
+  </g>
+  <g id="text_147">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="512.82" transform="rotate(-0 253.68 512.82)">73.06</text>
+  </g>
+  <g id="text_148">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="512.82" transform="rotate(-0 315.48 512.82)">69.25</text>
+  </g>
+  <g id="text_149">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="512.82" transform="rotate(-0 377.28 512.82)">70.54</text>
+  </g>
+  <g id="text_150">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="512.82" transform="rotate(-0 439.08 512.82)">67.73</text>
+  </g>
+  <g id="text_151">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="512.82" transform="rotate(-0 500.88 512.82)">79.39</text>
+  </g>
+  <g id="text_152">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="512.82" transform="rotate(-0 562.68 512.82)">75.35</text>
+  </g>
+  <g id="text_153">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="530.46" transform="rotate(-0 46.8 530.46)">StartLux 27B AutoThink (Q)</text>
+  </g>
+  <g id="text_154">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="530.46" transform="rotate(-0 253.68 530.46)">78.87</text>
+  </g>
+  <g id="text_155">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="530.46" transform="rotate(-0 315.48 530.46)">60.51</text>
+  </g>
+  <g id="text_156">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="530.46" transform="rotate(-0 377.28 530.46)">71.51</text>
+  </g>
+  <g id="text_157">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="530.46" transform="rotate(-0 439.08 530.46)">72.89</text>
+  </g>
+  <g id="text_158">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="530.46" transform="rotate(-0 500.88 530.46)">81.46</text>
+  </g>
+  <g id="text_159">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="530.46" transform="rotate(-0 562.68 530.46)">73.11</text>
+  </g>
+  <g id="text_160">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="558.72" transform="rotate(-0 46.8 558.72)">Strict clean 5,955 comparison: TC at the middle quality-target range, as a percentage of all-cloud</text>
+  </g>
+  <g id="text_161">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="569.376" transform="rotate(-0 46.8 569.376)">generation cost (lower is better). TC is normalized only by the actual 5,955 clean full_cloud_cost.</text>
+  </g>
+  <g id="text_162">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="580.032" transform="rotate(-0 46.8 580.032)">Baseline: 9 previous methods, SD across the actual repeats named in the table notes. StartLux: one</text>
+  </g>
+  <g id="text_163">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="590.688" transform="rotate(-0 46.8 590.688)">exploratory execution per condition (no SD). pending = condition not complete at this snapshot, not zero.</text>
+  </g>
+  <g id="text_164">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="601.344" transform="rotate(-0 46.8 601.344)">The current paper tables are a separate, protocol-mismatched reference; do not combine them with this table.</text>
+  </g>
+  <g id="text_165">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="618.75" transform="rotate(-0 46.8 618.75)">Baseline: 9 previous methods from the strict 5,955 sources; BQ/TC normalized by the actual 5,955 Qcloud/full_cloud_cost.</text>
+  </g>
+  <g id="text_166">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="627.246" transform="rotate(-0 46.8 627.246)">Repeat identity: SelfAsk/Entropy/MaxLogits/Conf. Margin = 3 fixed executions; Emb. MLP/HybridLLM/RouteLLM/MeanProbe = 3</text>
+  </g>
+  <g id="text_167">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="635.742" transform="rotate(-0 46.8 635.742)">training seeds; Jev = 3 actual API executions. A reported 0.00 is a measured sample SD for identical fixed executions, not a</text>
+  </g>
+  <g id="text_168">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="644.238" transform="rotate(-0 46.8 644.238)">missing value.</text>
+  </g>
+  <g id="text_169">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="652.734" transform="rotate(-0 46.8 652.734)">StartLux: one exploratory execution per condition; no SD. pending = condition not complete, not zero.</text>
+  </g>
+  <g id="text_170">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="661.23" transform="rotate(-0 46.8 661.23)">The paper reference is separate and protocol-mismatched (PAPER_REFERENCE.md); do not combine the two tables or rank them</text>
+  </g>
+  <g id="text_171">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="669.726" transform="rotate(-0 46.8 669.726)">together.</text>
+  </g>
+  <g id="text_172">
+   <text style="font-size: 6.4px; font-family: 'STIXGeneral'; text-anchor: middle; fill: #444444" x="306" y="767.68" transform="rotate(-0 306 767.68)">StartLux + RouterXBench  |  2026-10-24  |  strict 5,955  |  page 3/3</text>
+  </g>
+ </g>
+</svg>

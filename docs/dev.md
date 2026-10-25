@@ -31,3 +31,45 @@ At 04:35–04:36 CST on 2026-10-25, actual StartLux parents and eight per-GPU vL
 Host1 0.8B-Instant produced 128 unique query records and 128 unique query_answer records during incremental concurrency probes. Planner read the actual JSONL records and verified model identity, finite normalized local/cloud probabilities and explicit `none_check=true`, `allow_none=false`, `think_mode=never`. Failure files were empty. Incremental copies are visible under persistent `results/host1/`; a later final independent readback is still required. Probe records are retained for full-run continuation, not counted as completed full conditions.
 
 Host2 startup exposed stale shared FlashInfer build metadata pointing to an old Python3.10 environment, while current service is Python3.12. Current environment contains the required header. The worker was instructed to use a task-specific `FLASHINFER_WORKSPACE_BASE` without deleting another project's cache; this is an environment repair and does not change model/evaluation settings. Host3 continued initializing independently.
+
+
+## 2026-10-25 — Accept complete StartLux results and comparison tables
+
+### Question
+Deliver the full StartLux matrix together with the previous RouterXBench methods in paper-style main tables.
+
+### Analysis / Root Cause
+The current manuscript tables use5,954 common IDs and changed local answers across three evaluation rounds. Mixing those cells with the frozen historical5,955 StartLux protocol would misstate comparability. Earlier service/cache/FUSE issues are resolved; no additional model or Judge calls are needed for old baselines.
+
+### Solution
+Keep the frozen StartLux protocol; build strict tables from accepted historical5,955 old-method sources and independently recomputed clean display denominators. Preserve the current paper cells in a separate reference. Retain all12 conditions and their actual repeat identities, plus editable table scripts/CSV/LaTeX, vector PDF/SVG and source provenance. Raw scores remain in HDFS; summaries/manifests/verification accompany the report.
+
+### Validation
+All71,460 records pass exact-ID, question/local-answer hash, model/config/controls and raw-response checks. Independent HDFS hashes match all48 raw/summary/metrics/manifest files. All648 replay cells agree exactly; all378 displayed metric values and historical baseline SDs match their sources. Preview inspected at final size; embedded fonts, no raster PDF objects, editable SVG text. No Overleaf changes.
+
+### Files Changed
+`AGENTS.md`, `docs/data.md`, `docs/dev.md`, `experiment/STARTLUX_PLAN.md`, `LOG.md`, `MAIN_RESULTS.md`, `experiment/startlux/results/`, `experiment/startlux/main_tables/`, final verification JSON.
+
+### Commit Hash
+Completed results: see the Git commit titled `Record complete StartLux results and matched RouterXBench tables`; implementation `7fcdb2c`.
+
+
+## 2026-10-25 — Final resume acceptance
+
+### Question
+Resume the StartLux evaluation and finish any outstanding delivery.
+
+### Analysis / Root Cause
+All 12 frozen conditions were already complete; the result integration remained staged and the repository ignore rules excluded the result summaries/manifests and CSV tables. No additional inference was needed.
+
+### Solution
+Accept the completed matrix and explicitly include its small result artifacts and table CSVs in the result commit, preserving unrelated working changes.
+
+### Validation
+Rechecked all 12 local raw SHA256 values and 71,460 records, with exactly 5,955 unique sample_id values per condition. All 36 archived summary/metric/manifest hashes match the persistent-readback evidence. Existing independent replay checks cover 648 cells with zero difference and zero failed records.
+
+### Files Changed
+Result artifacts under `experiment/startlux/results/`, table CSVs, and the already staged evaluation documentation and table sources.
+
+### Commit Hash
+See the commit titled `Record complete StartLux results and matched RouterXBench tables`.

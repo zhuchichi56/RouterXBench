@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="612pt" height="792pt" viewBox="0 0 612 792" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-25T05:12:28.459116</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 792 
+L 612 792 
+L 612 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="patch_2">
+   <path d="M 46.8 566.64 
+L 565.2 566.64 
+L 565.2 471.6 
+L 46.8 471.6 
+L 46.8 566.64 
+z
+" style="fill: none; stroke: #777777; stroke-width: 0.6; stroke-linejoin: miter"/>
+  </g>
+  <g id="line2d_1">
+   <path d="M 46.8 86.4 
+L 565.2 86.4 
+" style="fill: none; stroke: #111111; stroke-width: 1.1"/>
+  </g>
+  <g id="line2d_2">
+   <path d="M 46.8 124.56 
+L 565.2 124.56 
+" style="fill: none; stroke: #111111; stroke-width: 0.6"/>
+  </g>
+  <g id="line2d_3">
+   <path d="M 46.8 328.68 
+L 565.2 328.68 
+" style="fill: none; stroke: #111111; stroke-width: 0.5"/>
+  </g>
+  <g id="line2d_4">
+   <path d="M 46.8 357.12 
+L 565.2 357.12 
+" style="fill: none; stroke: #111111; stroke-width: 1.1"/>
+  </g>
+  <g id="text_1">
+   <text style="font-size: 6.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="31.02" transform="rotate(-0 46.8 31.02)">Unchanged current paper table  |  protocol-mismatched reference  |  2026-10-24</text>
+  </g>
+  <g id="text_2">
+   <text style="font-weight: 700; font-size: 10.5px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="48.195" transform="rotate(-0 46.8 48.195)">Table 2. Paper reference: BQ, %</text>
+  </g>
+  <g id="text_3">
+   <text style="font-weight: 700; font-size: 7.4px; font-family: 'STIXGeneral'; text-anchor: middle; fill: #7a1f1f" x="306" y="72.41" transform="rotate(-0 306 72.41)">PROTOCOL-MISMATCHED REFERENCE — NOT THE STRICT MAIN TABLE</text>
+  </g>
+  <g id="text_4">
+   <text style="font-size: 7.4px; font-family: 'STIXGeneral'; text-anchor: middle; fill: #111111" x="379.8" y="96.89" transform="rotate(-0 379.8 96.89)">Budget-limited quality: BQ ↑</text>
+  </g>
+  <g id="text_5">
+   <text style="font-weight: 700; font-size: 7.9px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="115.735" transform="rotate(-0 46.8 115.735)">Method</text>
+  </g>
+  <g id="text_6">
+   <text style="font-weight: 700; font-size: 7.9px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="115.735" transform="rotate(-0 253.68 115.735)">Alpaca</text>
+  </g>
+  <g id="text_7">
+   <text style="font-weight: 700; font-size: 7.9px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="115.735" transform="rotate(-0 315.48 115.735)">MMLU</text>
+  </g>
+  <g id="text_8">
+   <text style="font-weight: 700; font-size: 7.9px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="115.735" transform="rotate(-0 377.28 115.735)">Big-Math</text>
+  </g>
+  <g id="text_9">
+   <text style="font-weight: 700; font-size: 7.9px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="115.735" transform="rotate(-0 439.08 115.735)">Magpie</text>
+  </g>
+  <g id="text_10">
+   <text style="font-weight: 700; font-size: 7.9px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="115.735" transform="rotate(-0 500.88 115.735)">MMLU-Pro</text>
+  </g>
+  <g id="text_11">
+   <text style="font-weight: 700; font-size: 7.9px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="115.735" transform="rotate(-0 562.68 115.735)">MATH</text>
+  </g>
+  <g id="text_12">
+   <text style="font-style: italic; font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="48.24" y="139.32" transform="rotate(-0 48.24 139.32)">Paper reference — mean ± sample SD, 3 rounds (protocol differs)</text>
+  </g>
+  <g id="text_13">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="167.55" transform="rotate(-0 46.8 167.55)">SelfAsk</text>
+  </g>
+  <g id="text_14">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="167.55" transform="rotate(-0 253.68 167.55)">91.93 ± 0.24</text>
+  </g>
+  <g id="text_15">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="167.55" transform="rotate(-0 315.48 167.55)">81.09 ± 0.71</text>
+  </g>
+  <g id="text_16">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="167.55" transform="rotate(-0 377.28 167.55)">81.01 ± 1.02</text>
+  </g>
+  <g id="text_17">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="167.55" transform="rotate(-0 439.08 167.55)">83.14 ± 0.27</text>
+  </g>
+  <g id="text_18">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="167.55" transform="rotate(-0 500.88 167.55)">67.02 ± 0.31</text>
+  </g>
+  <g id="text_19">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="167.55" transform="rotate(-0 562.68 167.55)">62.94 ± 1.40</text>
+  </g>
+  <g id="text_20">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="189.15" transform="rotate(-0 46.8 189.15)">Entropy</text>
+  </g>
+  <g id="text_21">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="189.15" transform="rotate(-0 253.68 189.15)">91.44 ± 0.22</text>
+  </g>
+  <g id="text_22">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="189.15" transform="rotate(-0 315.48 189.15)">79.75 ± 0.70</text>
+  </g>
+  <g id="text_23">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="189.15" transform="rotate(-0 377.28 189.15)">79.62 ± 1.37</text>
+  </g>
+  <g id="text_24">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="189.15" transform="rotate(-0 439.08 189.15)">80.66 ± 0.38</text>
+  </g>
+  <g id="text_25">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="189.15" transform="rotate(-0 500.88 189.15)">65.02 ± 1.25</text>
+  </g>
+  <g id="text_26">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="189.15" transform="rotate(-0 562.68 189.15)">64.00 ± 1.58</text>
+  </g>
+  <g id="text_27">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="210.75" transform="rotate(-0 46.8 210.75)">MaxLogits</text>
+  </g>
+  <g id="text_28">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="210.75" transform="rotate(-0 253.68 210.75)">92.42 ± 0.14</text>
+  </g>
+  <g id="text_29">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="210.75" transform="rotate(-0 315.48 210.75)">79.45 ± 0.96</text>
+  </g>
+  <g id="text_30">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="210.75" transform="rotate(-0 377.28 210.75)">79.56 ± 1.22</text>
+  </g>
+  <g id="text_31">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="210.75" transform="rotate(-0 439.08 210.75)">82.77 ± 0.33</text>
+  </g>
+  <g id="text_32">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="210.75" transform="rotate(-0 500.88 210.75)">64.44 ± 1.00</text>
+  </g>
+  <g id="text_33">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="210.75" transform="rotate(-0 562.68 210.75)">63.64 ± 1.78</text>
+  </g>
+  <g id="text_34">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="232.35" transform="rotate(-0 46.8 232.35)">Conf. Margin</text>
+  </g>
+  <g id="text_35">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="232.35" transform="rotate(-0 253.68 232.35)">91.25 ± 0.34</text>
+  </g>
+  <g id="text_36">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="232.35" transform="rotate(-0 315.48 232.35)">79.30 ± 1.18</text>
+  </g>
+  <g id="text_37">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="232.35" transform="rotate(-0 377.28 232.35)">80.44 ± 1.49</text>
+  </g>
+  <g id="text_38">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="232.35" transform="rotate(-0 439.08 232.35)">80.56 ± 0.41</text>
+  </g>
+  <g id="text_39">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="232.35" transform="rotate(-0 500.88 232.35)">65.45 ± 1.24</text>
+  </g>
+  <g id="text_40">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="232.35" transform="rotate(-0 562.68 232.35)">63.04 ± 1.38</text>
+  </g>
+  <g id="text_41">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="253.95" transform="rotate(-0 46.8 253.95)">Emb. MLP</text>
+  </g>
+  <g id="text_42">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="253.95" transform="rotate(-0 253.68 253.95)">90.99 ± 0.28</text>
+  </g>
+  <g id="text_43">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="253.95" transform="rotate(-0 315.48 253.95)">80.59 ± 0.84</text>
+  </g>
+  <g id="text_44">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="253.95" transform="rotate(-0 377.28 253.95)">78.98 ± 1.26</text>
+  </g>
+  <g id="text_45">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="253.95" transform="rotate(-0 439.08 253.95)">77.42 ± 0.53</text>
+  </g>
+  <g id="text_46">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="253.95" transform="rotate(-0 500.88 253.95)">65.04 ± 1.43</text>
+  </g>
+  <g id="text_47">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="253.95" transform="rotate(-0 562.68 253.95)">63.54 ± 1.88</text>
+  </g>
+  <g id="text_48">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="275.55" transform="rotate(-0 46.8 275.55)">HybridLLM</text>
+  </g>
+  <g id="text_49">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="275.55" transform="rotate(-0 253.68 275.55)">90.73 ± 0.25</text>
+  </g>
+  <g id="text_50">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="275.55" transform="rotate(-0 315.48 275.55)">81.07 ± 0.98</text>
+  </g>
+  <g id="text_51">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="275.55" transform="rotate(-0 377.28 275.55)">79.70 ± 1.16</text>
+  </g>
+  <g id="text_52">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="275.55" transform="rotate(-0 439.08 275.55)">77.54 ± 0.48</text>
+  </g>
+  <g id="text_53">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="275.55" transform="rotate(-0 500.88 275.55)">64.86 ± 1.59</text>
+  </g>
+  <g id="text_54">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="275.55" transform="rotate(-0 562.68 275.55)">63.21 ± 1.65</text>
+  </g>
+  <g id="text_55">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="297.15" transform="rotate(-0 46.8 297.15)">RouteLLM</text>
+  </g>
+  <g id="text_56">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="297.15" transform="rotate(-0 253.68 297.15)">90.68 ± 0.27</text>
+  </g>
+  <g id="text_57">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="297.15" transform="rotate(-0 315.48 297.15)">81.83 ± 0.79</text>
+  </g>
+  <g id="text_58">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="297.15" transform="rotate(-0 377.28 297.15)">79.62 ± 1.24</text>
+  </g>
+  <g id="text_59">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="297.15" transform="rotate(-0 439.08 297.15)">77.19 ± 0.53</text>
+  </g>
+  <g id="text_60">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="297.15" transform="rotate(-0 500.88 297.15)">69.41 ± 1.06</text>
+  </g>
+  <g id="text_61">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="297.15" transform="rotate(-0 562.68 297.15)">62.21 ± 1.65</text>
+  </g>
+  <g id="text_62">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="318.75" transform="rotate(-0 46.8 318.75)">Jev</text>
+  </g>
+  <g id="text_63">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="318.75" transform="rotate(-0 253.68 318.75)">92.13 ± 0.40</text>
+  </g>
+  <g id="text_64">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="318.75" transform="rotate(-0 315.48 318.75)">81.97 ± 0.60</text>
+  </g>
+  <g id="text_65">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="318.75" transform="rotate(-0 377.28 318.75)">79.19 ± 1.27</text>
+  </g>
+  <g id="text_66">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="318.75" transform="rotate(-0 439.08 318.75)">81.39 ± 0.46</text>
+  </g>
+  <g id="text_67">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="318.75" transform="rotate(-0 500.88 318.75)">61.56 ± 1.24</text>
+  </g>
+  <g id="text_68">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="318.75" transform="rotate(-0 562.68 318.75)">60.57 ± 1.86</text>
+  </g>
+  <g id="text_69">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="346.83" transform="rotate(-0 46.8 346.83)">MeanProbe</text>
+  </g>
+  <g id="text_70">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="253.68" y="346.83" transform="rotate(-0 253.68 346.83)">90.99 ± 0.26</text>
+  </g>
+  <g id="text_71">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="315.48" y="346.83" transform="rotate(-0 315.48 346.83)">81.57 ± 0.82</text>
+  </g>
+  <g id="text_72">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="377.28" y="346.83" transform="rotate(-0 377.28 346.83)">79.95 ± 1.47</text>
+  </g>
+  <g id="text_73">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="439.08" y="346.83" transform="rotate(-0 439.08 346.83)">77.45 ± 0.49</text>
+  </g>
+  <g id="text_74">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="500.88" y="346.83" transform="rotate(-0 500.88 346.83)">64.45 ± 1.64</text>
+  </g>
+  <g id="text_75">
+   <text style="font-size: 7.8px; font-family: 'STIXGeneral'; text-anchor: end; fill: #111111" x="562.68" y="346.83" transform="rotate(-0 562.68 346.83)">63.94 ± 1.75</text>
+  </g>
+  <g id="text_76">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="376.92" transform="rotate(-0 46.8 376.92)">Paper reference, unchanged: BQ at the middle budget range, as percentages of all-cloud quality; higher is</text>
+  </g>
+  <g id="text_77">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="387.576" transform="rotate(-0 46.8 387.576)">better. Entries report mean ± sample SD across three evaluation rounds. Protocol differs from the strict</text>
+  </g>
+  <g id="text_78">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="398.232" transform="rotate(-0 46.8 398.232)">5,955 tables: 5,954 subset, historical greedy + sampled 42/43, changed local answers. Not strictly matched</text>
+  </g>
+  <g id="text_79">
+   <text style="font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="46.8" y="408.888" transform="rotate(-0 46.8 408.888)">to StartLux 5,955; do not compare directly or combine ranks.</text>
+  </g>
+  <g id="text_80">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="426.294" transform="rotate(-0 46.8 426.294)">Values copied exactly from the current paper tables (table1_auroc.tex, table2_bq.tex, table3_tc.tex); no cell was changed.</text>
+  </g>
+  <g id="text_81">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="434.79" transform="rotate(-0 46.8 434.79)">Protocol: 5,954 subset; historical greedy + sampled 42/43 rounds; changed local answers.</text>
+  </g>
+  <g id="text_82">
+   <text style="font-size: 6.6px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="46.8" y="443.286" transform="rotate(-0 46.8 443.286)">Not strictly matched to the 5,955 StartLux protocol. Do not compare directly with MAIN_TABLES.md or combine ranks.</text>
+  </g>
+  <g id="text_83">
+   <text style="font-weight: 700; font-size: 7.2px; font-family: 'STIXGeneral'; text-anchor: start; fill: #111111" x="56.88" y="482.04" transform="rotate(-0 56.88 482.04)">Protocol difference (why this is a separate reference)</text>
+  </g>
+  <g id="text_84">
+   <text style="font-size: 6.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="56.88" y="504.06" transform="rotate(-0 56.88 504.06)">Subset is 5,954 requests, not the strict 5,955 clean split.</text>
+  </g>
+  <g id="text_85">
+   <text style="font-size: 6.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="56.88" y="512.844" transform="rotate(-0 56.88 512.844)">Historical greedy + sampled 42/43 rounds; local answers changed.</text>
+  </g>
+  <g id="text_86">
+   <text style="font-size: 6.8px; font-family: 'STIXGeneral'; text-anchor: start; fill: #444444" x="56.88" y="521.628" transform="rotate(-0 56.88 521.628)">Exact paper values only. Do not compare directly with the strict table or combine ranks.</text>
+  </g>
+  <g id="text_87">
+   <text style="font-size: 6.4px; font-family: 'STIXGeneral'; text-anchor: middle; fill: #444444" x="306" y="767.68" transform="rotate(-0 306 767.68)">StartLux + RouterXBench  |  2026-10-24  |  paper reference  |  page 2/3</text>
+  </g>
+ </g>
+</svg>
